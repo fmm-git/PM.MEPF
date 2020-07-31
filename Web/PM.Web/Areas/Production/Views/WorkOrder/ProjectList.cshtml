@@ -1,0 +1,165 @@
+﻿@{
+    ViewBag.Title = "ProjectList";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+
+<script src="~/Content/js/uploadFile.js"></script>
+<script>
+    var OnlySiteCode = $.request("OnlySiteCode");
+    $(function () {
+        $('#layout').layout();
+        ui_layout_toggler_click();
+        leftList();
+        gridList();
+    });
+    //加载项目结构
+    function leftList() {
+        var $leftgridList = $("#leftgridList");
+        var leftgridList = 'leftgridList';
+        $leftgridList.dataGrid({
+            url: "@Url.Action("Getmodel_tree", "BIM", new { area = "" })",
+            height: $(window).height() - 58,
+            colModel: [
+                { label: "id", name: "id", hidden: true, key: true },
+                {label: '项目结构树', name: 'name', width: 220, align: 'left', sortable: false,},
+                { label: 'flag', name: 'flag', hidden: true },
+                { label: 'tid', name: 'tid', hidden: true },
+                { label: 'modelfile', name: 'modelfile', hidden: true },
+                { label: 'filename', name: 'filename', hidden: true },
+                { label: '父级id', name: 'pid', hidden: true }
+            ],
+            treeGrid: true,//启用树型Grid功能
+            treeGridModel: 'adjacency',//表示返回数据的读取类型，分为两种：和adjacency
+            ExpandColumn: 'name',//树型结构在哪列显示
+            rownumbers: false,
+            sortname: 'id',
+            gridComplete: function () {
+
+            },
+            onCellSelect: function (id) {//单击
+                $("#gridList").jqGrid('setGridParam', {
+                    postData: { mxgjbm: id},
+                    page: 1
+                }).trigger('reloadGrid');
+            }
+        });
+    }
+
+
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "@Url.Action("GetProjectList", "WorkOrder")",
+            height: $(window).height()-128,
+            colModel: [
+            { label: "主键", name: "id", key: true, hidden: true, frozen: true },
+            { label: '车站编号', name: 'czbh', width: 80, align: 'left', sortable: false },
+            { label: '专业', name: 'zy', width: 120, align: 'left', sortable: false },
+            { label: '大系统', name: 'dxt', width: 120, align: 'left', sortable: false },
+            { label: '子系统', name: 'zxt', width: 120, align: 'left ' },
+            { label: '系统类型', name: 'xtlx', width: 120, align: 'left' },
+            { label: '材质', name: 'cz', width: 140, align: 'left' },
+            { label: '设备材料类型', name: 'sbcllx', width: 120, align: 'left' },
+            { label: '设备材料名称', name: 'sbclmc', width: 120, align: 'left' },
+            { label: '模型构件编码', name: 'mxgjbm', width: 260, align: 'left' },
+            { label: '构件编码', name: 'gjbm', hidden: true },
+            { label: '规格尺寸', name: 'ggcc', width: 140, align: 'left' },
+            { label: '长度', name: 'cd', width: 140, align: 'left' }
+            ],
+            gridComplete: function (id) {
+                $gridList.find("tbody").find("input:checkbox").each(function () {
+                    $(this).parent().css("padding-top", "8px").css("padding-left", "14px");
+                });
+            },
+            loadComplete: function () {
+                //让滚动条默认回到顶部
+                $('#gview_gridList .ui-jqgrid-bdiv').scrollTop(0);
+            },
+            multiselect: true,
+            pager: "#gridPager",
+            sortname: 'id',
+            sortorder: 'asc',
+            viewrecords: true,
+            shrinkToFit: false,
+        });
+    }
+
+    //提交数据
+    function BackData() {
+        var index = 1;
+        var tableData = [];
+        var ids = $("#gridList").jqGrid('getGridParam', 'selarrrow');
+        if (ids.length > 0) {
+            for (var i = 0; i < ids.length; i++) {
+                var rowData= $("#gridList").jqGrid('getRowData', ids[i]);
+                var mydata = {
+                    ID: 0,
+                    StationCode: rowData.zzbh,
+                    ComponentMajor: rowData.zy,
+                    BigSystem: rowData.dxt,
+                    SonSystem: rowData.zxt,
+                    SystemType: rowData.xtlx,
+                    MaterialType: rowData.sbcllx,
+                    MaterialQuality: rowData.cz,
+                    MxGjBm: rowData.mxgjbm,
+                    ComponentCode: rowData.gjbm,
+                    ComponentName: rowData.sbclmc,
+                    SpecificationModel: rowData.ggcc,
+                    Length: rowData.cd,
+                    LargePatternShow: "<span id=\"uplaodFileTitle-" + index + "\" class=\"Isfile\">未上传</span>&nbsp;&nbsp;<a class=\"layui-layer-btn0 btn btn-primary\" id=\"uplaodFile-" + index + "\" onclick=\"UplaodDetail('" + index + "');\">上传</a>&nbsp;&nbsp;<a class=\"layui-layer-btn0 btn btn-primary\" id=\"uplaodFilelook-" + index + "\" onclick=\"uplaodFilelookDetail('" + index + "');\" style=\"display:none;\">查看</a>",
+                    LargePattern: '',
+                    ComponentStrat: '未加工',
+                    MxGjId:rowData.id
+                };
+                tableData.push(mydata);
+                index++;
+            }
+        }
+        if (tableData.length < 1) {
+            $.modalMsg("请选择项目清单信息", "warning");
+            return false;
+        }
+        return tableData;
+    }
+
+
+</script>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west" style="overflow-x:visible">
+        <table id="leftgridList"></table>
+    </div>
+    <div class="ui-layout-center">
+        <div class="topPanel">
+            <div class="search">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-search">
+                                <select id="SearchType" name="SearchType" class="form-control SearchType" style="width: 120px;">
+                                    <option value="">全部</option>
+                                    <option value="sbclmc">设备材料名称</option>
+                                </select>
+                                <input id="sbclmc" name="sbclmc" type="text" placeholder="设备材料名称" class="form-control SearchContent hidSearchContent">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-search">
+                                <a class="btn btn-primary btn_searchOne" id="btn_searchOne">查询</a>
+                                <a class="btn btn-primary btn_search" id="btn_search">结果中搜索</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="topPanel-btn" id="toolbar">
+                <div class="btn-group">
+                    <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
+                </div>
+            </div>
+        </div>
+        <div class="gridPanel">
+            <table id="gridList" class="gridList"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</div>

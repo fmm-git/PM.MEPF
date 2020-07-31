@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "GIS";
+    Layout = null;
+}
+<style type="text/css">
+    .ui-jqgrid .table-bordered th {
+        border-left: 0px none !important;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        font-weight: normal;
+        background: #eee;
+        border: 1px solid #ddd;
+    }
+</style>
+<script>
+    $(function () {
+        $.LodeMenuBtn("/BIM/GISGridList","#toolbar_GIS");
+        gridList_GIS();
+        setTimeout(function () {
+            $("#gridList_GIS").setGridWidth($(".ui-layout-center").width()-30);
+        }, 500);
+    });
+
+    //点击组织机构加载数据
+    function clickOrgLoadGridList(code) {
+        getOrganizationalCode("gridList_WorkOrder", code);
+    }
+
+    function gridList_GIS() {
+        var $gridList = $("#gridList_GIS");
+        $gridList.dataGrid({
+            url: "@Url.Action("GetGISGridJson", "BIM")",
+            height: $(window).height() * 0.65,
+            colModel: [
+                { label: "主键", name: "ID", hidden: true, key: true },
+                { label: '站点', name: 'SiteName', width: 120 },
+                { label: "工程计划时间", name: "TakNum", width: 120, align: 'left', sortable: false },
+                { label: '计划总数', name: 'TakDay', width: 100, align: 'left', sortable: false, formatter: formatDatebox },
+                { label: "加工完成", name: "WarehouseTypeName", width: 80, align: 'left', sortable: false },
+                { label: "安装完成", name: "TotalInventory", width: 100, align: 'left', sortable: false },
+                { label: '进度超前', name: 'TotalTak', width: 100, align: 'left', sortable: false },
+                { label: '进度滞后', name: 'TotalEarnOrLos', width: 100, align: 'left', sortable: false }, 
+                { label: '', name: ''},
+            ],
+            ondblClickRow: function (id) {//双击
+
+            },
+            pager: "#gridPager_GIS",
+            viewrecords: true,
+            shrinkToFit: false,
+        });
+        $gridList.jqGrid('setGroupHeaders',
+            {
+                useColSpanStyle: true,
+                groupHeaders: [
+                    {
+                        startColumnName: 'TakDay', numberOfColumns: 5, titleText: '构件进度（项目数/种类数/件数）' }
+                ]
+            });
+        $("#btn_search").click(function () {
+            $gridList.jqGrid('setGridParam', {
+                postData: $(".search").formSerialize(),
+                page: 1
+            }).trigger('reloadGrid');
+        });
+        //回车查询
+        document.onkeydown = function (e) {
+            if (!e) e = window.event;
+            if ((e.keyCode || e.which) == 13) {
+                $('#btn_search').trigger("click");
+            }
+        }
+    }
+    function EarnOrLosColor(cellValue, options, rowObject) {
+        if (parseInt(rowObject.EarnOrLos) == -1) {
+            return "<span style='color: red;'>" + cellValue + "</span>";
+        } else {
+            return "<span style='color: green;'>" + cellValue + "</span>";
+        }
+    }
+
+    //导出excel
+    function btn_output() {
+        var param = $(".search").GetSearchCondition();
+        var url = "@Url.Action("OutputGISExcel", "BIM")";
+        location.href = url + "?jsonData=" + escape(JSON.stringify(param));
+    }
+</script>
+
+<div class="ui-layout-center" id="qw11">
+    <div class="topPanel divwidth1">
+        <div class="topPanel-btn divwidth2" id="toolbar_GIS">
+            <div class="btn-group">
+                <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
+            </div>
+        </div>
+        <div class="search divwidth2">
+            <table>
+                <tr>
+                    <td>
+                        <div class="input-group input-group-search">
+                            <select name="SearchType" class="form-control SearchType" style="width: 120px;">
+                                <option value="">全部</option>
+                                <option value="SiteName">站点名称</option>
+                            </select>
+                            <input id="SiteName" name="SiteName" type="text" placeholder="站点名称" class="form-control SearchContent hidSearchContent">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-search">
+                            <a class="btn btn-primary btn_searchOne">查询</a>
+                            <a class="btn btn-primary" id="btn_search">结果中搜索</a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="gridPanel">
+        <table id="gridList_GIS" class="gridList"></table>
+        <div id="gridPager_GIS" class="pager-fixed" style="bottom:0px;"></div>
+    </div>
+</div>

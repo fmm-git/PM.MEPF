@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<script>
+    var keyValue = $.request("keyValue");
+    var type = $.request("type");
+    var ParentProCode = $.request("ParentProCode");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "@Url.Action("GetFormJson", "Standardization")",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data.Item1[0]);
+                }
+            });
+        }
+    });
+
+    function initControl() {
+        var isReturn = false;
+        $("#ParentProCode").bindSelect({
+            url: "/SystemManage/Standardization/GetSelectJson",
+            search:true
+        });
+        $('#ParentProCode').find("option[value='" + ParentProCode + "']").attr("selected", true);
+        $("#select2-ParentProCode-container").html($('#ParentProCode').find("option:selected").text().replace(/　　/g, ''));
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "@Url.Action("SubmitForm", "Standardization")" + "?type=" + type,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                top.$("#loadingPage").hide();
+                $.currentWindow().Refresh("FBFX");
+            }
+        });
+    }
+</script>
+
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 25%;">
+        <input id="ID" name="ID" type="hidden" />
+        <div style="padding-top: 20px;">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">项目编号<span class="required1">*</span></th>
+                    <td class="formValue" colspan="2">
+                        <input id="ProCode" name="ProCode" type="text" class="form-control required" placeholder="请输入项目编号" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">项目名称<span class="required1">*</span></th>
+                    <td class="formValue" colspan="2">
+                        <input id="ProName" name="ProName" type="text" class="form-control required" value="" placeholder="请输入项目名称" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">上级项目</th>
+                    <td class="formValue" colspan="2">
+                        <select id="ParentProCode" name="ParentProCode" class="form-control">
+                            <option value="0">父节点</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">备注</th>
+                    <td class="formValue" colspan="2">
+                        <textarea id="Remark" name="Remark" class="form-control" placeholder="备注" style="height: 60px;"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>

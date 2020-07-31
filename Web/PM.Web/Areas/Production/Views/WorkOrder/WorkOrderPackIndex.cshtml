@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "订单打包";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    var OrderCode = $.request("OrderCode");
+    var mydata = [];
+    var index = 1;
+    var lastsel;
+
+    $(function () {
+        gridList();
+    });
+
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            datatype: "json",
+            height: $(window).height() - 160,
+            colModel: [
+                    { label: "主键", name: "ID", hidden: true },
+                    { label: '站点', name: 'SiteName', width: 120, height: 10, align: "left", sortable: false },
+                    { label: '包件号', name: 'PackageNumber', width: 140, height: 10, align: "left", sortable: false },
+                    { label: '订单编号', name: 'OrderCode', width: 140, align: "left", sortable: false },
+                    { label: '项目名称', name: 'ProName', width: 140, align: "left", sortable: false },
+                    { label: '构件/材料种类', name: 'ComponentType', sortable: false },
+                    { label: '构件名称', name: 'ComponentName', width: 150, align: "left", sortable: false },
+                    { label: '单位', name: 'MeteringUnit', width: 80, align: "left", sortable: false},
+                    { label: '本包数量', name: 'ThisPackageNum', width: 80, align: "left", sortable: false, editable: true },
+                    { label: '打包日期', name: 'PackDate', width: 120, align: "left", sortable: false, editable: true },
+                    { label: '备注', name: 'Remark', width:200, align: "left", sortable: false, editable: true }
+            ],
+            gridComplete: function () {
+                $(".ui-jqgrid-bdiv").css("overflow-x", "hidden");
+                $("div.unwritten").remove();
+            },
+            onCellSelect: function (rowid, iCol, cellContent, e) {
+                $gridList.jqGrid('editRow', rowid, true, null, null, null, null, null, null, null, iCol);
+                //获取表格最后一行Id
+                var selectedRowIds = $gridList.jqGrid("getDataIDs");
+                var id = selectedRowIds[selectedRowIds.length - 1];
+                if (rowid && (rowid !== lastsel || rowid == id)) {
+
+                    $gridList.jqGrid('saveRow', lastsel);
+                    $gridList.jqGrid('editRow', rowid, true);
+                    lastsel = rowid;
+                    $("#gridList>tbody").find("input:text").each(function () {
+                        var width = parseInt($(this).css("width").replace('px', '')) - 25;
+                        $(this).css("height", "20px").css("width", width + "px");
+                    });
+                }
+            },
+        });
+    }
+
+    //新增
+    function btn_add() {
+        var url = "/Production/WorkOrder/GetNoPackOrderDetail&keyValue=OrderCode/" + OrderCode;
+        var str = "";
+        var ret = selectClick('win_NoPackOrderDetail', url, 'Grid', '', '', str, '80%', '80%', function () {
+        });
+    }
+
+</script>
+<div class="ui-layout-center">
+    <div class="topPanel">
+        <div class="topPanel-btn" id="toolbar">
+            <div class="btn-group">
+                <a class="btn btn-primary" onclick="btn_add();"><i class="fa fa-plus"></i>新增</a>
+            </div>
+            <div class="btn-group">
+                <a class="btn btn-primary" onclick="btn_delete();"><i class="fa fa-trash-o"></i>删除</a>
+            </div>
+        </div>
+    </div>
+    <div class="gridPanel">
+        <table id="gridList"></table>
+    </div>
+</div>

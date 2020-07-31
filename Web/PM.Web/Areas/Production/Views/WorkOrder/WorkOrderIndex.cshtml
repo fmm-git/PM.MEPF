@@ -1,0 +1,355 @@
+﻿@{
+    ViewBag.Title = "加工订单主页";
+    Layout = null;
+}
+
+<style type="text/css">
+    .SelectBG {
+        background-color: #c6c6c6;
+        color: #000000;
+    }
+
+    .ui-jqgrid tr.jqgrow td {
+        vertical-align: middle;
+    }
+
+    .zzjgtj {
+        color: #6c6c6c;
+    }
+</style>
+<script>
+    var day = "";
+    $(function () {
+        $.LodeMenuBtn("/Production/WorkOrder/Index", "#toolbar_WorkOrder");
+        initControl();
+        gridList_WorkOrder();
+        var height = $("#ui-layout-center").height();
+        $("#ui-layout-center").height(height - 20);
+    });
+    function layout_center_bottom() {
+        var height = $("#ui-layout-center").height();
+        $("#ui-layout-center").height(height - 20);
+    }
+    //初始化加载查询条件
+    function initControl() {
+        //加工状态
+        $("#ProcessingState").bindSelect({
+            url: "@Url.Action("GetDicByCode", "DataDictionary", new { area = "SystemManage", dicCode = "ProcessingState" })",
+            id: "DictionaryCode",
+            text: "DictionaryText"
+        });
+        //加急程度
+        $("#UrgentDegree").bindSelect({
+            url: "@Url.Action("GetDicByCode", "DataDictionary", new { area = "SystemManage", dicCode = "UrgentDegree" })",
+            id: "DictionaryCode",
+            text: "DictionaryText"
+        });
+    }
+
+    //点击组织机构加载数据
+    function clickOrgLoadGridList(code) {
+        getOrganizationalCode("gridList_WorkOrder", code);
+    }
+
+    //----------------加载列表数据开始------------
+    function gridList_WorkOrder() {
+        var $gridList = $("#gridList_WorkOrder");
+        $gridList.dataGrid({
+            url: "@Url.Action("GetGridJson", "WorkOrder")",
+            height: $(window).height() * 0.7,
+            colModel: [
+                { label: "主键", name: "ID", hidden: true, key: true },
+                { label: '站点名称', name: 'SiteName', width: 140, align: 'left', sortable: false },
+                { label: '订单编号及类型', name: 'OrderCodeOrType', width: 140, align: 'left', sortable: false, formatter: NewCellOrderCodeOrType },
+                { label: '订单状态', name: 'OrderStateOrEx', width: 100, align: 'left', sortable: false, formatter: NewCellOrderStateOrEx },
+                { label: "专业", name: "Major", width: 120, align: 'left', sortable: false },
+                { label: '系统类型', name: 'SystemType', width: 120, align: 'left', sortable: false },
+                { label: '总件数', name: 'SumNumber', width: 70, align: 'left', sortable: false },
+                { label: '要求送达时间', name: 'DistributionTime', width: 120, align: 'left', sortable: false, formatter: formatDatebox },
+                { label: '打包状态', name: 'PackStart', width: 80, align: 'left', sortable: false },
+                { label: '现场签收', name: 'SignFor', width: 80, align: 'left', sortable: false },
+                { label: '现场安装', name: 'Install', width: 80, align: 'left', sortable: false },
+                { label: '录入人', name: 'InsertUserCode', hidden: true },
+                { label: '录入人及时间', name: 'UserName', width: 120, align: 'left', sortable: false, formatter: NewCellInsertUserOrTiem },
+                { label: '项目ID', name: 'ProjectId', hidden: true },
+                { label: '审批状态', name: 'Examinestatus', hidden: true },
+                { label: '订单状态', name: 'OrderCode', hidden: true },
+                { label: '订单状态', name: 'OrderState', hidden: true },
+                { label: '订单类型', name: 'OrderType', hidden: true },
+                { label: '加急程度', name: 'UrgentDegree', hidden: true },
+                { label: '订单类型', name: 'OrderTypeNew', hidden: true },
+                { label: '加急程度', name: 'UrgentDegreeNew', hidden: true },
+            ],
+            ondblClickRow: function (id) {//双击
+                btn_details_WorkOrder();
+            },
+            gridComplete: function () {
+                //var ids = $("#gridList_WorkOrder").getDataIDs();
+                //$gridList.setSelection(ids[0], true);
+            },
+            onCellSelect: function (id) {//单击
+
+            },
+            pager: "#gridPager_WorkOrder",
+            sortname: 'InsertTime',
+            sortorder: 'desc',
+            viewrecords: true,
+            shrinkToFit: false,
+        });
+        //回车查询
+        document.onkeydown = function (e) {
+            if (!e) e = window.event;
+            if ((e.keyCode || e.which) == 13) {
+                $('#btn_search').trigger("click");
+            }
+        }
+    }
+
+    function NewCellOrderCodeOrType(cellValue, options, rowObject) {
+        var tdhtml = rowObject.OrderCode + "<br/>" + rowObject.UrgentDegreeNew + "(" + rowObject.OrderTypeNew+")";
+        return tdhtml;
+    }
+    function NewCellOrderStateOrEx(cellValue, options, rowObject) {
+        var tdhtml = rowObject.OrderState + "<br/>" + rowObject.Examinestatus;
+        return tdhtml;
+    }
+    function NewCellInsertUserOrTiem(cellValue, options, rowObject) {
+        var tdhtml = rowObject.UserName + "<br/>" + formatDatebox(rowObject.InsertTime);
+        return tdhtml;
+    }
+    //----------------加载列表数据结束--------------
+
+    function btn_add_WorkOrder() {
+        var where = "?type=add";
+        var id = $('#ZZJG_tab_Info').jqGrid('getGridParam', 'selrow');
+        var CompanyData = $("#ZZJG_tab_Info").jqGrid('getRowData', id);
+        if (CompanyData.OrgType == "5") {
+            where += "&CompanyCode=" + CompanyData.CompanyCode + "&CompanyFullName=" + CompanyData.CompanyFullName;
+        }
+        $.modalOpen({
+            id: "Form",
+            title: "新增加工订单",
+            url: "/Production/WorkOrder/Form" + where,
+            width: "85%",
+            height: "85%",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    //通过模型下单
+    function modelPlaceOrder(orgcode, mxgjid) {
+        var where = "?type=add&mxgjid="+mxgjid;
+        var CompanyData = $("#ZZJG_tab_Info").jqGrid('getRowData', orgcode);
+        if (CompanyData.OrgType == "5") {
+            where += "&CompanyCode=" + CompanyData.CompanyCode + "&CompanyFullName=" + CompanyData.CompanyFullName;
+        }
+        $.modalOpen({
+            id: "Form",
+            title: "新增加工订单",
+            url: "/Production/WorkOrder/Form" + where,
+            width: "85%",
+            height: "85%",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    
+    function btn_edit_WorkOrder() {
+        var keyValue = $("#gridList_WorkOrder").jqGridRowValue().ID;
+        if (keyValue != "" && keyValue != null && keyValue != undefined) {
+            $.modalOpen({
+                id: "Form",
+                title: "修改加工订单",
+                url: "/Production/WorkOrder/Form?keyValue=" + keyValue + "&type=edit",
+                width: "85%",
+                height: "85%",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                }
+            });
+        } else {
+            $.modalMsg("请选择要修改加工订单信息", "warning");
+            return false;
+        }
+    }
+
+    function btn_delete_WorkOrder() {
+        var keyValue = $("#gridList_WorkOrder").jqGridRowValue().ID;
+        if (keyValue != "" && keyValue != null && keyValue != undefined) {
+            $.deleteForm({
+                url: "/Production/WorkOrder/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList_WorkOrder").resetSelection();
+                    $.currentWindow().$("#gridList_WorkOrder").trigger("reloadGrid");
+                }
+            });
+        } else {
+            $.modalMsg("请选择要删除的加工订单信息", "warning");
+            return false;
+        }
+    }
+
+    function btn_details_WorkOrder() {
+        var keyValue = $("#gridList_WorkOrder").jqGridRowValue().ID;
+        if (keyValue != "" && keyValue != null && keyValue != undefined) {
+            $.modalOpen({
+                id: "Details",
+                title: "查看加工订单",
+                url: "/Production/WorkOrder/Details?keyValue=" + keyValue,
+                width: "85%",
+                height: "85%",
+                btn: null,
+            });
+        } else {
+            $.modalMsg("请选择要查看的加工订单信息", "warning");
+            return false;
+        }
+    }
+
+    //审批流程
+    function btn_examination() {
+        var rowData = $("#gridList").jqGridRowValue();
+        if (rowData.length > 1) {
+            $.modalMsg("只能选择一条数据发起流程", "warning");
+            return false;
+        }
+        var DataId = rowData.ID;
+        if (DataId) {
+            if (rowData.Examinestatus != "未发起") {
+                SeeApproval("WorkOrder", DataId);
+            }
+            else {
+                var LoginUserCode = '@ViewBag.LoginUserCode';
+                examination(DataId, 'WorkOrder', rowData.Examinestatus, rowData.OrderCode, rowData.ProjectId, LoginUserCode, "");
+            }
+        }
+        else {
+            $.modalMsg("请选择要发起流程的信息", "warning");
+            return false;
+        }
+    }
+
+    //导出excel
+    function btn_output() {
+        var param = $(".search").GetSearchCondition();
+        var id = $('#leftgridList').jqGrid('getGridParam', 'selrow');
+        if (id != null && id != "" && id != undefined) {
+            var siteCode = getOrganizationalCode(id);
+            //重新加载报表数据
+            var CompanyId = $("#leftgridList").jqGrid('getRowData', id);
+            param.SiteCode = siteCode;
+            param.ProjectId = CompanyId.ProjectId;
+        }
+        var url = "@Url.Action("OutputExcel", "WorkOrder")";
+        location.href = url + "?jsonData=" + escape(JSON.stringify(param));
+    }
+
+    //打包
+    function btn_other1_WorkOrder() {
+        var OrderCode = $("#gridList_WorkOrder").jqGridRowValue().OrderCode;
+        //if (OrderCode) {
+        $.modalOpen({
+            id: "WorkOrderPackIndex",
+            title: "修改",
+            url: "/Production/WorkOrder/WorkOrderPackIndex?OrderCode=" + OrderCode,
+            width: "90%",
+            height: "90%",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitOrderPack();
+            }
+        });
+        //} else {
+        //    $.modalMsg("请选择要打包的订单信息", "warning");
+        //    return false;
+        //}
+    }
+
+    //签收
+    function btn_other2_WorkOrder() {
+        var OrderCode = $("#gridList_WorkOrder").jqGridRowValue().OrderCode;
+        //if (OrderCode) {
+        $.modalOpen({
+            id: "WorkOrderSignForIndex",
+            title: "修改",
+            url: "/Production/WorkOrder/WorkOrderSignForIndex?OrderCode=" + OrderCode,
+            width: "90%",
+            height: "90%",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitOrderSignFor();
+            }
+        });
+        //} else {
+        //    $.modalMsg("请选择要签收的订单信息", "warning");
+        //    return false;
+        //}
+    }
+    //安装
+    function btn_other3_WorkOrder() {
+        var OrderCode = $("#gridList_WorkOrder").jqGridRowValue().OrderCode;
+        //if (OrderCode) {
+        $.modalOpen({
+            id: "WorkOrderSignForIndex",
+            title: "修改",
+            url: "/Production/WorkOrder/WorkOrderSignForIndex?OrderCode=" + OrderCode,
+            width: "90%",
+            height: "90%",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitOrderSignFor();
+            }
+        });
+        //} else {
+        //    $.modalMsg("请选择要签收的订单信息", "warning");
+        //    return false;
+        //}
+    }
+</script>
+<div class="ui-layout-center">
+    <div name="WorkOrder_tab_Info">
+        <div class="topPanel">
+            <div class="search">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-search">
+                                <select id="SearchType" name="SearchType" class="form-control SearchType" style="width: 120px;">
+                                    <option value="">全部</option>
+                                    <option value="OrderCode">订单编号</option>
+                                </select>
+                                <input id="OrderCode" name="OrderCode" type="text" class="form-control SearchContent hidSearchContent" placeholder="订单编号" style="width: 140px; margin-left: 5px;">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-search">
+                                <a class="btn btn-primary btn_searchOne" id="btn_searchOne">查询</a>
+                                <a class="btn btn-primary btn_search" id="btn_search">结果中搜索</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="toolbar_WorkOrder" class="toolbar" style="float:left;margin-left:5px;">
+                <div class="btn-group">
+                    <a class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
+                </div>
+            </div>
+        </div>
+        <div class="gridPanel" style="margin-bottom:20px;">
+            <table id="gridList_WorkOrder" class="gridList"></table>
+            <div id="gridPager_WorkOrder" class="pager-fixed"></div>
+        </div>
+    </div>
+    <div name="ProblemOrder_tab_Info" id="ProblemOrder_tab_Info" style="display:none">
+        @{Html.RenderAction("Index", "ProblemOrder", new { area = "Production" });}
+    </div>
+    <div name="OrderPack_tab_Info" id="OrderPack_tab_Info" style="display:none">
+        @{Html.RenderAction("OrderPackIndex", "WorkOrder", new { area = "Production" });}
+    </div>
+    <ul class="nav nav-tabs" style="position:fixed;bottom:0px;background-color:white">
+        <li id="WorkOrder_tab_" onclick="selectTab($(this))" class="active"><a href="javascript:void(0);">加工订单</a></li>
+        <li id="ProblemOrder_tab_" onclick="selectTab($(this))"><a href="javascript:void(0);">变更记录</a></li>
+        <li id="OrderPack_tab_" onclick="selectTab($(this))"><a href="javascript:void(0);">包件二维码</a></li>
+    </ul>
+</div>

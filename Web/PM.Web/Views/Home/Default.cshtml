@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "形象进度展示";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<link href="~/Content/css/Style-index.css" rel="stylesheet" />
+<script src="~/Content/js/datepicker/WdatePicker.js"></script>
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="pane ui-layout-west ui-layout-pane ui-layout-pane-west left-scrollbar">
+        <ul class="nav nav-tabs">
+            <li id="ZZJG_tab_" onclick="selectTab($(this))" class="active"><a href="javascript:void(0);">组织机构</a></li>
+            <li id="XMJG_tab_" onclick="selectTab($(this))"><a href="javascript:void(0);">项目结构</a></li>
+        </ul>
+        <div name="ZZJG_tab_Info"><table id="ZZJG_tab_Info" style="width:500px;"></table></div>
+        <div name="XMJG_tab_Info" style="display:none"><table id="XMJG_tab_Info"></table></div>
+    </div>
+    <div class="ui-layout-center" id="innerLayout">
+        <div class="ui-layout-north">
+            <div name="GIS_tab_Info" style="height:91%">
+                @{Html.RenderAction("BIMGISView", "BIM"); }
+            </div>
+            <div name="3D_tab_Info" id="3D_tab_Info" style="height: 91%;display:none">
+                @{Html.RenderAction("BIM3DView", "BIM"); }
+            </div>
+            <ul class="nav nav-tabs">
+                <li id="GIS_tab_" onclick="selectTab($(this))" class="active"><a style="height:10px;" href="javascript:void(0);">GIS图</a></li>
+                <li id="3D_tab_" onclick="selectTab($(this))"><a style="height:10px;" href="javascript:void(0);">3D模型</a></li>
+            </ul>
+        </div>
+        <div class="ui-layout-center" id="ui-layout-center">
+            <!--------GIS-------->
+            <div name="GIS_tab_Info">
+                @{
+                    if (ViewBag.IsOrder)
+                    {
+                        Html.RenderAction("WorkOrderIndex", "WorkOrder", new { area = "Production" });
+                    }
+                    else
+                    {
+                        Html.RenderAction("GISGridList", "BIM");
+                    }
+                }
+            </div>
+            <!--------3D-------->
+            <div name="3D_tab_Info" style="display:none">
+                @{
+                    Html.RenderAction("BIM3DGridList", "BIM");
+                }
+            </div>
+        </div>
+    </div>
+    <div class="pane ui-layout-east">
+        <section class="panel panel-default" style="width:99%;height:625px;">
+            <header class="panel-heading font-bold cc i-head-color" style="background-color: #ffffff;">
+                <img src="~/Content/img/syjib.png" class="sytb" />统计报表
+            </header>
+            <div class="panel-body" style="margin-top:40px;">
+                @{
+                    if (ViewBag.IsOrder)
+                    {
+                        Html.RenderAction("RightReportChar", "WorkOrder", new { area = "Production" });
+                    }
+                    else
+                    {
+                        Html.RenderAction("RightReportChar", "BIM");
+                    }
+                }
+            </div>
+        </section>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#layout').layout({
+            onresize: load_scroll,
+            west: {
+                size: ($(window).width()) > 1000 ? .16 : .21
+            }
+        });
+        $('#innerLayout').layout({
+            onresize: load_scroll,
+            north: {
+                size: .65
+            }
+        });
+        setTimeout(function () {
+            ui_layout_toggler_click();
+        }, 500);
+        leftOrgList();
+        leftBIM3DList();
+    });
+    function selectTab(v) {
+        var id = v.attr('id');
+        if (id) {
+            $("#" + id + "").addClass("active").siblings().removeClass("active");
+            var dom = $("[name='" + id + "Info']");
+            $.each(dom, function (i, item) {
+                $(item).show();
+                $(item).siblings('div').hide();
+            });
+            if (id == "3D_tab_") {
+                initBim3D();
+            }
+        }
+    }
+    //加载组织机构
+    function leftOrgList() {
+        var $leftgridList = $("#ZZJG_tab_Info");
+        $leftgridList.dataGrid({
+            url: "/SystemManage/Company/GetAllCompanyOrBySearch",
+            height: $(window).height() - 96,
+            colModel: [
+               { label: "组织机构编号", name: "CompanyCode", hidden: true, key: true },
+               { label: '组织机构', name: 'CompanyFullName', width: 220, align: 'left', sortable: false, },
+               { label: '组织机构类型', name: 'OrgType', hidden: true },
+               { label: '项目id', name: 'ProjectId', hidden: true },
+               { label: '组织机构id', name: 'ParentCompanyCode_F', hidden: true },
+               { label: '组织机构父级id', name: 'ParentCompanyCode', hidden: true }
+            ],
+            treeGrid: true,//启用树型Grid功能
+            treeGridModel: 'adjacency',//表示返回数据的读取类型，分为两种：和adjacency
+            ExpandColumn: 'CompanyFullName',//树型结构在哪列显示
+            rownumbers: false,
+            sortname: 'CompanyCode',
+            //gridComplete: function () {
+            //    $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide();
+            //},
+            onCellSelect: function (id) {//单击
+                clickOrgLoadGridList(id);
+            }
+        });
+    }
+
+    //加载项目结构
+    function leftBIM3DList() {
+        var $leftgridList = $("#XMJG_tab_Info");
+        $leftgridList.dataGrid({
+            url: "@Url.Action("Getmodel_tree", "BIM")",
+            height: $(window).height() - 96,
+            colModel: [
+                { label: "id", name: "id", hidden: true, key: true },
+                { label: 'name', name: 'name', width: 220, align: 'left', sortable: false, },
+                { label: 'flag', name: 'flag', hidden: true },
+                { label: 'tid', name: 'tid', hidden: true },
+                { label: 'modelfile', name: 'modelfile', hidden: true },
+                { label: 'filename', name: 'filename', hidden: true },
+                { label: '父级id', name: 'pid', hidden: true }
+            ],
+            treeGrid: true,//启用树型Grid功能
+            treeGridModel: 'adjacency',//表示返回数据的读取类型，分为两种：和adjacency
+            ExpandColumn: 'name',//树型结构在哪列显示
+            rownumbers: false,
+            sortname: 'id',
+            gridComplete: function () {
+                $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide();
+            },
+            onCellSelect: function (id) {//单击
+
+            }
+        });
+    }
+</script>

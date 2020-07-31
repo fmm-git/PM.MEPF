@@ -1,0 +1,922 @@
+﻿@{
+    ViewBag.Title = "BIM3DView";
+    Layout = null;
+}
+<link href="~/Content/static/model/index.css" rel="stylesheet" />
+<link href="~/Content/static/icon/extend/iconfont.css" rel="stylesheet" />
+<script src="~/Content/static/model/BIM3DInterface.js"></script>
+<script src="~/Content/static/model/BIM3DViewer.js"></script>
+<style type="text/css">
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #menu {
+        background-color: #eee;
+        height: 26px;
+        margin: 0 auto;
+    }
+
+    .model-menu ul {
+        list-style: none;
+        z-index: 4;
+    }
+
+        .model-menu ul li {
+            float: left;
+            font-size: 12px;
+            line-height: 26px;
+            text-align: left;
+            position: relative;
+        }
+
+    .model-menu a {
+        text-decoration: none;
+        color: #000;
+        padding: 0px 0px 0px 10px;
+        display: block;
+        width: 100px;
+    }
+
+        .model-menu a:hover {
+            color: #FFF;
+            background-color: #666;
+        }
+
+    .model-menu ul li ul li {
+        float: none;
+        border-left: none;
+        margin-top: 2px;
+        background-color: #eee;
+    }
+
+        .model-menu ul li ul li a {
+            font-size: 10px;
+        }
+
+    .model-menu ul li ul {
+        width: 110px;
+        position: absolute;
+        left: 0px;
+        top: 26px;
+        display: none;
+    }
+
+    .page-main-card {
+        margin: 0 auto;
+        position: relative;
+        background-color: #f2f2f2;
+        width: 95%;
+        height: 92%;
+    }
+
+    .page-body-card {
+        -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+        -moz-box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+        box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+        background-color: #fff;
+        padding: 10px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .model-main {
+        position: absolute;
+        z-index: 2;
+        width: 100%;
+        height: 90%;
+    }
+
+    .box-main {
+        width: 100%;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        color: #fff;
+    }
+
+    .middle-main {
+        position: relative;
+    }
+
+    .model-info-box {
+        position: absolute;
+        top: 10px;
+        width: 120px;
+        height: 180px;
+        left: 10px;
+        z-index: 3;
+    }
+
+    .model-info-main {
+        background-color: rgba(0, 0, 0, .4);
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+        overflow: auto; /*当内容超过，出现滚动条*/
+    }
+
+        .model-info-main::-webkit-scrollbar { /*滚动条整体*/
+            width: 4px;
+        }
+
+        .model-info-main::-webkit-scrollbar-track { /*滚动条轨道*/
+            background: #999;
+            border-radius: 2px;
+        }
+
+        .model-info-main::-webkit-scrollbar-thumb { /*滚动条里面的滑块*/
+            background: white;
+            border-radius: 10px;
+        }
+
+            .model-info-main::-webkit-scrollbar-thumb:hover { /*滚动条鼠标事件，鼠标放上去出现的事件*/
+                background: #333;
+            }
+
+        .model-info-main::-webkit-scrollbar-corner { /*滚动条边角*/
+            background: #179a16;
+        }
+
+    .model-info-content {
+        padding: 10px 10px;
+    }
+
+        .model-info-content ul {
+            list-style: none;
+        }
+
+            .model-info-content ul a {
+                font-size: 12px;
+                color: #ffffff;
+                text-decoration: none;
+            }
+
+    .model-info-item-text {
+        float: left;
+        width: 50%;
+        font-size: 9px;
+    }
+
+    .switch-map {
+        position: absolute;
+        top: 10px;
+        width: 20px;
+        height: 20px;
+        right: 10px;
+        z-index: 3;
+    }
+
+    .switch-main {
+        width: 100%;
+        height: 100%;
+    }
+
+        .switch-main a {
+            text-decoration: none;
+            margin-left: 5px;
+        }
+
+    .switch-menu-icon {
+        width: 1.4em;
+        height: 1.4em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+    }
+
+    .side-button {
+        position: absolute;
+        width: 30px;
+        height: 18px;
+        right: 10px;
+        z-index: 3;
+    }
+
+    .place-order-model {
+        top: 40px;
+    }
+
+    .sign-for-model {
+        top: 65px;
+    }
+
+    .install-model {
+        top: 90px;
+    }
+
+    .data-model {
+        top: 115px;
+    }
+
+    .side-button-main {
+        background-color: #1E90FF;
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+    }
+
+    .side-button-a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.5em;
+        padding: 5px 5px 5px 7px;
+    }
+
+    .legend-model {
+        position: absolute;
+        top: 140px;
+        width: 80px;
+        height: 95px;
+        right: 10px;
+        z-index: 3;
+    }
+
+    .legend-main {
+        background-color: rgba(0, 0, 0, .4);
+        width: 100%;
+        height: 100%;
+    }
+
+    .legend-content {
+        padding: 10px 10px;
+    }
+
+    .legend-list {
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
+    }
+    .legend-list-li {
+         line-height:14px;
+    }
+
+    .bonyong-badge {
+        width: 18px;
+        height: 10px;
+        margin-right: 2px;
+        position: relative;
+        margin-bottom: -2px;
+        display: inline-block;
+        background-color: #FF5722;
+    }
+
+    .bonyong-bg-dark-orange {
+        background-color: #FF8C00 !important;
+    }
+
+    .bonyong-bg-green {
+        background-color: #008000 !important;
+    }
+
+    .bonyong-bg-light-grey {
+        background-color: #D3D3D3 !important;
+    }
+
+    .bonyong-bg-doder-blue {
+        background-color: #1E90FF !important;
+    }
+
+    .bonyong-bg-turquoise {
+        background-color: #40E0D0 !important;
+    }
+
+    .bonyong-badge-word {
+        margin-left: 5px;
+        font-size: 0.6em;
+    }
+</style>
+
+<div class="page-main-card">
+    <div class="page-body-card">
+        <div id="menu" class="model-menu">
+            <ul>
+                <li class="navmenu">
+                    <a href="javascript:;"><i class="iconfont iconthin-_pencil_rul"></i>&nbsp;模型测量</a>
+                    <ul>
+                        <li>
+                            <a href="javascript:coordinateMeasure();"> <i class="iconfont iconsanweizuobiao"></i>&nbsp;坐标测量</a>
+                        </li>
+                        <li>
+                            <a href="javascript:twoPointsDistance();"> <i class="iconfont iconliangdianjuli"></i>&nbsp;两点距离</a>
+                        </li>
+                        <li>
+                            <a href="javascript:pointLineDistance();"> <i class="iconfont icondianxianjuli"></i>&nbsp;点线距离</a>
+                        </li>
+                        <li>
+                            <a href="javascript:pointFaceDistance();"> <i class="iconfont iconbianjiwangdianmian"></i>&nbsp;点面距离</a>
+                        </li>
+                        <li>
+                            <a href="javascript:twoFacesDistance();"> <i class="iconfont icondimianjuli"></i>&nbsp;对象间距离</a>
+                        </li>
+                        <li>
+                            <a href="javascript:threePointsAngle();"> <i class="iconfont iconjiaodu"></i>&nbsp;三点角度</a>
+                        </li>
+                        <li>
+                            <a href="javascript:threePointsRadius();"> <i class="iconfont iconsandianyuan3"></i>&nbsp;三点圆半径</a>
+                        </li>
+                        <li><a href="javascript:getFaceArea();"> <i class="iconfont iconmianji"></i>&nbsp;表面面积</a></li>
+                        <li><a href="javascript:getModelVolume();"> <i class="iconfont icontiji"></i>&nbsp;对象体积</a></li>
+                    </ul>
+                </li>
+                <li class="navmenu">
+                    <a href="javascript:;"><i class="iconfont icongeli"></i>&nbsp;可视操作</a>
+                    <ul>
+                        <li>
+                            <a href="javascript:setModelHide();"> <i class="iconfont iconyincang"></i>&nbsp;隐藏选中对象</a>
+                        </li>
+                        <li>
+                            <a href="javascript:setOtherModelHide();"> <i class="iconfont iconyincang1"></i>&nbsp;隐藏非选中对象</a>
+                        </li>
+                        <li>
+                            <a href="javascript:cancelModelHide();"> <i class="iconfont iconxianshi_huaban"></i>&nbsp;取消隐藏</a>
+                        </li>
+                        <li>
+                            <a href="javascript:setModelQuarantine();"> <i class="iconfont iconfenlishiguanli"></i>&nbsp;隔离选中模块</a>
+                        </li>
+                        <li>
+                            <a href="javascript:setOtherModelQuarantine();"> <i class="iconfont iconseparate"></i>&nbsp;隔离非选中模块</a>
+                        </li>
+                        <li>
+                            <a href="javascript:cancelModelQuarantine();"> <i class="iconfont iconfenli"></i>&nbsp;取消隔离</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="navmenu">
+                    <a href="javascript:;"><i class="iconfont iconshitupouqiehe"></i>&nbsp;剖切查看</a>
+                    <ul>
+                        <li>
+                            <a href="javascript:startFaceSlice();"> <i class="iconfont iconpouqie"></i>&nbsp;自由剖切</a>
+                        </li>
+                        <li>
+                            <a href="javascript:startXYSlice();">
+                                <i class="iconfont iconXYzuobiaozhou"></i>&nbsp;XY剖切
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:startYZSlice();">
+                                <i class="iconfont iconZYzuobiaozhou"></i>&nbsp;YZ剖切
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:startZXSlice();">
+                                <i class="iconfont iconXZzuobiaozhou"></i>&nbsp;ZX剖切
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:startBoxSlice();">
+                                <i class="iconfont iconpouqiehe"></i>&nbsp;剖切盒
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:startEdgeSlice();"> <i class="iconfont iconpouqie1"></i>&nbsp;直线法平面剖切</a>
+                        </li>
+                        <li><a href="javascript:openSliceCompass();"> <i class="iconfont icondakai2"></i>&nbsp;开启剖切面罗盘</a>
+                        <li>
+                            <a href="javascript:closeSliceCompass();"> <i class="iconfont iconicon-test"></i>&nbsp;关闭剖切面罗盘</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="navmenu">
+                    <a href="javascript:;"><i class="iconfont iconweibiaoti1"></i>&nbsp;视图标注</a>
+                    <ul>
+                        <li><a href="javascript:wordsMark();"> <i class="iconfont iconwenben"></i>&nbsp;文本标注</a></li>
+                        <li>
+                            <a href="javascript:rectangleMark();"> <i class="iconfont iconjuxing"></i>&nbsp;矩形标注</a>
+                        </li>
+                        <li>
+                            <a href="javascript:circularMark();"> <i class="iconfont iconyuanxing"></i>&nbsp;圆形标注</a>
+                        </li>
+                        <li>
+                            <a href="javascript:ellipseMark();"> <i class="iconfont icontuoyuanxing"></i>&nbsp;椭圆标注</a>
+                        </li>
+                        <li>
+                            <a href="javascript:arrowheadMark();"> <i class="iconfont iconjiantou_zuoshang"></i>&nbsp;箭头标注</a>
+                        </li>
+                        <li>
+                            <a href="javascript:polygonMark();"> <i class="iconfont iconduobianxing"></i>&nbsp;多边形标注</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="myContainer" class="model-main">
+        </div>
+        <div class="box-main">
+            <div class="middle-main">
+                <div class="model-info-box" id="modelInfoBox" style="display:none">
+                    <div class="model-info-main">
+                        <div class="model-info-content">
+                            <ul>
+                                <li class="nav-item">
+                                    <a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>机械</span><i class="my-icon nav-more"></i></a>
+                                    <ul>
+                                        <li><div class="model-info-item-text">系统分类</div><div class="model-info-item-text">送风</div></li>
+                                        <li><div class="model-info-item-text">系统类型</div><div class="model-info-item-text">SF空调送风</div></li>
+                                        <li><div class="model-info-item-text">系统名称</div><div class="model-info-item-text">SF 1</div></li>
+                                        <li><div class="model-info-item-text">当量直径</div><div class="model-info-item-text">1717</div></li>
+                                        <li><div class="model-info-item-text">面积</div><div class="model-info-item-text">2 m²</div></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>尺寸标注</span><i class="my-icon nav-more"></i></a>
+                                    <ul>
+                                        <li><div class="model-info-item-text">尺寸</div><div class="model-info-item-text">1600*400</div></li>
+                                        <li><div class="model-info-item-text">宽度</div><div class="model-info-item-text">1600</div></li>
+                                        <li><div class="model-info-item-text">高度</div><div class="model-info-item-text">400</div></li>
+                                        <li><div class="model-info-item-text">长度</div><div class="model-info-item-text">1250</div></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>其他</span><i class="my-icon nav-more"></i></a>
+                                    <ul>
+                                        <li><div class="model-info-item-text">模型构件编码</div><div class="model-info-item-text">L21_Z17...</div></li>
+                                        <li><div class="model-info-item-text">_线路</div><div class="model-info-item-text">二十一号线</div></li>
+                                        <li><div class="model-info-item-text">_位置</div><div class="model-info-item-text">凤岗站</div></li>
+                                        <li><div class="model-info-item-text">_专业</div><div class="model-info-item-text">通风与空调</div></li>
+                                        <li><div class="model-info-item-text">_系统</div><div class="model-info-item-text">大系统</div></li>
+                                        <li><div class="model-info-item-text">_子系统</div><div class="model-info-item-text">大系统</div></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>尺寸标注</span><i class="my-icon nav-more"></i></a>
+                                    <ul>
+                                        <li><div class="model-info-item-text">宽度</div><div class="model-info-item-text">100</div></li>
+                                        <li><div class="model-info-item-text">长度</div><div class="model-info-item-text">100</div></li>
+                                        <li><div class="model-info-item-text">高度</div><div class="model-info-item-text">100</div></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="switch-map">
+                    <div class="switch-main">
+                        <a href="javascript:switch3DMap();" title="进度概况" class="work-type-a">
+                            <svg class="switch-menu-icon" aria-hidden="true">
+                                <use xlink:href="#iconcaidanguanli"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="side-button place-order-model">
+                    <div class="side-button-main">
+                        <a href="javascript:placeOrder();" class="side-button-a">
+                            下单
+                        </a>
+                    </div>
+                </div>
+                <div class="side-button sign-for-model">
+                    <div class="side-button-main">
+                        <a href="javascript:switch3DMap();" class="side-button-a">
+                            签收
+                        </a>
+                    </div>
+                </div>
+                <div class="side-button install-model">
+                    <div class="side-button-main">
+                        <a href="javascript:switch3DMap();" class="side-button-a">
+                            安装
+                        </a>
+                    </div>
+                </div>
+                <div class="side-button data-model">
+                    <div class="side-button-main">
+                        <a href="javascript:switch3DMap();" class="side-button-a">
+                            资料
+                        </a>
+                    </div>
+                </div>
+                <div class="legend-model">
+                    <div class="legend-main">
+                        <div class="legend-content">
+                            <ul class="legend-list">
+                                <li class="legend-list-li">
+                                    <span class="bonyong-badge bonyong-bg-light-grey"></span><span class="bonyong-badge-word">未开始</span>
+                                </li>
+                                <li class="legend-list-li">
+                                    <span class="bonyong-badge bonyong-bg-dark-orange"></span><span class="bonyong-badge-word">加工中</span>
+                                </li>
+                                <li class="legend-list-li">
+                                    <span class="bonyong-badge bonyong-bg-doder-blue"></span><span class="bonyong-badge-word">加工完成</span>
+                                </li>
+                                <li class="legend-list-li">
+                                    <span class="bonyong-badge bonyong-bg-turquoise"></span><span class="bonyong-badge-word">安装完成</span>
+                                </li>
+                                <li class="legend-list-li">
+                                    <span class="bonyong-badge bonyong-bg-green"></span><span class="bonyong-badge-word">验收完成</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function getModelInfo(id) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("getModelInfo", "BIM")',
+            data: { id: id},
+            async: false,
+            success: function (data) {
+
+            }
+        });
+    }
+</script>
+<!--模型内置接口-->
+<script type="text/javascript">
+    //初始化插件
+    // 父dom对象
+    var domObj = document.getElementById('myContainer');
+    var bim3dViewer = new BIM3DInterface(domObj);
+    var myAxis = false;
+    var currentSelectObj;
+    $(function () {
+        //initBim3D();
+    });
+    function initBim3D() {
+        bim3dViewer.resize();
+        var pathName = "http://" + window.location.host;
+        bim3dViewer.appendFile(["http://192.168.3.222:8085/Content/static/file/b8d0d8ea0a824ccfb9da1342b1f7e2a7_0.b3dz"]);
+        bim3dViewer.addAppendFileCallBack(function (url, status) {
+            //由于appendFile接口传入长度为2的数组，则该回调会调用两次。
+            // 返回appendFile接口传入的url1,、url2模型文件的加载状态。
+            // status 值为1加载成功，为0加载失败。
+            //设置轮廓线显示隐藏
+            bim3dViewer.setOutlineVisible(true);
+            //设置轮廓线颜色
+            bim3dViewer.setOutlineColor(0xff000000);
+        });
+
+        //注册ESC事件
+        $(document).keydown(function (event) {
+            if (event.keyCode == 27) {
+                exitMeasure();
+                exitMark();
+                //退出坐标轴剖切
+                if (myAxis) {
+                    exitAxisSlice();
+                }
+                //退出剖切盒
+                exitBoxSlice();
+                //直线法平面剖切
+                exitEdgeSlice();
+            }
+        });
+
+        bim3dViewer.addSelectObjectCallBack(function (object) {
+            //可使用object.name属性在转换模型时的db文件中根据id查询相应的数据。
+            // object对象或者object.name可直接用来调用相应的模型操作接口，例如颜色、透明度、可见性。
+            currentSelectObj = object;
+            if (object != undefined) {
+                getModelPropertyInfo(object.name);
+            } else {
+                $('#modelInfoBox').css('display', 'none');
+            }
+        });
+    }
+
+    //设置场景裁剪 系统默认为0
+    //bim3dViewer.setOptionCullingThreshold(10);
+
+    //获取暂时模型具体信息
+    function getModelPropertyInfo(id) {
+        $('#modelInfoBox').css('display','block');//style="display: none"
+        var dataArray = [];
+        /*$.ajax({
+            type: "GET",
+            url: "http://192.168.3.201:8083/api/WorkOrder/GetComponentDetails?id="+id,
+            dataType: "json",
+            async: false,//同步
+            success: function (resultdata) {
+                dataArray=resultdata.data.rows;
+            },
+            error: function (data, errorMsg) {
+                console.log(errorMsg)
+            }
+        });
+        console.log(dataArray)*/
+    }
+    //下单
+    function placeOrder() {
+        if (currentSelectObj != undefined) {
+            var selectObj = new Object();
+            selectObj.organizationId = "6373083897509963358";
+            selectObj.modelId = currentSelectObj.name;
+            modelPlaceOrder(selectObj.organizationId, selectObj.modelId);
+        }
+    }
+
+    //隐藏选中模块
+    function setModelHide() {
+        if (currentSelectObj != undefined) {
+            var id = currentSelectObj.name;
+            //visible 是否可见，true显示，false隐藏。
+            var visible = false;
+            var setOption = 0;
+            bim3dViewer.setModelVisible(id, visible, setOption);
+        }
+    }
+
+    //隐藏非选中模块
+    function setOtherModelHide() {
+        if (currentSelectObj != undefined) {
+            var id = currentSelectObj.name;
+            //visible 是否可见，true显示，false隐藏。
+            var visible = false;
+            var setOption = 1;
+            bim3dViewer.setModelVisible(id, visible, setOption);
+        }
+    }
+
+    /**
+     * 取消隐藏
+     */
+    function cancelModelHide() {
+        if (currentSelectObj != undefined) {
+            var id = "";
+            var visible = true;
+            var setOption = 1;
+            bim3dViewer.setModelVisible(id, visible, setOption);
+        }
+    }
+
+    /**
+     * 隔离选中模块
+     */
+    function setModelQuarantine() {
+        if (currentSelectObj != undefined) {
+            var id = currentSelectObj.name;
+            //是否隔离对象，true隔离，false取消隔离
+            var bQuarantine = true;
+            var setOption = 0;
+            bim3dViewer.setModelQuarantine(id, bQuarantine, setOption);
+        }
+    }
+
+    /**
+     * 隔离非选中模块
+     */
+    function setOtherModelQuarantine() {
+        if (currentSelectObj != undefined) {
+            var id = currentSelectObj.name;
+            //是否隔离对象，true隔离，false取消隔离
+            var bQuarantine = true;
+            var setOption = 1;
+            bim3dViewer.setModelQuarantine(id, bQuarantine, setOption);
+        }
+    }
+
+    /**
+     * 取消隔离
+     */
+    function cancelModelQuarantine() {
+        var id = "";
+        //是否隔离对象，true隔离，false取消隔离
+        var bQuarantine = false;
+        var setOption = 1;
+        bim3dViewer.setModelQuarantine(id, bQuarantine, setOption);
+    }
+
+    /**
+     * 坐标测量
+     */
+    function coordinateMeasure() {
+        bim3dViewer.measurePoint(false);
+    }
+
+    /**
+     * 两点距离测量
+     */
+    function twoPointsDistance() {
+        bim3dViewer.measurePtop();
+    }
+
+    /**
+     * 点线距离测量
+     */
+    function pointLineDistance() {
+        bim3dViewer.measureLtop();
+    }
+
+    /**
+     * 点面距离测量
+     */
+    function pointFaceDistance() {
+        bim3dViewer.measureFtop();
+    }
+
+    /**
+     * 对象间距离测量
+     */
+    function twoFacesDistance() {
+        bim3dViewer.measureLtol();
+    }
+
+    /**
+     * 三点角度测量
+     */
+    function threePointsAngle() {
+        bim3dViewer.measureAngleByPoints();
+    }
+
+    /**
+     * 三点圆半径测量
+     */
+    function threePointsRadius() {
+        bim3dViewer.measureRadius();
+    }
+
+    /**
+     * 表面面积
+     */
+    function getFaceArea() {
+        bim3dViewer.measureArea();
+    }
+
+    /**
+     * 对象体积
+     */
+    function getModelVolume() {
+        bim3dViewer.measureVolume();
+    }
+
+    /**
+     * 退出测量
+     */
+    function exitMeasure() {
+        bim3dViewer.endMeasure();
+    }
+
+    //剖切查看
+    /**
+     * 自由剖切
+     */
+    function startFaceSlice() {
+        bim3dViewer.startSliceByFace();
+    }
+
+    /**
+     * XY剖切
+     */
+    function startXYSlice() {
+        //2对应z轴即xy平面
+        bim3dViewer.startSliceModelByAxis(2);
+        myAxis = true;
+    }
+
+    /**
+     * YZ剖切
+     */
+    function startYZSlice() {
+        //0对应x轴即yz平面
+        bim3dViewer.startSliceModelByAxis(0);
+        myAxis = true;
+    }
+
+    /**
+     * ZX剖切
+     */
+    function startZXSlice() {
+        //1对应y轴即xz平面
+        bim3dViewer.startSliceModelByAxis(1);
+        myAxis = true;
+    }
+
+    /**
+     * 退出坐标轴剖切
+     */
+    function exitAxisSlice() {
+        for (var i = 1, n = 4; i < n; i++) {
+            bim3dViewer.endSliceModelByAxis(i);
+        }
+        myAxis = false;
+    }
+
+    /**
+     * 打开剖切盒
+     */
+    function startBoxSlice() {
+        bim3dViewer.startBoxClip();
+    }
+
+    /**
+     * 退出剖切盒
+     */
+    function exitBoxSlice() {
+        bim3dViewer.endBoxClip();
+    }
+
+    /**
+     *开始直线法平面剖切
+     */
+    function startEdgeSlice() {
+        bim3dViewer.startSliceByEdge();
+    }
+
+    /**
+     *退出直线法平面剖切
+     */
+    function exitEdgeSlice() {
+        bim3dViewer.endSliceByEdge();
+    }
+    /**
+     * 开启剖切面罗盘
+     */
+    function openSliceCompass() {
+        //false 显示
+        bim3dViewer.hiddenCap(false);
+        //false显示
+        bim3dViewer.hiddenCapGizmo(false);
+    }
+    /**
+     * 关闭剖切面罗盘
+     */
+    function closeSliceCompass() {
+        bim3dViewer.hiddenCap(true);
+        bim3dViewer.hiddenCapGizmo(true);
+    }
+
+    //视图标注
+
+    /**
+     * 文字标注
+     */
+    function wordsMark() {
+        bim3dViewer.textMark();
+    }
+
+    /**
+     * 矩形标注
+     */
+    function rectangleMark() {
+        bim3dViewer.rectMarkWithPanel();
+    }
+
+    /**
+     * 圆形标注
+     */
+    function circularMark() {
+        bim3dViewer.circleMarkWithPanel();
+    }
+
+    /**
+     * 圆形标注
+     */
+    function ellipseMark() {
+        bim3dViewer.ellipseMarkWithPanel();
+    }
+
+    /**
+     * 箭头标注
+     */
+    function arrowheadMark() {
+        bim3dViewer.arrowMarkWithPanel();
+    }
+
+    /**
+     * 多边形标注
+     */
+    function polygonMark() {
+        bim3dViewer.regularPolygonMarkWithPanel();
+    }
+
+    /**
+     * 退出标注
+     */
+    function exitMark() {
+        bim3dViewer.endMark();
+    }
+
+    $(function () {
+        $(".navmenu").mouseover(function () {
+            $(this).children("ul").show();
+        })
+        $(".navmenu").mouseout(function () {
+            $(this).children("ul").hide();
+        })
+    });
+    $(function () {
+        $('.nav-item>a').on('click',
+            function () {
+                if (!$('.nav').hasClass('nav-mini')) {
+                    if ($(this).next().css('display') == "none") {
+                        $('.nav-item').children('ul').slideUp(300);
+                        $(this).next('ul').slideDown(300);
+                        $(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
+                    } else {
+                        $(this).next('ul').slideUp(300);
+                        $('.nav-item.nav-show').removeClass('nav-show');
+                    }
+                }
+            });
+    });
+</script>

@@ -1,0 +1,171 @@
+﻿@{
+    ViewBag.Title = "3D模型_项目总清单";
+    Layout = null;
+}
+
+<script>
+    $(function () {
+        $.LodeMenuBtn("/BIM/3DGridList","#toolbar_3DProject");
+        gridList_Project();
+    });
+    function gridList_Project() {
+        var $gridList = $("#gridList_Project");
+        $gridList.dataGrid({
+            url: "@Url.Action("Get3DGridJson", "BIM")",
+            height: $(window).height() * 0.5,
+            //height: "auto",//高度自适应
+            //autowidth: true,//宽度自适应
+            colModel: [
+                { label: "主键", name: "ComponentCode", hidden: true, key: true },
+                { label: "主键", name: "ComponentCodeShow", hidden: true},
+                { label: '专业', name: 'Major', width: 120, align: 'left', sortable: false  },
+                { label: "大系统", name: "System", width: 120, align: 'left', sortable: false },
+                { label: '子系统', name: 'Subsystem', width: 100, align: 'left', sortable: false, formatter: formatDatebox },
+                //{ label: "系统类型", name: "WarehouseTypeName", width: 80, align: 'left', sortable: false },
+                { label: "材料类型", name: "MaterialType", width: 100, align: 'left', sortable: false },
+                { label: "构件名称", name: "Material", width: 100, align: 'left', sortable: false },
+                { label: "规格尺寸", name: "Size", width: 200, align: 'left', sortable: false },
+                { label: "计划总数", name: "Total", width: 100, align: 'left', sortable: false },
+                { label: "加工中", name: "ProcessingShow", width: 100, align: 'left', sortable: false },
+                { label: '加工完成', name: 'ProcessCompleteShow', width: 100, align: 'left', sortable: false },
+                { label: '安装完成', name: 'InstallCompleteShow', width: 100, align: 'left', sortable: false },
+                { label: '计划完工时间', name: 'PlanTime', width: 100, align: 'left', sortable: false },
+                { label: '实际完工时间', name: 'ActualTime', width: 100, align: 'left', sortable: false },
+                { label: '进度状态', name: 'ProgressStatusShow', width: 100, align: 'left', sortable: false },
+                { label: '备注', name: 'Remark', width: 100, align: 'left', sortable: false },
+            ],
+            gridComplete: function () {
+                $gridList.find("tbody").find("input:checkbox").each(function () {
+                    $(this).parent().css("padding-top", "8px").css("padding-left", "14px");
+                });
+            },
+            ondblClickRow: function (id) {//双击
+
+            },
+            pager: "#gridPager_Project",
+            viewrecords: true,
+            multiselect: true,
+            shrinkToFit: false,
+            subGrid: true,
+            subGridRowExpanded: function (subgrid_id, row_id) {
+                var rowData = $("#gridList_Project").jqGrid('getRowData', row_id);
+                var subgrid_table_id = subgrid_id + "_t";
+                var subgrid_pager_id = subgrid_id + "_pgr";
+                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "' class='scroll'></table><div id='" + subgrid_pager_id + "' class='scroll'></div>");
+                $("#" + subgrid_table_id).jqGrid({
+                    url: "@Url.Action("Get3DItemGridJson", "BIM")" + "?ComponentCode=" + rowData.ComponentCodeShow + "&Size=" + rowData.Size,
+                    datatype: "json",
+                    //width: 800,  
+                    colModel: [
+                        { label: "主键", name: "id", hidden: true, key: true },
+                        { label: "构件名称", name: "Name", width: 200, align: 'left', sortable: false },
+                        { label: "长度", name: "Length", width: 80, align: 'left', sortable: false },
+                        { label: "计划总数", name: "Total", width: 80, align: 'left', sortable: false },
+                        { label: "加工中", name: "ProcessingShow", width: 100, align: 'left', sortable: false },
+                        { label: '加工完成', name: 'ProcessCompleteShow', width: 100, align: 'left', sortable: false },
+                        { label: '安装完成', name: 'InstallCompleteShow', width: 100, align: 'left', sortable: false },
+                        { label: '计划完工时间', name: 'PlanTime', width: 100, align: 'left', sortable: false },
+                        { label: '实际完工时间', name: 'ActualTime', width: 100, align: 'left', sortable: false },
+                        { label: '进度状态', name: 'ProgressStatusShow', width: 100, align: 'left', sortable: false },
+                        { label: '备注', name: 'Remark', width: 100, align: 'left', sortable: false },
+                    ],
+                    gridComplete: function () {
+                        $("#" + subgrid_table_id).find("tbody").find("input:checkbox").each(function () {
+                            $(this).parent().css("padding-top", "8px").css("padding-left", "14px");
+                        });
+                        $("#gview_" + subgrid_table_id).find(".ui-jqgrid-bdiv").css("overflow-x", "hidden");
+                    },
+                    //jsonReader: {   // (8)针对子表格的jsonReader设置
+                    //    root: "gridModel",
+                    //    records: "record",
+                    //    repeatitems: false
+                    //},
+                    //prmNames: { search: "search" },
+                    pager: subgrid_pager_id,
+                    viewrecords: true,
+                    rownumbers: true,
+                    multiselect: true,
+                    height: "100%",
+                    rowNum: 10
+                });
+            }
+        });
+        $("#btn_search").click(function () {
+            $gridList.jqGrid('setGridParam', {
+                postData: $(".search").formSerialize(),
+                page: 1
+            }).trigger('reloadGrid');
+        });
+        //回车查询
+        document.onkeydown = function (e) {
+            if (!e) e = window.event;
+            if ((e.keyCode || e.which) == 13) {
+                $('#btn_search').trigger("click");
+            }
+        }
+    }
+    function EarnOrLosColor(cellValue, options, rowObject) {
+        if (parseInt(rowObject.EarnOrLos) == -1) {
+            return "<span style='color: red;'>" + cellValue + "</span>";
+        } else {
+            return "<span style='color: green;'>" + cellValue + "</span>";
+        }
+    }
+
+    //导出excel
+    function btn_output() {
+        var param = $(".search").GetSearchCondition();
+        var url = "@Url.Action("Output3DExcel", "BIM")";
+        location.href = url + "?jsonData=" + escape(JSON.stringify(param));
+    }
+</script>
+
+<div class="ui-layout-center">
+    <ul class="nav nav-tabs">
+        <li id="Project_tab_" onclick="selectTab($(this))" class="active"><a href="javascript:void(0);">项目总清单</a></li>
+        <li id="GJ_tab_" onclick="selectTab($(this))"><a href="javascript:void(0);">管件类</a></li>
+        <li id="FM_tab_" onclick="selectTab($(this))"><a href="javascript:void(0);">阀门类</a></li>
+        <li id="SB_tab_" onclick="selectTab($(this))"><a href="javascript:void(0);">设备类</a></li>
+    </ul>
+    <div id="Project_tab_Info">
+        <div class="topPanel divwidth1">
+            <div class="topPanel-btn divwidth2" id="toolbar_3DProject">
+                <div class="btn-group">
+                    <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
+                </div>
+            </div>
+            <div class="search divwidth2">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-search">
+                                <select name="SearchType" class="form-control SearchType" style="width: 120px;">
+                                    <option value="">全部</option>
+                                    <option value="SiteName">构件名称</option>
+                                    <option value="SiteName2">构件编号</option>
+                                    <option value="SiteName3">构件规格</option>
+                                </select>
+                                <input id="SiteName" name="SiteName" type="text" placeholder="构件名称" class="form-control SearchContent hidSearchContent">
+                                <input id="SiteName2" name="SiteName2" type="text" placeholder="构件编号" class="form-control SearchContent hidSearchContent">
+                                <input id="SiteName3" name="SiteName3" type="text" placeholder="构件规格" class="form-control SearchContent hidSearchContent">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-search">
+                                <a class="btn btn-primary btn_searchOne">查询</a>
+                                <a class="btn btn-primary" id="btn_search">结果中搜索</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="gridPanel">
+            <table id="gridList_Project" class="gridList"></table>
+            <div id="gridPager_Project" class="pager-fixed" style="bottom:0px;"></div>
+        </div>
+    </div>
+    <div id="GJ_tab_Info" style="display:none"></div>
+    <div id="FM_tab_Info" style="display:none"></div>
+    <div id="SB_tab_Info" style="display:none"></div>
+</div>

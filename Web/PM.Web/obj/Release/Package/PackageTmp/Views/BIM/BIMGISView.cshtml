@@ -1,0 +1,641 @@
+﻿@{
+    ViewBag.Title = "BIMGISView";
+    Layout = null;
+}
+<link rel="stylesheet" href="~/Content/static/icon/extend/iconfont.css">
+<script src="~/Content/static/icon/extend/iconfont.js"></script>
+<script type="text/javascript"
+        src="https://webapi.amap.com/maps?v=2.0&key=c62283ba318ab35ee7226e7d7b327b5b"></script>
+<style type="text/css">
+    li {
+        list-style: none;
+    }
+
+    blockquote, body, button, dd, div, dl, dt, form, h1, h2, h3, h4, h5, h6, input, li, ol, p, pre, td, textarea, th, ul {
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    .page-main-card {
+        margin: 0 auto;
+        position: relative;
+        background-color: #f2f2f2;
+    }
+
+    .page-body-card {
+        -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+        -moz-box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+        box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+        background-color: #fff;
+    }
+
+    .legend-map-box {
+        position: absolute;
+        top: 50px;
+        width: 80px;
+        height: 124px;
+        right: 5px;
+        z-index: 3;
+    }
+
+    .switch-map-box {
+        position: absolute;
+        top: 10px;
+        width: 80px;
+        height: 22px;
+        right: 5px;
+        z-index: 3;
+    }
+
+    .switch-map-main {
+        background-color: rgba(0, 0, 0, .4);
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+    }
+
+        .switch-map-main a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 6px;
+        }
+
+        .switch-map-main i {
+            font-size: 15px;
+        }
+
+    .legend___1S28Y {
+        background-color: rgba(0, 0, 0, .4);
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+    }
+
+    .legend-settings {
+        padding-top: 4px;
+        padding-left: 6px;
+    }
+
+    .legend-map-a {
+        color: #93D1FF;
+        text-decoration: none;
+        margin-left: 5px;
+    }
+
+    .content___1-QLM {
+        padding: 1px 10px;
+    }
+
+    .legend-map-list {
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
+    }
+    .legend-map-item {
+        line-height:14px;
+    }
+
+    .map-main {
+        position: absolute;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+    }
+
+    .box-main {
+        width: 100%;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        color: #fff;
+    }
+
+    .middle-main {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .map-badge {
+        width: 16px;
+        height: 10px;
+        margin-right: 2px;
+        position: relative;
+        margin-bottom: -2px;
+        display: inline-block;
+        background-color: #FF5722;
+        border-radius: 2px;
+    }
+
+    .map-bg-orange {
+        background-color: #FFB800 !important;
+    }
+
+    .map-bg-dark-orange {
+        background-color: #FF8C00 !important;
+    }
+
+    .map-bg-green {
+        background-color: #2E8B57 !important;
+    }
+
+    .map-bg-red {
+        background-color: #FF0000 !important;
+    }
+
+    .map-badge-graphical {
+        margin-right: 4px;
+        width: 14px;
+        height: 14px;
+        margin-bottom: -4px;
+    }
+
+    .map-badge-word {
+        font-size: 10px;
+    }
+
+    .track-map {
+        position: absolute;
+        top: 190px;
+        width: 22px;
+        height: 20px;
+        right: 63px;
+        z-index: 3;
+    }
+
+    .work-type-main {
+        background-color: rgba(0, 0, 0, .4);
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+    }
+
+    .renovation-map {
+        position: absolute;
+        top: 190px;
+        width: 22px;
+        height: 20px;
+        right: 33.5px;
+        z-index: 3;
+    }
+
+    .electromechanical-map {
+        position: absolute;
+        top: 190px;
+        width: 22px;
+        height: 20px;
+        right: 5px;
+        z-index: 3;
+    }
+
+    .work-type-a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 3px;
+    }
+
+    .work-type-icon {
+        width: 1.3em;
+        height: 1.3em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+    }
+</style>
+<div class="page-main-card">
+    <div class="page-body-card">
+        <div id="container" class="map-main"></div>
+        <div class="box-main">
+            <div class="middle-main">
+                <div class="switch-map-box">
+                    <div class="switch-map-main">
+                        <a href="javascript:switch2DMap();">
+                            <i class="iconfont iconerweiditu1" title="二维"></i>
+                        </a>
+                        <a href="javascript:switch3DMap();">
+                            <i class="iconfont iconditu1" title="三维"></i>
+                        </a>
+                        <a href="javascript:switchSatelliteMap();">
+                            <i class="iconfont iconbf-icon-3Dmap" style="font-size:17px" title="实景"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="legend-map-box">
+                    <div class="legend___1S28Y">
+                        <div class="legend-settings">
+                            <a href="javascript:switch3DMap();" class="legend-map-a">
+                                <i class="iconfont iconshezhi" style="font-size: 10px"></i>&nbsp;设置
+                            </a>
+                        </div>
+                        <div class="content___1-QLM">
+                            <ul class="legend-map-list">
+                                <li class="item___qIsLA" >
+                                    <img class="map-badge-graphical" src="~/Content/static/image/whiteicon.png"
+                                         alt=""><span class="map-badge-word">未动工</span>
+                                </li>
+                                <li class="item___qIsLA">
+                                    <img class="map-badge-graphical"
+                                         src="~/Content/static/image/blueicon.png"
+                                         alt=""><span class="map-badge-word">施工中</span>
+                                </li>
+                                <li class="item___qIsLA">
+                                    <img class="map-badge-graphical"
+                                         src="~/Content/static/image/greenicon.png"
+                                         alt=""><span class="map-badge-word">完工</span>
+                                </li>
+                                <li class="legend-map-item" >
+                                    <span class="map-badge map-bg-dark-orange"></span><span class="map-badge-word">进度滞后</span>
+                                </li>
+                                <li class="legend-map-item" >
+                                    <span class="map-badge map-bg-red"></span><span class="map-badge-word">严重滞后</span>
+                                </li>
+                                <li class="legend-map-item">
+                                    <span class="map-badge map-bg-green"></span><span class="map-badge-word">进度正常</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="track-map">
+                    <div class="work-type-main">
+                        <a href="javascript:switch3DMap();" class="work-type-a" title="轨道">
+                            <svg class="work-type-icon" aria-hidden="true">
+                                <use xlink:href="#icondaolu-kuaizhuang"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="renovation-map">
+                    <div class="work-type-main">
+                        <a href="javascript:switch3DMap();" class="work-type-a" title="装饰装修">
+                            <svg class="work-type-icon" aria-hidden="true">
+                                <use xlink:href="#icontools-"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="electromechanical-map">
+                    <div class="work-type-main">
+                        <a href="javascript:switch3DMap();" class="work-type-a" title="机电">
+                            <svg class="work-type-icon" aria-hidden="true">
+                                <use xlink:href="#iconjidian1"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    var map = null;
+    //地图中心数组
+    var mapCenterArr = {
+        "123": [113.251237, 22.953471],
+        "456": [113.23553, 22.959794],
+    };
+    //var stationColor1 = '#bfbfbf';
+    var stationColor1 = 'rgba(6, 127, 228, 0.71)';
+    var stationColor2 = '#fff';
+    var stationOpacity2 = 1;
+    var stationOpacity1 = 1;
+    //-----
+    var titleTextColor = '#fff';
+    //进度正常
+    var titleNormalBackground = '#2E8B57';
+    //严重滞后
+    var titleSeriousLagBackground = '#FF0000';
+    //进度滞后
+    var titleLaggingBackground = '#FF8C00';
+    var titleBackgroudOpacity = 1;
+    var titleBackgroudColor2 = '#49C685';
+    var titleBorderColor = '#adb1af';
+    var titleBorderColor2 = '#142';
+
+    //折线
+    //var polylineColor='#bfbfbf';
+    var polylineColor = 'rgba(6, 127, 228, 0.71)';
+    //定义不同缩放级别的点直径
+    var CircleRadiusDefine = [];
+    CircleRadiusDefine[3] = 20000;
+    CircleRadiusDefine[4] = 12000;
+    CircleRadiusDefine[5] = 8000;
+    CircleRadiusDefine[6] = 5000;
+    CircleRadiusDefine[7] = 3000;
+    CircleRadiusDefine[8] = 1500;
+    CircleRadiusDefine[9] = 1000;
+    CircleRadiusDefine[10] = 500;
+    CircleRadiusDefine[11] = 350;
+    CircleRadiusDefine[12] = 190;
+    CircleRadiusDefine[13] = 110;
+    CircleRadiusDefine[14] = 65;
+    CircleRadiusDefine[15] = 42;
+    CircleRadiusDefine[16] = 30;
+    CircleRadiusDefine[17] = 16;
+    CircleRadiusDefine[18] = 10;
+    CircleRadiusDefine[19] = 6;
+    CircleRadiusDefine[20] = 4;
+    //定义不同缩放级别的线宽
+    var LineWeightDefine = [];
+    LineWeightDefine[3] = 1;
+    LineWeightDefine[4] = 1;
+    LineWeightDefine[5] = 1;
+    LineWeightDefine[6] = 1;
+    LineWeightDefine[7] = 1;
+    LineWeightDefine[8] = 1;
+    LineWeightDefine[9] = 1;
+    LineWeightDefine[10] = 1;
+    LineWeightDefine[11] = 2;
+    LineWeightDefine[12] = 3;
+    LineWeightDefine[13] = 4;
+    LineWeightDefine[14] = 5;
+    LineWeightDefine[15] = 6;
+    LineWeightDefine[16] = 7;
+    LineWeightDefine[17] = 8;
+    LineWeightDefine[18] = 9;
+    LineWeightDefine[19] = 10;
+    LineWeightDefine[20] = 11;
+    $(function () {
+        //获取窗口
+        //var width = $(window).width() *0.554;
+        //var height = $(window).height()*0.43;
+        ////设置地图宽高
+        //$('#container').css({
+        //    'width': width,
+        //    'height': height
+        //});
+        //$('.middle-main').css({
+        //    'width': width,
+        //    'height': height
+        //});
+        switch2DMap();
+    });
+
+    //显示地图层级与中心点信息
+    function logMapinfo() {
+        var zoom = map.getZoom(); //获取当前地图级别
+        var center = map.getCenter(); //获取当前地图中心位置
+        console.log(zoom)
+        console.log(center)
+    };
+
+
+    //绑定地图移动与缩放事件
+    // map.on('moveend', logMapinfo);
+    //map.on('zoomend', logMapinfo);
+
+
+    //绑定地图移动与缩放事件
+    //map.on('moveend', logMapinfo);
+    //map.on('zoomend', logMapinfo);
+
+    //切换二维地图
+    function switch2DMap() {
+        //存在地图则销毁地图
+        destroyMap();
+        //获取地图中心位置
+        var mapCenter = mapCenterArr['456'];
+        //地图样式
+        var mapStyle = 'amap://styles/4232ebc28581310f2d632a7b5973446d';
+        //创建地图
+        map = new AMap.Map('container', {
+            viewMode: '2D', // 地图模式
+            mapStyle: mapStyle,
+            center: mapCenter,
+            zoom: 13,
+            //地图显示的缩放级别范围, 默认为 [2, 20] ，取值范围 [2 ~ 20]
+            zooms: [12, 20],
+        });
+        var dataMapArray = getData();
+        var len = dataMapArray.length
+        for (var i = 0; i < len; i++) {
+            var dataMap = dataMapArray[i];
+            //初始化站点图形
+            var circle = new AMap.Circle({
+                map: map,
+                center: eval(dataMap.CentrePoint),// 圆心位置
+                radius: CircleRadiusDefine[map.getZoom()] * 0.8, //半径
+                strokeColor: stationColor2, //线颜色
+                strokeOpacity: stationOpacity2, //线透明度
+                strokeWeight: 2, //线粗细度
+                fillColor: stationColor1, //填充颜色
+                fillOpacity: stationOpacity1,//填充透明度
+                zIndex: 16
+            });
+            //判断滞后
+            var titleBackground = titleNormalBackground;
+            //进度滞后
+            if (dataMap.LineArray == '2') {
+                titleBackground = titleLaggingBackground;
+            }
+            //严重滞后
+            if (dataMap.LineArray == '3') {
+                titleBackground = titleSeriousLagBackground;
+            }
+            //初始化站点标题
+            var marker = new AMap.Marker({
+                map: map,
+                topWhenClick: true,
+                position: eval(dataMap.CentrePoint), //基点位置
+                offset: new AMap.Pixel(eval(dataMap.Deviation)[0], eval(dataMap.Deviation)[1]), //相对于基点的偏移位置
+                content: '<div style="background:' + titleBackground + ';opacity:' + titleBackgroudOpacity + ';border:1px solid ' + titleBorderColor + ';box-shadow: 2px 2px 2px #888888;padding:2px 3px;border-radius:4px;color:' + titleTextColor + ';white-space:nowrap;text-align: center;width: 80px"><p style="font-size:12px;">' + dataMap.Name + '</p><p style="font-size: 8px;">' + dataMap.CompanyCode_F + '</p>' + '</div>',   //自定义点标记覆盖物内容
+                extData: '1234',
+                zIndex: 15,
+            });
+        }
+        var lineData = getLineData();
+        var lineLen = lineData.length;
+        for (var i = 0; i < lineLen; i++) {
+            var lineArray = lineData[i].LineArray;
+            var polyline = setPolyline(lineArray);
+            map.add(polyline);
+        }
+    }
+
+    //切换三维地图
+    function switch3DMap() {
+        //存在地图则销毁地图
+        destroyMap();
+        //获取地图中心位置
+        var mapCenter = mapCenterArr['456'];
+        //创建地图
+        map = new AMap.Map('container', {
+            pitch: 65, // 地图俯仰角度，有效范围 0 度- 83 度
+            viewMode: '3D', // 地图模式
+            center: mapCenter,
+            zoom: 13,
+            //地图显示的缩放级别范围, 默认为 [2, 20] ，取值范围 [2 ~ 20]
+            zooms: [12, 20],
+        });
+        var dataMapArray = getData();
+        var len = dataMapArray.length
+        for (var i = 0; i < len; i++) {
+            var dataMap = dataMapArray[i];
+            //初始化站点图形
+            var circle = new AMap.Circle({
+                map: map,
+                center: eval(dataMap.CentrePoint),// 圆心位置
+                radius: CircleRadiusDefine[map.getZoom()] * 0.8, //半径
+                strokeColor: stationColor2, //线颜色
+                strokeOpacity: stationOpacity2, //线透明度
+                strokeWeight: 2, //线粗细度
+                fillColor: stationColor1, //填充颜色
+                fillOpacity: stationOpacity1,//填充透明度
+                zIndex: 16
+            });
+            //判断滞后
+            var titleBackground = titleNormalBackground;
+            //进度滞后
+            if (dataMap.LineArray == '2') {
+                titleBackground = titleLaggingBackground;
+            }
+            //严重滞后
+            if (dataMap.LineArray == '3') {
+                titleBackground = titleSeriousLagBackground;
+            }
+
+            //初始化站点标题
+            var marker = new AMap.Marker({
+                map: map,
+                topWhenClick: true,
+                position: eval(dataMap.CentrePoint), //基点位置
+                offset: new AMap.Pixel(eval(dataMap.Deviation)[0], eval(dataMap.Deviation)[1]), //相对于基点的偏移位置
+                content: '<div style="background:' + titleBackground + ';opacity:' + titleBackgroudOpacity + ';border:1px solid ' + titleBorderColor + ';box-shadow: 2px 2px 2px #888888;padding:2px 3px;border-radius:4px;color:' + titleTextColor + ';white-space:nowrap;text-align: center;width: 80px"><p style="font-size:12px;">' + dataMap.Name + '</p><p style="font-size: 8px;">' + dataMap.CompanyCode_F + '</p>' + '</div>',   //自定义点标记覆盖物内容
+                extData: '1234',
+                zIndex: 15,
+            });
+        }
+        var lineData = getLineData();
+        var lineLen = lineData.length;
+        for (var i = 0; i < lineLen; i++) {
+            var lineArray = lineData[i].LineArray;
+            var polyline = setPolyline(lineArray);
+            map.add(polyline);
+        }
+    }
+
+    //切换卫星地图（实景）
+    function switchSatelliteMap() {
+        //存在地图则销毁地图
+        destroyMap();
+        //获取地图中心位置
+        var mapCenter = mapCenterArr['456'];
+        //创建地图
+        map = new AMap.Map('container', {
+            center: mapCenter,
+            //卫星地图
+            layers: [new AMap.TileLayer.Satellite()],
+            zoom: 13,
+            //地图显示的缩放级别范围, 默认为 [2, 20] ，取值范围 [2 ~ 20]
+            zooms: [12, 20],
+        });
+        var dataMapArray = getData();
+        var len = dataMapArray.length
+        for (var i = 0; i < len; i++) {
+            var dataMap = dataMapArray[i];
+            //初始化站点图形
+            var circle = new AMap.Circle({
+                map: map,
+                center: eval(dataMap.CentrePoint),// 圆心位置
+                radius: CircleRadiusDefine[map.getZoom()] * 0.8, //半径
+                strokeColor: stationColor2, //线颜色
+                strokeOpacity: stationOpacity2, //线透明度
+                strokeWeight: 2, //线粗细度
+                fillColor: stationColor1, //填充颜色
+                fillOpacity: stationOpacity1,//填充透明度
+                zIndex: 16
+            });
+            //判断滞后
+            var titleBackground = titleNormalBackground;
+            //进度滞后
+            if (dataMap.LineArray == '2') {
+                titleBackground = titleLaggingBackground;
+            }
+            //严重滞后
+            if (dataMap.LineArray == '3') {
+                titleBackground = titleSeriousLagBackground;
+            }
+            //初始化站点标题
+            var marker = new AMap.Marker({
+                map: map,
+                topWhenClick: true,
+                position: eval(dataMap.CentrePoint), //基点位置
+                offset: new AMap.Pixel(eval(dataMap.Deviation)[0], eval(dataMap.Deviation)[1]), //相对于基点的偏移位置
+                content: '<div style="background:' + titleBackground + ';opacity:' + titleBackgroudOpacity + ';border:1px solid ' + titleBorderColor + ';box-shadow: 2px 2px 2px #888888;padding:2px 3px;border-radius:4px;color:' + titleTextColor + ';white-space:nowrap;text-align: center;width: 80px"><p style="font-size:12px;">' + dataMap.Name + '</p><p style="font-size: 8px;">' + dataMap.CompanyCode_F + '</p>' + '</div>',   //自定义点标记覆盖物内容
+                extData: '1234',
+                zIndex: 15,
+            });
+        }
+        var lineData = getLineData();
+        var lineLen = lineData.length
+        for (var i = 0; i < lineLen; i++) {
+            var lineArray = lineData[i].LineArray;
+            var polyline = setPolyline(lineArray);
+            map.add(polyline);
+        }
+    }
+
+    function getData() {
+        var dataMapArray = [];
+        $.ajax({
+            type: "GET",
+            url: "/SystemManage/OrganizationMap/GetOrganizationMapList?type=1",
+            dataType: "json",
+            async: false,//同步
+            success: function (resultdata) {
+                dataMapArray = resultdata.data;
+            },
+            error: function (data, errorMsg) {
+                console.log(errorMsg)
+            }
+        });
+        console.log(dataMapArray)
+        return dataMapArray;
+    }
+
+    function getLineData() {
+        var lineData = [];
+        $.ajax({
+            type: "GET",
+            url: "/SystemManage/OrganizationMap/GetOrganizationMapList?type=2",
+            dataType: "json",
+            async: false,//同步
+            success: function (resultdata) {
+                lineData = resultdata.data;
+            },
+            error: function (data, errorMsg) {
+                console.log(errorMsg)
+            }
+        });
+        console.log(lineData)
+        return lineData;
+    }
+    //设置线条路径和样式
+    function setPolyline(lineArray) {
+        var polyline = new AMap.Polyline({
+            path: eval(lineArray),//设置线覆盖物路径
+            isOutline: true, //线条是否带描边，默认false
+            outlineColor: '#ffeeff',//线条描边颜色，此项仅在isOutline为true时有效，默认：#000000
+            borderWeight: 3, //描边的宽度，默认为1
+            strokeColor: polylineColor, //线条颜色，使用16进制颜色代码赋值。默认值为#006600
+            strokeOpacity: 1, //线条透明度，取值范围[0,1]，0表示完全透明，1表示不透明。默认为0.9
+            strokeWeight: LineWeightDefine[map.getZoom()],        //线条宽度，单位：像素
+            // 折线样式还支持 'dashed'
+            strokeStyle: "solid", //线样式，实线:solid，虚线:dashed
+            // strokeStyle是dashed时有效
+            strokeDasharray: [10, 5],//勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效
+            lineJoin: 'round', //折线拐点的绘制样式，默认值为'miter'尖角，其他可选值：'round'圆角、'bevel'斜角
+            lineCap: 'round', //折线两端线帽的绘制样式，默认值为'butt'无头，其他可选值：'round'圆头、'square'方头
+            zIndex: 10, //折线覆盖物的叠加顺序。默认叠加顺序，先添加的线在底层，后添加的线在上层。通过该属性可调整叠加顺序，使级别较高的折线覆盖物在上层显示默认zIndex：50
+        });
+        return polyline;
+    }
+
+    //地图销毁
+    function destroyMap() {
+        map && map.destroy();
+    }
+</script>
