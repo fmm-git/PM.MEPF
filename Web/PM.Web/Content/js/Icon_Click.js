@@ -1,10 +1,7 @@
 ﻿
 function ui_layout_toggler_click() {
-    //gridList_scroll(3000);
     $(".ui-layout-center").css("overflow", "hidden");
-    $(".ui-layout-toggler").click("bind", function () {
-        //gridList_scroll(300);
-    })
+    load_scroll();
 }
 
 function gridList_scroll(minit) {
@@ -13,13 +10,25 @@ function gridList_scroll(minit) {
     }, minit);
 }
 function load_scroll() {
-    var width = $(".ui-layout-center").width();
-    var height = $(".ui-layout-center").height();
-    $("#gridList").setGridWidth(width);//jqgrid表格随窗口大小改变而改变
+    var width = $("#ui-layout-center").width();
+    var height = $("#ui-layout-center").height();
+    $("#gridList").setGridWidth(width); 
     var dom = $(".gridList");
     $.each(dom, function (i, item) {
-        $(item).setGridWidth(width*0.98);
-        $(item).setGridHeight(height * 0.65);
+        $(item).setGridWidth(width);
+        $(item).setGridHeight(height-130);
+    });
+    doResize_left();
+    if (typeof (resize3DModelWindow) == 'function') {
+        resize3DModelWindow();
+    }
+}
+
+function doResize_left() {
+    var domleft = $(".gridListLeft");
+    $.each(domleft, function (i, item) {
+        $(item).setGridWidth($(".ui-layout-west").width());
+        $(item).setGridHeight($(".ui-layout-west").height() - 40);
     });
 }
 

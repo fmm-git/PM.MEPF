@@ -12,13 +12,7 @@ function examination(DataId, FormCode, Examinestatus, DataCode, ProjectId, Login
         //查找流程定义
         var OtherParmaNew = "";
         if (OtherParma) {//判断是否传入了其他参数
-            if (OtherParma == "BuildingSteel") {//建筑钢筋
-                OtherParmaNew = "建筑钢筋";
-            } else if (OtherParma == "SectionSteel") {//型钢
-                OtherParmaNew = "型钢";
-            } else {
-                OtherParmaNew = OtherParma;
-            }
+            OtherParmaNew = OtherParma;
         }
         $.ajax({
             type: 'Get',
@@ -29,7 +23,7 @@ function examination(DataId, FormCode, Examinestatus, DataCode, ProjectId, Login
             success: function (data) {
                 var datajson = JSON.parse(data);
                 if (datajson.length > 0) {
-                    flag=LaunchFlow(FormCode, datajson[0].FlowCode, DataId, DataCode, datajson[0].FormName, LoginUserCode);
+                    flag = LaunchFlow(FormCode, datajson[0].FlowCode, DataId, DataCode, datajson[0].FormName, LoginUserCode);
                 } else {
                     $.modalMsg("流程未定义", "warning");
                     flag = false;
@@ -43,45 +37,6 @@ function examination(DataId, FormCode, Examinestatus, DataCode, ProjectId, Login
         return false;
     }
     return flag;
-    //var rowData = $("#gridList").jqGridRowValue();
-    //if (id != "" && id != null && id != undefined) {
-    //    if (examinestatus == "审核完成") {
-    //        $.modalMsg("该数据处于" + examinestatus + "不能重复发起流程", "warning");
-    //        return false;
-    //    }
-    //    else if (examinestatus == "审批中" || examinestatus == "已退回") {
-    //        $.modalOpen({
-    //            id: "Serach",
-    //            title: "查看审批流程",
-    //            url: "/Flow/PageDealFlow/Index?FormCode=" + formcode + "&FormDataCode=" + id,
-    //            width: "60%",
-    //            height: "450px",
-    //            btn: null,
-    //            callBack: function (iframeId) {
-    //                top.frames[iframeId].submitForm();
-    //                $.reload();
-    //            }
-    //        });
-    //    }
-    //    else {
-    //        $.modalOpen({
-    //            id: "ChangeFlow",
-    //            title: "选择要发起的审批流程",
-    //            url: "/Flow/PageDealFlow/ChangeFlow?FormCode=" + formcode + "&name=" + dataname + "&id=" + id + "&ProjectId=" + rowData.ProjectId,
-    //            width: "50%",
-    //            height: "450px",
-    //            btn: ['发起流程', '关闭'],
-    //            callBack: function (iframeId) {
-    //                top.frames[iframeId].submitForm();
-    //                $.reload();
-    //            }
-    //        });
-    //    }
-    //}
-    //else {
-    //    $.modalMsg("请选择要发起流程的单据", "warning");
-    //    return false;
-    //}
 }
 
 function SeeApproval(FormCode, DataId) {
@@ -122,9 +77,6 @@ function LaunchFlow(FormCode, FlowCode, DataId, DataCode, FormName, LoginUserCod
             var str_json = JSON.parse(data);
             if (str_json.state == "success") {
                 $.modalMsg("发起流程成功", "success");
-                if (FormCode!="InOrder") {
-                    $.reload();
-                }
                 return true;
             }
             else {

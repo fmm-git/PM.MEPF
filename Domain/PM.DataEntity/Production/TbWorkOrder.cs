@@ -14,7 +14,7 @@ using Dos.ORM;
 namespace PM.DataEntity
 {
     /// <summary>
-    /// 加工订单
+    /// 实体类TbWorkOrder。(属性说明自动提取数据库字段的描述信息)
     /// </summary>
     [Table("TbWorkOrder")]
     [Serializable]
@@ -38,6 +38,11 @@ namespace PM.DataEntity
 		private DateTime? _InsertTime;
 		private string _Examinestatus;
 		private string _ProjectId;
+		private string _PackState;
+		private string _SignForState;
+		private string _InstallState;
+		private DateTime? _JgCompleteTiem;
+		private string _JgProgress;
 
 		/// <summary>
 		/// ID
@@ -260,6 +265,71 @@ namespace PM.DataEntity
 				this._ProjectId = value;
 			}
 		}
+		/// <summary>
+		/// 订单打包状态
+		/// </summary>
+		[Field("PackState")]
+		public string PackState
+		{
+			get{ return _PackState; }
+			set
+			{
+				this.OnPropertyValueChange("PackState");
+				this._PackState = value;
+			}
+		}
+		/// <summary>
+		/// 签收状态
+		/// </summary>
+		[Field("SignForState")]
+		public string SignForState
+		{
+			get{ return _SignForState; }
+			set
+			{
+				this.OnPropertyValueChange("SignForState");
+				this._SignForState = value;
+			}
+		}
+		/// <summary>
+		/// 安装状态
+		/// </summary>
+		[Field("InstallState")]
+		public string InstallState
+		{
+			get{ return _InstallState; }
+			set
+			{
+				this.OnPropertyValueChange("InstallState");
+				this._InstallState = value;
+			}
+		}
+		/// <summary>
+		/// 加工完成时间
+		/// </summary>
+		[Field("JgCompleteTiem")]
+		public DateTime? JgCompleteTiem
+		{
+			get{ return _JgCompleteTiem; }
+			set
+			{
+				this.OnPropertyValueChange("JgCompleteTiem");
+				this._JgCompleteTiem = value;
+			}
+		}
+		/// <summary>
+		/// 加工进度
+		/// </summary>
+		[Field("JgProgress")]
+		public string JgProgress
+		{
+			get{ return _JgProgress; }
+			set
+			{
+				this.OnPropertyValueChange("JgProgress");
+				this._JgProgress = value;
+			}
+		}
 		#endregion
 
 		#region Method
@@ -302,6 +372,11 @@ namespace PM.DataEntity
 				_.InsertTime,
 				_.Examinestatus,
 				_.ProjectId,
+				_.PackState,
+				_.SignForState,
+				_.InstallState,
+				_.JgCompleteTiem,
+				_.JgProgress,
 			};
         }
         /// <summary>
@@ -327,6 +402,11 @@ namespace PM.DataEntity
 				this._InsertTime,
 				this._Examinestatus,
 				this._ProjectId,
+				this._PackState,
+				this._SignForState,
+				this._InstallState,
+				this._JgCompleteTiem,
+				this._JgProgress,
 			};
         }
         /// <summary>
@@ -417,6 +497,26 @@ namespace PM.DataEntity
 			/// 
 			/// </summary>
 			public readonly static Field ProjectId = new Field("ProjectId", "TbWorkOrder", "");
+            /// <summary>
+			/// 订单打包状态
+			/// </summary>
+			public readonly static Field PackState = new Field("PackState", "TbWorkOrder", "订单打包状态");
+            /// <summary>
+			/// 签收状态
+			/// </summary>
+			public readonly static Field SignForState = new Field("SignForState", "TbWorkOrder", "签收状态");
+            /// <summary>
+			/// 安装状态
+			/// </summary>
+			public readonly static Field InstallState = new Field("InstallState", "TbWorkOrder", "安装状态");
+            /// <summary>
+			/// 加工完成时间
+			/// </summary>
+			public readonly static Field JgCompleteTiem = new Field("JgCompleteTiem", "TbWorkOrder", "加工完成时间");
+            /// <summary>
+			/// 加工进度
+			/// </summary>
+			public readonly static Field JgProgress = new Field("JgProgress", "TbWorkOrder", "加工进度");
         }
         #endregion
 	}

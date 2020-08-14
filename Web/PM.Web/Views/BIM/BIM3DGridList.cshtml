@@ -3,44 +3,80 @@
     Layout = null;
 }
 
-<script>
+    <script type="text/javascript">
+    //定义一个集合存放选中行的数据
+    var selectRowData = [];
+    var index = 1;
+    var lastsel;
+    var lastselSub = 0;
+    var gridList_ = "";
+    var gridList_Sub = "";
+    var _dbNameStr = "";
+    var _siteCode = "";
+    var isclickSub = false;
     $(function () {
-        $.LodeMenuBtn("/BIM/3DGridList","#toolbar_3DProject");
+        $.LodeMenuBtn("/BIM/3DGridList", "#toolbar_3DProject");
         gridList_Project();
     });
+
+    //#region 初始化表格
     function gridList_Project() {
-        var $gridList = $("#gridList_Project");
+        gridList_ = "gridList_Project";
+        var $gridList = $("#"+gridList_);
         $gridList.dataGrid({
             url: "@Url.Action("Get3DGridJson", "BIM")",
-            height: $(window).height() * 0.5,
+            editurl: "@Url.Action("EditRow", "BIM")",
             //height: "auto",//高度自适应
             //autowidth: true,//宽度自适应
             colModel: [
-                { label: "主键", name: "ComponentCode", hidden: true, key: true },
-                { label: "主键", name: "ComponentCodeShow", hidden: true},
+                { label: "主键", name: "PidTag", hidden: true, key: true },
+                { label: "ComponentCode", name: "ComponentCode", hidden: true},
+                { label: "ComponentCodeShow", name: "ComponentCodeShow", hidden: true },
+                { label: "ProgressStatus", name: "ProgressStatus", hidden: true },
                 { label: '专业', name: 'Major', width: 120, align: 'left', sortable: false  },
                 { label: "大系统", name: "System", width: 120, align: 'left', sortable: false },
-                { label: '子系统', name: 'Subsystem', width: 100, align: 'left', sortable: false, formatter: formatDatebox },
+                { label: '子系统', name: 'Subsystem', width: 100, align: 'left', sortable: false},
                 //{ label: "系统类型", name: "WarehouseTypeName", width: 80, align: 'left', sortable: false },
                 { label: "材料类型", name: "MaterialType", width: 100, align: 'left', sortable: false },
                 { label: "构件名称", name: "Material", width: 100, align: 'left', sortable: false },
+                { label: "材质", name: "", width: 100, align: 'left', sortable: false },
+                { label: "构件编号", name: "", width: 150, align: 'left', sortable: false },
                 { label: "规格尺寸", name: "Size", width: 200, align: 'left', sortable: false },
+                { label: "长度", name: "Length", width: 80, align: 'left', sortable: false },
+                { label: "面积", name: "Area", width: 80, align: 'left', sortable: false },
                 { label: "计划总数", name: "Total", width: 100, align: 'left', sortable: false },
                 { label: "加工中", name: "ProcessingShow", width: 100, align: 'left', sortable: false },
                 { label: '加工完成', name: 'ProcessCompleteShow', width: 100, align: 'left', sortable: false },
                 { label: '安装完成', name: 'InstallCompleteShow', width: 100, align: 'left', sortable: false },
-                { label: '计划完工时间', name: 'PlanTime', width: 100, align: 'left', sortable: false },
-                { label: '实际完工时间', name: 'ActualTime', width: 100, align: 'left', sortable: false },
-                { label: '进度状态', name: 'ProgressStatusShow', width: 100, align: 'left', sortable: false },
-                { label: '备注', name: 'Remark', width: 100, align: 'left', sortable: false },
+                { label: '计划完工时间', name: 'PlanTime', width: 100, align: 'left', sortable: false, editable: true, formatter: formatDatebox   },
+                { label: '实际完工时间', name: 'ActualTime', width: 100, align: 'left', sortable: false, formatter: formatDatebox  },
+                { label: '进度状态', name: 'ProgressStatusShow', width: 100, align: 'left', sortable: false, formatter: ProgressStatusShow },
+                { label: '备注', name: 'Remark', width: 100, align: 'left', sortable: false, editable: true },
             ],
             gridComplete: function () {
                 $gridList.find("tbody").find("input:checkbox").each(function () {
-                    $(this).parent().css("padding-top", "8px").css("padding-left", "14px");
+                    $(this).parent().css("width", "40px").css("padding-top", "8px").css("padding-left", "14px");
+                    gridList_p_check(this);
+                });
+                $gridList.find("tbody").find(".ui-sgcollapsed").each(function () {
+                    $(this).css("width", "40px").css("padding-top", "5px");
                 });
             },
-            ondblClickRow: function (id) {//双击
-
+            ondblClickRow: function (rowid, iCol, cellContent, e) {
+                editRow("#"+gridList_, rowid, false);
+                if (!isclickSub) {
+                saveRow(gridList_Sub, lastselSub,true);
+                    lastselSub = 0;
+                }
+                isclickSub = false;
+            },
+            onSelectAll: function (rowids, statue) {
+                allCheck_P(rowids);
+            },
+            onSelectRow: function (rowid, status) {
+                if (rowid && rowid !== lastsel) {
+                    $gridList.jqGrid('saveRow', lastsel);
+                }
             },
             pager: "#gridPager_Project",
             viewrecords: true,
@@ -48,69 +84,293 @@
             shrinkToFit: false,
             subGrid: true,
             subGridRowExpanded: function (subgrid_id, row_id) {
-                var rowData = $("#gridList_Project").jqGrid('getRowData', row_id);
+                //var row_id = row_id_p.replace.join("$")[0];
+                saveRow("#" + gridList_, lastsel, false);
+                saveRow(gridList_Sub, lastselSub, true);
+                var rowData = $gridList.jqGrid('getRowData', row_id);
                 var subgrid_table_id = subgrid_id + "_t";
-                var subgrid_pager_id = subgrid_id + "_pgr";
-                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "' class='scroll'></table><div id='" + subgrid_pager_id + "' class='scroll'></div>");
+                gridList_Sub = "#" + subgrid_table_id;
+                lastselSub = 0;
+                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "' class='scroll'></table>");
                 $("#" + subgrid_table_id).jqGrid({
-                    url: "@Url.Action("Get3DItemGridJson", "BIM")" + "?ComponentCode=" + rowData.ComponentCodeShow + "&Size=" + rowData.Size,
+                    url: "@Url.Action("Get3DItemGridJson", "BIM")",
+                    postData: {
+                        DBName: _dbNameStr,
+                        ComponentCode: rowData.ComponentCodeShow,
+                        Size: rowData.Size,
+                        TotalCount: rowData.Total,
+                        PlanTime: rowData.PlanTime,
+                        Remark: rowData.Remark
+                    },
+                    editurl: "@Url.Action("EditRowSub", "BIM")",
                     datatype: "json",
-                    //width: 800,  
                     colModel: [
                         { label: "主键", name: "id", hidden: true, key: true },
-                        { label: "构件名称", name: "Name", width: 200, align: 'left', sortable: false },
+                        { label: "ProgressStatus", name: "ProgressStatus", hidden: true },
+                        { label: "主键", name: "ComponentCode", hidden: true },
+                        { label: "构件名称", name: "Name", width: 100, align: 'left', sortable: false },
+                        { label: "材质", name: "Material", width: 100, align: 'left', sortable: false },
+                        { label: "构件编号", name: "ComponentCode", width: 200, align: 'left', sortable: false },
+                        { label: "规格尺寸", name: "Size", width: 150, align: 'left', sortable: false },
                         { label: "长度", name: "Length", width: 80, align: 'left', sortable: false },
-                        { label: "计划总数", name: "Total", width: 80, align: 'left', sortable: false },
+                        { label: "面积", name: "Area", width: 80, align: 'left', sortable: false },
+                        { label: "计划总数", name: "Total", width: 100, align: 'left', sortable: false },
                         { label: "加工中", name: "ProcessingShow", width: 100, align: 'left', sortable: false },
                         { label: '加工完成', name: 'ProcessCompleteShow', width: 100, align: 'left', sortable: false },
                         { label: '安装完成', name: 'InstallCompleteShow', width: 100, align: 'left', sortable: false },
-                        { label: '计划完工时间', name: 'PlanTime', width: 100, align: 'left', sortable: false },
-                        { label: '实际完工时间', name: 'ActualTime', width: 100, align: 'left', sortable: false },
-                        { label: '进度状态', name: 'ProgressStatusShow', width: 100, align: 'left', sortable: false },
-                        { label: '备注', name: 'Remark', width: 100, align: 'left', sortable: false },
+                        { label: '计划完工时间', name: 'PlanTime', width: 100, align: 'left', sortable: false, editable: true, formatter: formatDatebox  },
+                        { label: '实际完工时间', name: 'ActualTime', width: 100, align: 'left', sortable: false, formatter: formatDatebox  },
+                        { label: '进度状态', name: 'ProgressStatusShow', width: 100, align: 'left', sortable: false, formatter: ProgressStatusShow  },
+                        { label: '备注', name: 'Remark', width: 100, align: 'left', sortable: false, editable: true },
                     ],
                     gridComplete: function () {
                         $("#" + subgrid_table_id).find("tbody").find("input:checkbox").each(function () {
-                            $(this).parent().css("padding-top", "8px").css("padding-left", "14px");
+                            $(this).parent().css("padding-top", "8px").css("padding-left", "214px");
+                        });
+                        $("#" + subgrid_id).find(".ui-jqgrid-hdiv").css("height", "28px");
+                        $("#" + subgrid_id).find(".ui-jqgrid-htable").find("th").each(function () {
+                            $(this).css("background-color", "aliceblue");
                         });
                         $("#gview_" + subgrid_table_id).find(".ui-jqgrid-bdiv").css("overflow-x", "hidden");
+                        $("#jqgh_" + subgrid_table_id + "_cb").css("padding-left", "200px");
+                        allCheck_sub(row_id);
                     },
-                    //jsonReader: {   // (8)针对子表格的jsonReader设置
-                    //    root: "gridModel",
-                    //    records: "record",
-                    //    repeatitems: false
-                    //},
-                    //prmNames: { search: "search" },
-                    pager: subgrid_pager_id,
+                    //点击题头的checkbox按钮，一键多选
+                    onSelectAll: function (rowids, statue) {
+                        //rowids是被全选中的行数据的id数组
+                        if (statue) {
+                            for (var i = 0; i < rowids.length; i++) {
+                                var rowData = $("#" + subgrid_table_id).jqGrid('getRowData', rowids[i]);
+                                selectRowData.push(rowData.id);
+                            }
+                        } else {
+                            for (var i = 0; i < rowids.length; i++) {
+                                var rowData = $("#" + subgrid_table_id).jqGrid('getRowData', rowids[i]);
+                                selectRowData.splice($.inArray(rowData.id, selectRowData), 1);
+                            }
+                        }
+                        checkbox_parent(row_id,"jqg_","",statue);
+                    },
+                    ondblClickRow: function (rowid, iCol, cellContent, e) {
+                        editRow("#" + subgrid_table_id, rowid, true);
+                        saveRow("#" + gridList_, lastsel, false);
+                        isclickSub = true;
+                    },
+                    onSelectRow: function (rowid, status) {
+                        var ids = $("#" + subgrid_table_id).jqGrid('getGridParam', 'selarrrow');
+                        if (ids.length > 0) {//选中
+                            var rowData = $("#" + subgrid_table_id).jqGrid('getRowData', rowid);
+                            selectRowData.push(rowData.id);
+                        } else {//取消选中
+                            var rowData = $("#" + subgrid_table_id).jqGrid('getRowData', rowid);
+                            selectRowData.splice($.inArray(rowData.id, selectRowData), 1);
+                        }
+                        checkbox_sub(row_id, "cb_", "_t", status);
+                    },
                     viewrecords: true,
                     rownumbers: true,
                     multiselect: true,
+                    multiselectWidth: 420,
                     height: "100%",
-                    rowNum: 10
+                    rowNum: -1
                 });
             }
         });
-        $("#btn_search").click(function () {
-            $gridList.jqGrid('setGridParam', {
-                postData: $(".search").formSerialize(),
-                page: 1
-            }).trigger('reloadGrid');
-        });
-        //回车查询
-        document.onkeydown = function (e) {
-            if (!e) e = window.event;
-            if ((e.keyCode || e.which) == 13) {
-                $('#btn_search').trigger("click");
-            }
-        }
     }
-    function EarnOrLosColor(cellValue, options, rowObject) {
-        if (parseInt(rowObject.EarnOrLos) == -1) {
+    function LoadData_Project(dbNameStr, componentCode) {
+        $("#" +gridList_).jqGrid('clearGridData');
+        if (componentCode == "") return;
+        _dbNameStr = dbNameStr;
+        _siteCode = getSelectOrg_Index().CompanyCode;
+        var postData = { DBName: _dbNameStr, ComponentCode: componentCode };
+        $("#" +gridList_).jqGrid('setGridParam', {
+            postData: postData,
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    function ProgressStatusShow(cellValue, options, rowObject) {
+        if (rowObject.ProgressStatusShow != "正常") {
             return "<span style='color: red;'>" + cellValue + "</span>";
         } else {
             return "<span style='color: green;'>" + cellValue + "</span>";
         }
     }
+    //#endregion
+
+    //#region 表格事件
+    function valid(rowid, isSub) {
+        //var lab = gridList_ + "_" + rowid;
+        //if (isSub) lab = lab + "_t";
+        //lab = lab + "_PlanTime";
+        //var planTimeDom = $("td[aria-describedby='" + lab + "']").find("#" + rowid + "_PlanTime");
+        if (isSub) {
+            $("#" + rowid + "_PlanTime").focus(function () {
+                WdatePicker({
+                    readOnly: true,
+                    dateFmt: 'yyyy-MM-dd '
+                });
+            });
+        } else {
+            $("#" + rowid + "_PlanTime").focus(function () {
+                WdatePicker({
+                    readOnly: true,
+                    dateFmt: 'yyyy-MM-dd ',
+                    onpicking: PlanTimeChange
+                });
+            });
+        }
+    }
+    function editRow(gridList, rowid, isSub) {
+        var lastRow = "";
+        var w = 25;
+        if (isSub) {
+            lastRow = lastselSub;
+            w = 0;
+        }
+        else {
+            lastRow = lastsel;
+        }
+        //获取表格最后一行Id
+        var selectedRowIds = $(gridList).jqGrid("getDataIDs");
+        var id = selectedRowIds[selectedRowIds.length - 1];
+        if (rowid && (rowid !== lastRow || rowid == id)) {
+            saveRow(gridList, lastRow,isSub);
+            var rowData = $(gridList).jqGrid('getRowData', rowid);
+            $(gridList).jqGrid('editRow', rowid, {
+                keys: true,
+                extraparam: {
+                    "SiteCode": _siteCode,
+                    "ComponentCode": rowData.ComponentCode,
+                },
+            });
+            $(gridList).find("tbody").find("input:text").each(function () {
+                var width = parseInt($(this).css("width").replace('px', '')) - w;
+                $(this).css("height", "20px").css("width", width + "px");
+            });
+            if (isSub) {
+                lastselSub = rowid;
+            }
+            else {
+                lastsel = rowid;
+            }
+            valid(rowid, isSub);
+        }
+    }
+    function saveRow(gridList, rowid, isSub) {
+        var grid = $(gridList);
+            if (grid.length != 0 && rowid != "" && rowid != 0) {
+                if (isSub) {
+                    var rowData = grid.jqGrid('getRowData', rowid);
+                    grid.jqGrid('saveRow', rowid, { extraparam: { "SiteCode": _siteCode, "ComponentCode": rowData.ComponentCode } });
+
+                } else {
+                    grid.jqGrid('saveRow', rowid, { extraparam: { "SiteCode": _siteCode} });
+                }
+        }
+    }
+    //子表格复选框选中
+    function checkbox_sub(rowid, slab, elab, status) {
+        if (!status) {
+            checkbox_parent(rowid, slab, "", status);
+        } else {
+            var gridList = "#" + gridList_ +"_" + rowid + elab;
+            var ids_sel = $(gridList).jqGrid('getGridParam', 'selarrrow');
+            var ids_all = $(gridList).jqGrid("getDataIDs");
+            if (ids_sel.length == ids_all.length) checkbox_parent(rowid, slab, elab, status);
+        }
+    }
+    function checkbox_parent(rowid, slab, elab, status) {
+        if (elab != "") {
+            var box = $("#" + slab + gridList_ +"_" + rowid + elab);
+            var s = box.is(":checked");
+            if (status != s) {
+            box.prop('checked', status);
+                checkbox_parent(rowid, "jqg_", "", status);
+            }
+        } else {
+            var ps = $("#jqg_" + gridList_ +"_" + rowid).is(":checked");
+            if (ps != status) {
+                $("#" +gridList_).jqGrid("setSelection", rowid, false);
+            }
+        }
+    }
+    //子表全选
+    function allCheck_sub(row_id) {
+        var ps = $("#jqg_" + gridList_ + "_" + row_id).is(":checked");
+        if (ps) {
+            $("#cb_" + gridList_ + "_" + row_id + "_t").click();
+        }
+    }
+    //主表复选框勾选
+    function gridList_p_check(dom) {
+        $("#"+dom.id).click(function () {
+            var status = $(this).is(":checked");
+            var id = $(this).parent().parent()[0].id;
+            var subdiv = $("#cb_" + gridList_ +"_" + id + "_t");
+            if (!subdiv) {
+                if (status) {
+                    //var ids_sel = $("#" + gridList_).jqGrid('getGridParam', 'selarrrow');
+                    //var ids_all = $("#" + gridList_).jqGrid("getDataIDs");
+                    //if (ids_sel.length == ids_all.length) checkbox_parent(rowid, slab, elab, status);
+                    //翻页问题,待定
+                }
+            }
+            else {//子表勾选
+            if (status) {
+                var ids_all = $("#" + gridList_ +"_" + id + "_t").jqGrid("getDataIDs");
+                $.each(ids_all, function (index, value) {
+                    $("#" + gridList_ +"_" + id + "_t").jqGrid("setSelection", value, false);
+                });
+                subdiv.prop('checked', status);
+            } else {
+                $("#" + gridList_+"_" + id + "_t").jqGrid('resetSelection');
+                }
+            }
+        });
+    }
+    //主表全选
+    function allCheck_P(rowids) {
+        $.each(rowids, function (index, row_id) {
+            var box = $("#cb_" + gridList_ + "_" + row_id + "_t");
+            if (box) {
+                box.click();
+            }
+        });
+    }
+     //#endregion
+
+    //#region 业务方法
+    //主表时间选择
+    function PlanTimeChange(wp) {
+        if (wp.cal.getDateStr() != wp.cal.getNewDateStr()) {
+            var row_id = wp.cal.currFocus.id.replace("_PlanTime", "");
+            $.modalConfirm("确认要批量修改计划完工时间吗?", function (status) {
+                if (status) {
+                    var rowData = $("#" + gridList_).jqGrid('getRowData', row_id);
+                    $("#" + gridList_).jqGrid('saveRow', row_id, {
+                        extraparam: {
+                            "SiteCode": _siteCode,
+                            "AllWrite": true,
+                            "DBName": _dbNameStr,
+                            "ComponentCodeShow": rowData.ComponentCodeShow,
+                            "Size": rowData.Size,
+                            "TotalCount": rowData.Total,
+                        },
+                        successfunc: function (XHR) {
+                            var $grid_sub = $("#" + gridList_ + "_" + row_id + "_t");
+                            if ($grid_sub.length) {
+                                $grid_sub.trigger('reloadGrid');
+                                top.layer.closeAll();
+                                return true;
+                            } 
+                        }
+                    });
+                }
+            })
+            
+        }
+    }
+     //#endregion
 
     //导出excel
     function btn_output() {
@@ -118,7 +378,33 @@
         var url = "@Url.Action("Output3DExcel", "BIM")";
         location.href = url + "?jsonData=" + escape(JSON.stringify(param));
     }
-</script>
+
+    //通过项目清单下单
+    function projectListPlaceOrder() {
+        var modelIdList = $.unique(selectRowData.sort());
+        if (modelIdList.length > 0) {
+            $.ajax({
+                url: "@Url.Action("IsModelIdPlaceOrder", "WorkOrder")",
+                data: { modelIdList: modelIdList },
+                dataType: "json",
+                traditional: true, //默认false
+                async: false,
+                success: function (data) {
+                    if (data.state == "success") {
+                        modelPlaceOrder(modelIdList);
+                    }
+                    else {
+                        $.modalMsg(data.message, "warning");
+                        return false;
+                    }
+                }
+            });
+        } else {
+            $.modalMsg("请选择项目清单中的构件信息！！", "warning");
+            return false;
+        }
+    }
+    </script>
 
 <div class="ui-layout-center">
     <ul class="nav nav-tabs">
@@ -129,11 +415,6 @@
     </ul>
     <div id="Project_tab_Info">
         <div class="topPanel divwidth1">
-            <div class="topPanel-btn divwidth2" id="toolbar_3DProject">
-                <div class="btn-group">
-                    <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
-                </div>
-            </div>
             <div class="search divwidth2">
                 <table>
                     <tr>
@@ -153,11 +434,19 @@
                         <td>
                             <div class="btn-search">
                                 <a class="btn btn-primary btn_searchOne">查询</a>
-                                <a class="btn btn-primary" id="btn_search">结果中搜索</a>
+                                <a class="btn btn-primary btn_search">结果中搜索</a>
                             </div>
                         </td>
                     </tr>
                 </table>
+            </div>
+            <div class="topPanel-btn divwidth2" id="toolbar_3DProject">
+                <div class="btn-group">
+                    <a class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
+                </div>
+                <div class="btn-group">
+                    <a class="btn btn-primary" onclick="projectListPlaceOrder()">下单</a>
+                </div>
             </div>
         </div>
         <div class="gridPanel">

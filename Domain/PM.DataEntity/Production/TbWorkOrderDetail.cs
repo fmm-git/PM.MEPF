@@ -34,11 +34,22 @@ namespace PM.DataEntity
 		private string _MaterialQuality;
 		private string _SpecificationModel;
 		private decimal? _Length;
+		private string _Area;
 		private string _Remark;
 		private string _LargePattern;
 		private string _ComponentStrat;
 		private string _MxGjBm;
 		private string _MxGjId;
+		private string _IsPack;
+		private DateTime? _PackDate;
+		private string _PackUserCode;
+		private string _IsSignFor;
+		private DateTime? _SignForDate;
+		private string _SignForUserCode;
+		private string _IsInstall;
+		private DateTime? _InstallDate;
+		private string _InstallUserCode;
+		private string _PackCode;
 
 		/// <summary>
 		/// ID
@@ -210,6 +221,19 @@ namespace PM.DataEntity
 			}
 		}
 		/// <summary>
+		/// 面积
+		/// </summary>
+		[Field("Area")]
+		public string Area
+		{
+			get{ return _Area; }
+			set
+			{
+				this.OnPropertyValueChange("Area");
+				this._Area = value;
+			}
+		}
+		/// <summary>
 		/// 备注
 		/// </summary>
 		[Field("Remark")]
@@ -274,6 +298,136 @@ namespace PM.DataEntity
 				this._MxGjId = value;
 			}
 		}
+		/// <summary>
+		/// 是否打包
+		/// </summary>
+		[Field("IsPack")]
+		public string IsPack
+		{
+			get{ return _IsPack; }
+			set
+			{
+				this.OnPropertyValueChange("IsPack");
+				this._IsPack = value;
+			}
+		}
+		/// <summary>
+		/// 打包日期
+		/// </summary>
+		[Field("PackDate")]
+		public DateTime? PackDate
+		{
+			get{ return _PackDate; }
+			set
+			{
+				this.OnPropertyValueChange("PackDate");
+				this._PackDate = value;
+			}
+		}
+		/// <summary>
+		/// 打包用户
+		/// </summary>
+		[Field("PackUserCode")]
+		public string PackUserCode
+		{
+			get{ return _PackUserCode; }
+			set
+			{
+				this.OnPropertyValueChange("PackUserCode");
+				this._PackUserCode = value;
+			}
+		}
+		/// <summary>
+		/// 是否签收
+		/// </summary>
+		[Field("IsSignFor")]
+		public string IsSignFor
+		{
+			get{ return _IsSignFor; }
+			set
+			{
+				this.OnPropertyValueChange("IsSignFor");
+				this._IsSignFor = value;
+			}
+		}
+		/// <summary>
+		/// 签收时间
+		/// </summary>
+		[Field("SignForDate")]
+		public DateTime? SignForDate
+		{
+			get{ return _SignForDate; }
+			set
+			{
+				this.OnPropertyValueChange("SignForDate");
+				this._SignForDate = value;
+			}
+		}
+		/// <summary>
+		/// 签收用户
+		/// </summary>
+		[Field("SignForUserCode")]
+		public string SignForUserCode
+		{
+			get{ return _SignForUserCode; }
+			set
+			{
+				this.OnPropertyValueChange("SignForUserCode");
+				this._SignForUserCode = value;
+			}
+		}
+		/// <summary>
+		/// 是否安装
+		/// </summary>
+		[Field("IsInstall")]
+		public string IsInstall
+		{
+			get{ return _IsInstall; }
+			set
+			{
+				this.OnPropertyValueChange("IsInstall");
+				this._IsInstall = value;
+			}
+		}
+		/// <summary>
+		/// 安装时间
+		/// </summary>
+		[Field("InstallDate")]
+		public DateTime? InstallDate
+		{
+			get{ return _InstallDate; }
+			set
+			{
+				this.OnPropertyValueChange("InstallDate");
+				this._InstallDate = value;
+			}
+		}
+		/// <summary>
+		/// 安装用户
+		/// </summary>
+		[Field("InstallUserCode")]
+		public string InstallUserCode
+		{
+			get{ return _InstallUserCode; }
+			set
+			{
+				this.OnPropertyValueChange("InstallUserCode");
+				this._InstallUserCode = value;
+			}
+		}
+		/// <summary>
+		/// 包件号
+		/// </summary>
+		[Field("PackCode")]
+		public string PackCode
+		{
+			get{ return _PackCode; }
+			set
+			{
+				this.OnPropertyValueChange("PackCode");
+				this._PackCode = value;
+			}
+		}
 		#endregion
 
 		#region Method
@@ -312,11 +466,22 @@ namespace PM.DataEntity
 				_.MaterialQuality,
 				_.SpecificationModel,
 				_.Length,
+				_.Area,
 				_.Remark,
 				_.LargePattern,
 				_.ComponentStrat,
 				_.MxGjBm,
 				_.MxGjId,
+				_.IsPack,
+				_.PackDate,
+				_.PackUserCode,
+				_.IsSignFor,
+				_.SignForDate,
+				_.SignForUserCode,
+				_.IsInstall,
+				_.InstallDate,
+				_.InstallUserCode,
+				_.PackCode,
 			};
         }
         /// <summary>
@@ -338,11 +503,22 @@ namespace PM.DataEntity
 				this._MaterialQuality,
 				this._SpecificationModel,
 				this._Length,
+				this._Area,
 				this._Remark,
 				this._LargePattern,
 				this._ComponentStrat,
 				this._MxGjBm,
 				this._MxGjId,
+				this._IsPack,
+				this._PackDate,
+				this._PackUserCode,
+				this._IsSignFor,
+				this._SignForDate,
+				this._SignForUserCode,
+				this._IsInstall,
+				this._InstallDate,
+				this._InstallUserCode,
+				this._PackCode,
 			};
         }
         /// <summary>
@@ -418,6 +594,10 @@ namespace PM.DataEntity
 			/// </summary>
 			public readonly static Field Length = new Field("Length", "TbWorkOrderDetail", "长度");
             /// <summary>
+			/// 面积
+			/// </summary>
+			public readonly static Field Area = new Field("Area", "TbWorkOrderDetail", "面积");
+            /// <summary>
 			/// 备注
 			/// </summary>
 			public readonly static Field Remark = new Field("Remark", "TbWorkOrderDetail", "备注");
@@ -437,6 +617,46 @@ namespace PM.DataEntity
 			/// 模型构建id
 			/// </summary>
 			public readonly static Field MxGjId = new Field("MxGjId", "TbWorkOrderDetail", "模型构建id");
+            /// <summary>
+			/// 是否打包
+			/// </summary>
+			public readonly static Field IsPack = new Field("IsPack", "TbWorkOrderDetail", "是否打包");
+            /// <summary>
+			/// 打包日期
+			/// </summary>
+			public readonly static Field PackDate = new Field("PackDate", "TbWorkOrderDetail", "打包日期");
+            /// <summary>
+			/// 打包用户
+			/// </summary>
+			public readonly static Field PackUserCode = new Field("PackUserCode", "TbWorkOrderDetail", "打包用户");
+            /// <summary>
+			/// 是否签收
+			/// </summary>
+			public readonly static Field IsSignFor = new Field("IsSignFor", "TbWorkOrderDetail", "是否签收");
+            /// <summary>
+			/// 签收时间
+			/// </summary>
+			public readonly static Field SignForDate = new Field("SignForDate", "TbWorkOrderDetail", "签收时间");
+            /// <summary>
+			/// 签收用户
+			/// </summary>
+			public readonly static Field SignForUserCode = new Field("SignForUserCode", "TbWorkOrderDetail", "签收用户");
+            /// <summary>
+			/// 是否安装
+			/// </summary>
+			public readonly static Field IsInstall = new Field("IsInstall", "TbWorkOrderDetail", "是否安装");
+            /// <summary>
+			/// 安装时间
+			/// </summary>
+			public readonly static Field InstallDate = new Field("InstallDate", "TbWorkOrderDetail", "安装时间");
+            /// <summary>
+			/// 安装用户
+			/// </summary>
+			public readonly static Field InstallUserCode = new Field("InstallUserCode", "TbWorkOrderDetail", "安装用户");
+            /// <summary>
+			/// 包件号
+			/// </summary>
+			public readonly static Field PackCode = new Field("PackCode", "TbWorkOrderDetail", "包件号");
         }
         #endregion
 	}

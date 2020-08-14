@@ -13,10 +13,10 @@ using Dos.ORM;
 
 namespace PM.DataEntity
 {
-    /// <summary>
-    /// 模型项目清单附加信息表
-    /// </summary>
-    [Table("TbModelOtherInfo")]
+	/// <summary>
+	/// 模型项目清单附加信息表
+	/// </summary>
+	[Table("TbModelOtherInfo")]
     [Serializable]
     public partial class TbModelOtherInfo : Entity
     {
@@ -146,6 +146,13 @@ namespace PM.DataEntity
 				_.ID,
 			};
         }
+		/// <summary>
+        /// 获取实体中的标识列
+        /// </summary>
+        public override Field GetIdentityField()
+        {
+            return _.ID;
+        }
         /// <summary>
         /// 获取列信息
         /// </summary>
@@ -232,5 +239,13 @@ namespace PM.DataEntity
 			public readonly static Field ProjectId = new Field("ProjectId", "TbModelOtherInfo", "项目Id");
         }
         #endregion
+
+        #region 扩展字段
+        public string DBName { get; set; }
+		public string ComponentCodeShow { get; set; }
+		public string Size { get; set; }
+		public int TotalCount { get; set; }
+		public bool AllWrite { get; set; }
+		#endregion
 	}
 }

@@ -1479,7 +1479,8 @@ where a.ID=@ID";
             {
                 var model = Repository<TbFlowPerform>.First(p => p.FlowPerformID == FlowPerformID);
                 string sqlYwTable = "";//业务表sql
-                string sqlFe = "";//流程节点事件sql
+                //string sqlFe = "";//流程节点事件sql
+                List<string> sqlFe = new List<string>();
                 string sqlEarlyInfo = "";//流程预警信息sql
                 //向插入TbFlowPerformOpinions
                 List<TbFlowPerformOpinions> fpoList = new List<TbFlowPerformOpinions>();
@@ -1507,8 +1508,14 @@ where a.ID=@ID";
                                 if (!string.IsNullOrWhiteSpace(FormCode))
                                 {
                                     //查找菜单流程事件
-                                    var feModel = Repository<TbFlowEvent>.First(p => p.FormCode == FormCode);
-                                    sqlFe = feModel.EventDescriptionsql;
+                                    var feModel = Repository<TbFlowEvent>.Query(p => p.FormCode == FormCode);
+                                    if (feModel.Count() > 0) 
+                                    {
+                                        for (int i = 0; i < feModel.Count(); i++)
+                                        {
+                                            sqlFe.Add(feModel[i].EventDescriptionsql);
+                                        }
+                                    }
                                 }
                             }
                             FlowNodeCode = fpnrModel.ChildNodeCode;
@@ -1568,9 +1575,12 @@ where a.ID=@ID";
                     {
                         Db.Context.FromSql(sqlYwTable).SetDbTransaction(trans).ExecuteNonQuery();
                     }
-                    if (!string.IsNullOrWhiteSpace(sqlFe))
+                    if (sqlFe.Count()>0)
                     {
-                        Db.Context.FromSql(sqlFe).AddInParameter("@ID", DbType.String, FormDataCode).SetDbTransaction(trans).ExecuteNonQuery();
+                        for (int i = 0; i < sqlFe.Count(); i++)
+                        {
+                            Db.Context.FromSql(sqlFe[i]).AddInParameter("@ID", DbType.String, FormDataCode).SetDbTransaction(trans).ExecuteNonQuery();
+                        }
                     }
                     if (fpoList.Count > 0)
                     {

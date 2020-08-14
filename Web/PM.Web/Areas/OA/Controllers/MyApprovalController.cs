@@ -146,7 +146,7 @@ namespace PM.Web.Areas.OA.Controllers
         public ActionResult Approval(string para)
         {
             RequestPara model = PM.Common.Extension.JsonEx.JsonToObj<RequestPara>(para);
-            var data = _flowperform.Approval(model.FlowCode, model.performState, model.performOpinions, model.FlowPerformID, model.flowNodeCode, Convert.ToString(Session["userid"]), model.FlowTitle, model.FreeNodeUser);
+            var data = _flowperform.Approval(model.FlowCode, model.performState, model.performOpinions, model.FlowPerformID, model.flowNodeCode, Convert.ToString(PM.Common.OperatorProvider.Provider.CurrentUser.UserId), model.FlowTitle, model.FreeNodeUser);
             return Content(data.ToJson());
         }
         /// <summary>
@@ -157,7 +157,7 @@ namespace PM.Web.Areas.OA.Controllers
         public ActionResult GetFlowWorkNode(string para)
         {
             RequestPara model = PM.Common.Extension.JsonEx.JsonToObj<RequestPara>(para);
-            var data = _flowperform.GetFlowWorkNode(model.FlowCode, model.performState, model.performOpinions, model.FlowPerformID, model.flowNodeCode, Convert.ToString(Session["userid"]), model.FlowTitle, model.FreeNodeUser);
+            var data = _flowperform.GetFlowWorkNode(model.FlowCode, model.performState, model.performOpinions, model.FlowPerformID, model.flowNodeCode, Convert.ToString(PM.Common.OperatorProvider.Provider.CurrentUser.UserId), model.FlowTitle, model.FreeNodeUser);
             return Content(data.ToJson());
         }
         /// <summary>
@@ -167,7 +167,7 @@ namespace PM.Web.Areas.OA.Controllers
         /// <returns></returns>
         public ActionResult UpdatePerformState(string FlowPerformID, string FlowCode, string FlowNodeCode, int performState, string UserType)
         {
-            var data = _flowperform.UpdatePerformState(FlowPerformID, FlowCode, FlowNodeCode, performState, UserType, Convert.ToString(Session["userid"]));
+            var data = _flowperform.UpdatePerformState(FlowPerformID, FlowCode, FlowNodeCode, performState, UserType, Convert.ToString(PM.Common.OperatorProvider.Provider.CurrentUser.UserId));
             return Content(data.ToJson());
         }
         /// <summary>
@@ -177,7 +177,7 @@ namespace PM.Web.Areas.OA.Controllers
         /// <returns></returns>
         public ActionResult UpdatePerformStateZxr(string FlowPerformID, string FlowCode, string FlowNodeCode, int performState, string UserType)
         {
-            var data = _flowperform.UpdatePerformStateZxr(FlowPerformID, FlowCode, FlowNodeCode, performState, UserType, Convert.ToString(Session["userid"]));
+            var data = _flowperform.UpdatePerformStateZxr(FlowPerformID, FlowCode, FlowNodeCode, performState, UserType, Convert.ToString(PM.Common.OperatorProvider.Provider.CurrentUser.UserId));
             return Content(data.ToJson());
         }
 
@@ -209,7 +209,7 @@ namespace PM.Web.Areas.OA.Controllers
         public ActionResult ApprovalNew(string para)
         {
             RequestPara model = PM.Common.Extension.JsonEx.JsonToObj<RequestPara>(para);
-            var data = _flowperform.ApprovalNew(model.FlowCode, model.performState, model.performOpinions, model.FlowPerformID, model.flowNodeCode, Convert.ToString(Session["userid"]), model.FlowTitle);
+            var data = _flowperform.ApprovalNew(model.FlowCode, model.performState, model.performOpinions, model.FlowPerformID, model.flowNodeCode, Convert.ToString(PM.Common.OperatorProvider.Provider.CurrentUser.UserId), model.FlowTitle);
             return Content(data.ToJson());
         }
 

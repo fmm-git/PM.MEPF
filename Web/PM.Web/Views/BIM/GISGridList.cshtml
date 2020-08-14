@@ -16,9 +16,9 @@
     $(function () {
         $.LodeMenuBtn("/BIM/GISGridList","#toolbar_GIS");
         gridList_GIS();
-        setTimeout(function () {
-            $("#gridList_GIS").setGridWidth($(".ui-layout-center").width()-30);
-        }, 500);
+        //setTimeout(function () {
+        //    $("#gridList_GIS").setGridWidth($(".ui-layout-center").width()-30);
+        //}, 500);
     });
 
     //点击组织机构加载数据
@@ -30,7 +30,7 @@
         var $gridList = $("#gridList_GIS");
         $gridList.dataGrid({
             url: "@Url.Action("GetGISGridJson", "BIM")",
-            height: $(window).height() * 0.65,
+            //height: $(window).height() * 0.65,
             colModel: [
                 { label: "主键", name: "ID", hidden: true, key: true },
                 { label: '站点', name: 'SiteName', width: 120 },

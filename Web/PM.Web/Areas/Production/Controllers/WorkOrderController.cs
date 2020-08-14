@@ -27,7 +27,8 @@ namespace PM.Web.Areas.Production.Controllers
     {
         //
         //加工订单
-        private readonly TbWorkOrderLogic _workOrderLogic = new TbWorkOrderLogic();
+        private readonly TbWorkOrderLogic _workOrderLogic = new TbWorkOrderLogic(); 
+        private readonly string _fileConfig = System.Configuration.ConfigurationManager.AppSettings["uploadBIMFile"];
 
         #region 加工订单
 
@@ -80,6 +81,16 @@ namespace PM.Web.Areas.Production.Controllers
         #endregion
 
         #region 新增、修改、查看
+        /// <summary>
+        /// 判断模型构建是否下单
+        /// </summary>
+        /// <param name="modelIdList">模型构建ID集合</param>
+        /// <returns></returns>
+        public ActionResult IsModelIdPlaceOrder(List<string> modelIdList) 
+        {
+            var data = _workOrderLogic.IsModelIdPlaceOrder(modelIdList);
+            return Content(data.ToJson());
+        }
 
         /// <summary>
         /// 订单新增、修改页面
@@ -122,7 +133,7 @@ namespace PM.Web.Areas.Production.Controllers
         /// 新增、修改订单选择项目清单页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult ProjectList() 
+        public ActionResult ProjectList()
         {
             return View();
         }
@@ -134,7 +145,7 @@ namespace PM.Web.Areas.Production.Controllers
         /// <returns></returns>
         public ActionResult GetProjectList(ProjectListRequest request)
         {
-            string dbName = Server.MapPath("~/DB_Data/tmp60CB.tmp.db");
+            string dbName = Server.MapPath("/" + _fileConfig + "/" + request.dbName);
             BIMLogic _BIMLogic = new BIMLogic(dbName);
             var data = _BIMLogic.GetProjectList(request);
             return Content(data.ToJson());
@@ -233,6 +244,67 @@ namespace PM.Web.Areas.Production.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// 订单打包列表信息
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetOrderPackGridJson(WorkOrderRequest request)
+        {
+            var data = _workOrderLogic.GetOrderPackGridJson(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 获取未打包的订单明细信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetNoPackOrderDetail(WorkOrderDetailRequest request) 
+        {
+            var data = _workOrderLogic.GetNoPackOrderDetail(request);
+            return Content(data.ToJson());
+        }
+
+        /// <summary>
+        /// 获取下一包件号
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetNextPackCode() 
+        {
+            var data = CreateCode.GetNoNew2("PackCode", "TbWorkOrderPack");
+            return Content(data.ToString());
+        }
+
+        /// <summary>
+        /// 保存订单打包信息
+        /// </summary>
+        /// <param name="OrderCode">订单编号</param>
+        /// <param name="packModel">订单打包信息</param>
+        /// <returns></returns>
+        public ActionResult SubmitOrderPackForm(string OrderCode, string packModel)
+        {
+            try
+            {
+                var workOrderPackItem = JsonEx.JsonToObj<List<TbWorkOrderPack>>(packModel);
+                var data = _workOrderLogic.OrderPackInsert(OrderCode, workOrderPackItem);
+                return Content(data.ToJson());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// 获取包件二维码信息
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetPackageQRCodeJson(PackageQRCodeRequest request)
+        {
+            var data = _workOrderLogic.GetPackageQRCodeJson(request);
+            return Content(data.ToJson());
+        }
 
         #endregion
 
@@ -242,16 +314,197 @@ namespace PM.Web.Areas.Production.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// 订单签收列表信息
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetOrderSignForGridJson(WorkOrderRequest request)
+        {
+            var data = _workOrderLogic.GetOrderSignForGridJson(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 选择签收数据源类型
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ChangeSignForTypeList() 
+        {
+            return View();
+        }
+        /// <summary>
+        /// 获取未签收的包件明细信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetNoSignForPackInfo(WorkOrderDetailRequest request)
+        {
+            var data = _workOrderLogic.GetNoSignForPackInfo(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 获取未签收的订单明细信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetNoSignForOrderDetail(WorkOrderDetailRequest request)
+        {
+            var data = _workOrderLogic.GetNoSignForOrderDetail(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 保存订单签收信息
+        /// </summary>
+        /// <param name="OrderCode">订单编号</param>
+        /// <param name="signForModel">订单签收信息</param>
+        /// <returns></returns>
+        public ActionResult SubmitOrderSignForForm(string OrderCode, string signForModel)
+        {
+            try
+            {
+                var workOrderSignForItem = JsonEx.JsonToObj<List<TbWorkOrderSignFor>>(signForModel);
+                var data = _workOrderLogic.OrderSignForInsert(OrderCode, workOrderSignForItem);
+                return Content(data.ToJson());
 
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// 判断选中的模型构建ID集合是否存在已经签收了的模型构建id
+        /// </summary>
+        /// <param name="modelIdList">选中的模型构建ID集合</param>
+        /// <returns></returns>
+        public ActionResult IsPlaceOrderAndSignFor(List<string> modelIdList)
+        {
+            var data = _workOrderLogic.IsPlaceOrderAndSignFor(modelIdList);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 获取通过模型构件id要签收的信息
+        /// </summary>
+        /// <param name="mxgjid"></param>
+        /// <returns></returns>
+        public ActionResult GetModelGjInfo(string mxgjid) 
+        {
+            var data = _workOrderLogic.GetModelGjInfo(mxgjid);
+            return Content(data.ToJson());
+        }
+
+        /// <summary>
+        /// 保存模型构件签收信息
+        /// </summary>
+        /// <param name="signForModel">订单签收信息</param>
+        /// <returns></returns>
+        public ActionResult SubmitModelSignForForm(string signForModel)
+        {
+            try
+            {
+                var workOrderSignForItem = JsonEx.JsonToObj<List<TbWorkOrderSignFor>>(signForModel);
+                var data = _workOrderLogic.ModelSignForInsert(workOrderSignForItem);
+                return Content(data.ToJson());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         #endregion
 
         #region 订单安装
 
+        /// <summary>
+        /// 判断选中的模型构建ID集合是否存在已经安装了的模型构建id
+        /// </summary>
+        /// <param name="modelIdList">选中的模型构建ID集合</param>
+        /// <returns></returns>
+        public ActionResult IsPlaceOrderAndInstall(List<string> modelIdList)
+        {
+            var data = _workOrderLogic.IsPlaceOrderAndInstall(modelIdList);
+            return Content(data.ToJson());
+        }
         public ActionResult WorkOrderInstallIndex()
         {
             return View();
         }
+        /// <summary>
+        /// 订单安装列表信息
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetOrderInstallGridJson(WorkOrderRequest request)
+        {
+            var data = _workOrderLogic.GetOrderInstallGridJson(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 选择安装数据源类型
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ChangeInstallTypeList()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 获取未安装的包件明细信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetNoInstallPackInfo(WorkOrderDetailRequest request)
+        {
+            var data = _workOrderLogic.GetNoInstallPackInfo(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 获取未安装的订单明细信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetNoInstallOrderDetail(WorkOrderDetailRequest request)
+        {
+            var data = _workOrderLogic.GetNoInstallOrderDetail(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 保存订单签收信息
+        /// </summary>
+        /// <param name="OrderCode">订单编号</param>
+        /// <param name="installForModel">订单安装信息</param>
+        /// <returns></returns>
+        public ActionResult SubmitOrderInstallForm(string OrderCode, string installForModel)
+        {
+            try
+            {
+                var workOrderInstallItem = JsonEx.JsonToObj<List<TbWorkOrderInstall>>(installForModel);
+                var data = _workOrderLogic.OrderInstallInsert(OrderCode, workOrderInstallItem);
+                return Content(data.ToJson());
 
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// 保存模型构件安装信息
+        /// </summary>
+        /// <param name="installForModel">安装信息</param>
+        /// <returns></returns>
+        public ActionResult SubmitModelInstallForm(string installForModel)
+        {
+            try
+            {
+                var workOrderInstallItem = JsonEx.JsonToObj<List<TbWorkOrderInstall>>(installForModel);
+                var data = _workOrderLogic.ModelInstallInsert(workOrderInstallItem);
+                return Content(data.ToJson());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         #endregion
 
     }

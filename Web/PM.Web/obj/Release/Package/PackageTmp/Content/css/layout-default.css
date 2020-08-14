@@ -13,6 +13,44 @@
  * Last Updated: 2010-02-10
  * NOTE: For best code readability, view this with a fixed-space font and tabs equal to 4-chars
  */
+#triangle-up {
+	margin-left: -5px;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-left: 30px solid transparent;
+	border-right: 30px solid transparent;
+	border-bottom: 20px solid #1ABC9C;
+}
+
+#triangle-down {
+	margin-bottom: 3px;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 9px solid #1ABC9C;
+}
+#triangle-left {
+	margin-top: 5px;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-top: 35px solid transparent;
+	border-right: 15px solid #1ABC9C;
+	border-bottom: 35px solid transparent;
+}
+
+#triangle-right {
+	margin-top: 10px;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-top: 15px solid transparent;
+	border-left: 6px solid #1ABC9C;
+	border-bottom: 15px solid transparent;
+}
 
 /*
  *	DEFAULT FONT

@@ -4,32 +4,33 @@
 }
 <link href="~/Content/css/Style-index.css" rel="stylesheet" />
 <script src="~/Content/js/datepicker/WdatePicker.js"></script>
+<script src="~/Content/js/jqgrid/jquery.contextmenu.r2.js"></script>
 
-<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%; z-index:0">
     <div class="pane ui-layout-west ui-layout-pane ui-layout-pane-west left-scrollbar">
         <ul class="nav nav-tabs">
-            <li id="ZZJG_tab_" onclick="selectTab($(this))" class="active"><a href="javascript:void(0);">组织机构</a></li>
-            <li id="XMJG_tab_" onclick="selectTab($(this))"><a href="javascript:void(0);">项目结构</a></li>
+            <li id="ZZJG_tab_" name="GIS_tab_" onclick="selectTab($(this))" class="active"><a href="javascript:void(0);">组织机构</a></li>
+            <li id="XMJG_tab_" name="3D_tab_" onclick="selectTab($(this))"><a href="javascript:void(0);">项目结构</a></li>
         </ul>
-        <div name="ZZJG_tab_Info"><table id="ZZJG_tab_Info" style="width:500px;"></table></div>
-        <div name="XMJG_tab_Info" style="display:none"><table id="XMJG_tab_Info"></table></div>
+        <div class="GIS_tab_Info ZZJG_tab_Info"><table id="ZZJG_tab_Info" class="gridListLeft" style="width:500px;"></table></div>
+        <div class="3D_tab_Info XMJG_tab_Info" style="display:none"><table id="XMJG_tab_Info" class="gridListLeft"></table></div>
     </div>
     <div class="ui-layout-center" id="innerLayout">
         <div class="ui-layout-north">
-            <div name="GIS_tab_Info" style="height:91%">
+            <div class="GIS_tab_Info ZZJG_tab_Info" style="height:91%">
                 @{Html.RenderAction("BIMGISView", "BIM"); }
             </div>
-            <div name="3D_tab_Info" id="3D_tab_Info" style="height: 91%;display:none">
+            <div class="3D_tab_Info XMJG_tab_Info" id="3D_tab_Info" style="height: 91%;display:none">
                 @{Html.RenderAction("BIM3DView", "BIM"); }
             </div>
             <ul class="nav nav-tabs">
-                <li id="GIS_tab_" onclick="selectTab($(this))" class="active"><a style="height:10px;" href="javascript:void(0);">GIS图</a></li>
-                <li id="3D_tab_" onclick="selectTab($(this))"><a style="height:10px;" href="javascript:void(0);">3D模型</a></li>
+                <li id="GIS_tab_" name="ZZJG_tab_" onclick="selectTab($(this))" class="active"><a style="height:10px;" href="javascript:void(0);">GIS图</a></li>
+                <li id="3D_tab_" name="XMJG_tab_" onclick="selectTab($(this))"><a id="3DModal_lab" style="height:10px;" href="javascript:void(0);">3D模型</a></li>
             </ul>
         </div>
-        <div class="ui-layout-center" id="ui-layout-center">
+        <div class="ui-layout-center" id="ui-layout-center" style="z-index: -1">
             <!--------GIS-------->
-            <div name="GIS_tab_Info">
+            <div class="GIS_tab_Info ZZJG_tab_Info">
                 @{
                     if (ViewBag.IsOrder)
                     {
@@ -42,14 +43,14 @@
                 }
             </div>
             <!--------3D-------->
-            <div name="3D_tab_Info" style="display:none">
+            <div class="3D_tab_Info XMJG_tab_Info" style="display:none;">
                 @{
                     Html.RenderAction("BIM3DGridList", "BIM");
                 }
             </div>
         </div>
     </div>
-    <div class="pane ui-layout-east">
+    <div class="pane ui-layout-east" id="ui-layout-east">
         <section class="panel panel-default" style="width:99%;height:625px;">
             <header class="panel-heading font-bold cc i-head-color" style="background-color: #ffffff;">
                 <img src="~/Content/img/syjib.png" class="sytb" />统计报表
@@ -69,38 +70,74 @@
         </section>
     </div>
 </div>
-
+<div class="contextMenu" id="menu_modelTree" style="display: none">
+    <ul>
+        <li id="Show3DModel">查看模型</li>
+    </ul>
+</div>
 <script type="text/javascript">
+    var jsonStr = "";//模型json文件
+    var dbNameStr = "";//模型数据文件
+    var selectOrgData = null;//选中的组织机构数据
+    var selectSiteCode = "";//选中的站点编号
+    var selectModelCode = "";//勾选的模型编号
+
+    //#region 页面基础设置
     $(function () {
         $('#layout').layout({
             onresize: load_scroll,
+            resizerTip: "可调整大小",
+            sliderTip: "显示/隐藏侧边栏",
             west: {
-                size: ($(window).width()) > 1000 ? .16 : .21
+                size: ($(window).width()) > 1366 ? .16 : .25,
+                togglerContent_open: '<div id="triangle-left"></div>',
+                togglerContent_closed: '<div id="triangle-right"></div>',
+            },
+            east: {
+                togglerContent_open: '<div id="triangle-right"></div>',
+                togglerContent_closed: '<div id="triangle-left"></div>',
             }
         });
         $('#innerLayout').layout({
             onresize: load_scroll,
+            resizerTip: "可调整大小",
+            spacing_open: 8,
+            spacing_closed: 8,
+            togglerContent_open: '<div id="triangle-up"></div>',
+            togglerContent_closed: '<div id="triangle-down"></div>',
             north: {
                 size: .65
             }
         });
+
+        $(".ui-layout-resizer").each(function () {
+            $(this).css("z-index", "-1");
+        });
+        $("#ui-layout-east,#ui-layout-center").css("z-index", "-1");
         setTimeout(function () {
             ui_layout_toggler_click();
         }, 500);
         leftOrgList();
         leftBIM3DList();
     });
+    var flag = false;
     function selectTab(v) {
+        flag = false;
         var id = v.attr('id');
         if (id) {
+            if (id == "3D_tab_" || id == "XMJG_tab_") {
+                getModelInfoByOrg();
+                if (!flag) return;
+            }
             $("#" + id + "").addClass("active").siblings().removeClass("active");
-            var dom = $("[name='" + id + "Info']");
+            $("[name='" + id + "']").addClass("active").siblings().removeClass("active");
+            var dom = $("#layout").find("." + id + "Info");
             $.each(dom, function (i, item) {
                 $(item).show();
                 $(item).siblings('div').hide();
             });
-            if (id == "3D_tab_") {
-                initBim3D();
+            if (flag) {
+                loadModelData_Index();
             }
         }
     }
@@ -109,10 +146,9 @@
         var $leftgridList = $("#ZZJG_tab_Info");
         $leftgridList.dataGrid({
             url: "/SystemManage/Company/GetAllCompanyOrBySearch",
-            height: $(window).height() - 96,
             colModel: [
                { label: "组织机构编号", name: "CompanyCode", hidden: true, key: true },
-               { label: '组织机构', name: 'CompanyFullName', width: 220, align: 'left', sortable: false, },
+               { label: '组织机构', name: 'CompanyFullName', align: 'left', sortable: false, },
                { label: '组织机构类型', name: 'OrgType', hidden: true },
                { label: '项目id', name: 'ProjectId', hidden: true },
                { label: '组织机构id', name: 'ParentCompanyCode_F', hidden: true },
@@ -122,25 +158,38 @@
             treeGridModel: 'adjacency',//表示返回数据的读取类型，分为两种：和adjacency
             ExpandColumn: 'CompanyFullName',//树型结构在哪列显示
             rownumbers: false,
+            shrinkToFit: true,
             sortname: 'CompanyCode',
-            //gridComplete: function () {
-            //    $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide();
-            //},
+            gridComplete: function () {
+                $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide();
+                $("tr.jqgrow", this).contextMenu('menu_modelTree', {
+                    bindings: { //右键菜单绑定的事件
+                        "Show3DModel": function (trigger) {
+                            show3DModel_Index();
+                        }
+                    }
+                });
+            },
             onCellSelect: function (id) {//单击
                 clickOrgLoadGridList(id);
+                selectOrgData = $("#ZZJG_tab_Info").jqGrid('getRowData', id);
             }
         });
     }
-
     //加载项目结构
     function leftBIM3DList() {
         var $leftgridList = $("#XMJG_tab_Info");
+        $leftgridList.jqGrid('clearGridData');
         $leftgridList.dataGrid({
             url: "@Url.Action("Getmodel_tree", "BIM")",
-            height: $(window).height() - 96,
             colModel: [
                 { label: "id", name: "id", hidden: true, key: true },
-                { label: 'name', name: 'name', width: 220, align: 'left', sortable: false, },
+                {
+                    label: 'name', name: 'name', width: 220, sortable: false, formatter: function (value, grid, rows, state) {
+                        return "<input type='checkbox' style='margin-top:10px;' value=" + rows.id + " onclick='treeTreeGridCheck(this)'/>" + rows.name
+                    }
+                },
+                //{ label: 'name', name: 'name', width: 220, align: 'left', sortable: false, },
                 { label: 'flag', name: 'flag', hidden: true },
                 { label: 'tid', name: 'tid', hidden: true },
                 { label: 'modelfile', name: 'modelfile', hidden: true },
@@ -151,13 +200,198 @@
             treeGridModel: 'adjacency',//表示返回数据的读取类型，分为两种：和adjacency
             ExpandColumn: 'name',//树型结构在哪列显示
             rownumbers: false,
+            shrinkToFit: true,
             sortname: 'id',
             gridComplete: function () {
                 $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide();
             },
             onCellSelect: function (id) {//单击
-
+                //gridList_Project(dbNameStr);
             }
         });
     }
+    function getSelectOrg_Index() {
+        return selectOrgData;
+    }
+    //#endregion
+
+    //#region 通过模型构件下单、签收、安装
+    //通过模型下单
+    function modelPlaceOrder(mxgjid) {
+        if (mxgjid) {
+            var where = "?type=add&mxgjid=" + mxgjid + "&dbNameStr=" + dbNameStr;
+            var id = $('#ZZJG_tab_Info').jqGrid('getGridParam', 'selrow');
+            var CompanyData = $("#ZZJG_tab_Info").jqGrid('getRowData', id);
+            if (CompanyData.OrgType == "5") {
+                where += "&CompanyCode=" + CompanyData.CompanyCode + "&CompanyFullName=" + CompanyData.CompanyFullName;
+            }
+            $.modalOpen({
+                id: "Form",
+                title: "新增加工订单",
+                url: "/Production/WorkOrder/Form" + where,
+                width: "85%",
+                height: "85%",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                }
+            });
+        } else {
+            $.modalMsg("请先选择模型中需要下单的构建！", "warning");
+            return false;
+        }
+    }
+
+    //通过模型签收
+    function modelSignForOrder(mxgjid) {
+        if (mxgjid) {
+            $.modalOpen({
+                id: "WorkOrderSignForIndex",
+                title: "构件签收",
+                url: "/Production/WorkOrder/WorkOrderSignForIndex?SignForType=ModelSignFor&mxgjid=" + mxgjid,
+                width: "90%",
+                height: "90%",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].SubmitOrderSignForForm();
+                    //调用模型改变颜色的方法
+                    componentSignForComplete(mxgjid);
+                }
+            });
+        }
+    }
+
+    //通过模型安装
+    function modelInstallOrder(mxgjid) {
+        if (mxgjid) {
+            $.modalOpen({
+                id: "WorkOrderSignForIndex",
+                title: "构件安装",
+                url: "/Production/WorkOrder/WorkOrderInstallIndex?InstallType=ModelInstall&mxgjid=" + mxgjid,
+                width: "90%",
+                height: "90%",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].SubmitOrderInstallForm();
+                    //调用模型改变颜色的方法
+                    componentInstallComplete(mxgjid);
+                }
+            });
+        }
+    }
+    //#endregion
+
+    //#region 组织机构复选框勾选
+    function treeTreeGridCheck(dom) {
+        var id = $(dom).val();
+        var rowChecked = $("#" + id).find("input").is(":checked");
+        getModelIdList(id, rowChecked);//展示模型
+        if (rowChecked) {
+            selectModelCode = id;
+        }
+        else {
+            selectModelCode = "";
+        }
+        RelativeTreeGridCheck(id);
+        LoadData_Project(dbNameStr, selectModelCode);//项目清单数据筛选
+    }
+    function RelativeTreeGridCheck(id) {
+        var rowData = $('#XMJG_tab_Info').jqGrid('getRowData', id, true);
+        var parentData = $('#XMJG_tab_Info').jqGrid('getNodeParent', rowData);
+        var rowChecked = $("#" + id).find("input").is(":checked");
+        var childrenData = $('#XMJG_tab_Info').jqGrid('getNodeChildren', rowData);
+        $.each(childrenData, function (n, value) {
+            $("#" + value.id).find("input").prop('checked', rowChecked);
+            RelativeTreeGridCheck(value.id);
+        });
+        checkP(rowChecked, parentData);
+    }
+    function checkP(rowChecked, parentData) {
+        if (parentData != null) {
+            var parentData_p = $('#XMJG_tab_Info').jqGrid('getNodeParent', parentData);
+            var childrenData_p = $('#XMJG_tab_Info').jqGrid('getNodeChildren', parentData);
+            var flag = true;
+            $.each(childrenData_p, function (n, value) {
+                var rowChecked_p = $("#" + value.id).find("input").is(":checked");
+                if (rowChecked_p != rowChecked) {
+                    flag = false;
+                }
+            });
+            $("#" + parentData.id).find("input").prop('checked', flag ? rowChecked : flag);
+            if (rowChecked && flag) selectModelCode = parentData.id;
+            checkP(rowChecked, parentData_p);
+        }
+    }
+    //#endregion
+
+    //#region 展示模型数据
+    //获取组织机构对应的模型数据
+    function getModelInfoByOrg() {
+        if (selectOrgData == null || selectOrgData.OrgType != "5") {
+            $.modalMsg("请选择站点信息", "warning");
+            flag = false;
+            return flag;
+        }
+        if (selectOrgData.CompanyCode == selectSiteCode) {
+            flag = true;
+            return flag;
+        }
+        $.ajax({
+            url: "@Url.Action("GetGridJson", "OrganizationMap",new { area= "SystemManage" })",
+            data: { ProjectId: selectOrgData.ProjectId, SiteCode: selectOrgData.CompanyCode },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                jsonStr = "";
+                dbNameStr = "";
+                if (data.length > 0) {
+                    jsonStr = $.grep(data, function (value) {
+                        return value.Type == 1;
+                    })[0].Path;
+                    dbNameStr = $.grep(data, function (value) {
+                        return value.Type == 2;
+                    })[0].Path;
+                    $("#3DModal_lab").html(selectOrgData.CompanyFullName);
+                    flag = true;
+                }
+                else {
+                    $.modalMsg("该站点还未上传模型", "warning");
+                    flag = false;
+                }
+            }
+        });
+    }
+    function loadModelData_Index() {
+        if (selectOrgData.CompanyCode != selectSiteCode) {
+            selectSiteCode = selectOrgData.CompanyCode;
+        $("#XMJG_tab_Info").jqGrid('clearGridData');
+        if (jsonStr != "" && dbNameStr != "") {
+            $("#XMJG_tab_Info").jqGrid('setGridParam', { postData: { dbName: dbNameStr }, }).trigger('reloadGrid');
+            getBim3DJsonfile(jsonStr);//加载模型数据
+            }
+        }
+    }
+    //获取显示的模型id
+    function getModelIdList(code, rowChecked) {
+        $.ajax({
+            url: "@Url.Action("GetModelIdList", "BIM")",
+            data: { dbName: dbNameStr, ComponentCode: code },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                if (rowChecked) {
+                    showCheckModelViews(data);
+                } else {
+                    hideCheckModelViews(data);
+                }
+            }
+        });
+    }
+    //模型显示
+    function show3DModel_Index(siteCode) {
+        if (siteCode) {
+            $("#ZZJG_tab_Info").jqGrid("setSelection", siteCode, true);
+            selectOrgData = $("#ZZJG_tab_Info").jqGrid('getRowData', siteCode);
+        }
+        $("#XMJG_tab_").click();
+    }
+    //#endregion
+
 </script>

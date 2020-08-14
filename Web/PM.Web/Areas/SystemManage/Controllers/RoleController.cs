@@ -34,9 +34,13 @@ namespace PM.Web.Areas.SystemManage.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Form(string type)
+        public ActionResult Form(string type,string DepartmentId,string OrgType)
         {
-            ViewBag.RoleId = CreateCode.GetOrgId();
+            if (type == "add")
+            {
+                ViewBag.RoleId = CreateCode.GetOrgId();
+                ViewBag.RoleCode = _role.NextRoleCode(DepartmentId, OrgType);
+            }
             return View();
         }
         /// <summary>

@@ -125,6 +125,51 @@ namespace PM.Domain.WebBase
 
         }
 
+        public static string GetNoNew2(string fileCode, string TableName)
+        {
+            string sql = "select MAX(" + fileCode + ") as Code from " + TableName +"";
+            SqlConnection conn = new SqlConnection(connStr);
+            SqlDataAdapter adapter = new SqlDataAdapter(sql, conn);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            var NextCode = "";
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                //获取当前序列号
+                var currentNumber = dt.Rows[0][0].ToString();
+
+                if (string.IsNullOrEmpty(currentNumber))//为空，根据当前年月生成一个
+                {
+                    var yearMonth = DateTime.Now.Date.ToString("yyyyMMdd");
+
+                    NextCode = yearMonth + "001";
+                }
+                else
+                {
+                    //不为空的话截取年月部分与当前年月比较
+                    var yearMonthPart = currentNumber.Substring(0, 8);
+
+                    var dtNow = DateTime.Now.Date.ToString("yyyyMMdd");
+
+                    if (!yearMonthPart.Equals(dtNow))//如果年月不相同，重新生成
+                    {
+
+                        NextCode = dtNow + "001";
+                    }
+                    else
+                    {
+                        //若年月相同，则根据后面四位序列号+1生成新的序列号
+
+                        var num = currentNumber.Substring(8, currentNumber.Length - (8));
+                        var nextNum = GetIndex(num);
+
+                        NextCode = yearMonthPart + nextNum;
+                    }
+                }
+            }
+            return NextCode;
+        }
+
         private static string GetIndex(string num)
         {
 

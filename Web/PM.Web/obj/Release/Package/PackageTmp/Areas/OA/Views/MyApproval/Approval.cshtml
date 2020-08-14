@@ -108,122 +108,44 @@
 
     //审批同意、退回提交
     function Approval(performState) {
-        if (FlowType == "Old") {
-            var performOpinions = $("#approvalcontent").val();
-            //点击退回时，必须填写审批意见，否则提示：请填写退回原因
-            if (performState == 3 && performOpinions == "") {
-                $.modalMsg("请填写退回原因", "warning");
-                return false;
-            }
-            $.loading(true, '请稍后...');
-            var FlowTitle = '';
-            var para = {
-                FlowCode: FlowCode,
-                performState: performState,
-                performOpinions: performOpinions,
-                FlowPerformID: FlowPerformID,
-                flowNodeCode: flowNodeCode,
-                FlowTitle: FlowTitle,
-                FreeNodeUser: ''
-            };
-            if (FormCode == "WorkOrder") {
-                //判断加工订单的流程是否是加工厂接收阶段，同时更改加工订单的加工状态
-                $.ajax({
-                    type: 'POST',
-                    url: '/MyApproval/GetFlowWorkNode',
-                    data: { para: JSON.stringify(para) },
-                    async: false,
-                    cache: false,
-                    success: function (data) {
-                        $.loading(false);
-                        var str_json = JSON.parse(data);
-                        if (str_json.state == "success") {
-                            $.currentWindow().reload();
-                            //调用父页面方法刷新预警数量
-                            window.parent.getcount();
-                            var index = top.layer.getFrameIndex("Approval");
-                            top.layer.close(index);
-                        } else {
-                            $.modalAlert(str_json.message, "warning");
-                        }
-                    }
-                });
-            } else {
-                $.ajax({
-                    type: 'POST',
-                    url: '/MyApproval/Approval',
-                    data: { para: JSON.stringify(para) },
-                    async: false,
-                    cache: false,
-                    success: function (data) {
-                        $.loading(false);
-                        var str_json = JSON.parse(data);
-                        if (str_json.state == "success") {
-                            //判断该流程表单是否是原材料到货入库功能
-                            if (FormCode == "InOrder") {
-                                //判断该数据是否审核完成，如果审核完成发送短信、消息
-                                $.ajax({
-                                    url: "@Url.Action("LoadInOrder", "MyApproval")",
-                                    data: { ID: ID },
-                                    dataType: "json",
-                                    async: false,
-                                    success: function (data) {
-
-                                    }
-                                });
-                            }
-                            $.currentWindow().reload();
-                            //调用父页面方法刷新预警数量
-                            window.parent.getcount();
-                            var index = top.layer.getFrameIndex("Approval");
-                            top.layer.close(index);
-                        }
-                        else {
-                            $.modalAlert(str_json.message, "warning");
-                        }
-                    }
-                });
-            }
-        } else {
-            var performOpinions = $("#approvalcontent").val();
-            //点击退回时，必须填写审批意见，否则提示：请填写退回原因
-            if (performState == 3 && performOpinions == "") {
-                $.modalMsg("请填写退回原因", "warning");
-                return false;
-            }
-            $.loading(true, '请稍后...');
-            var FlowTitle = '';
-            var para = {
-                FlowCode: FlowCode,
-                performState: performState,
-                performOpinions: performOpinions,
-                FlowPerformID: FlowPerformID,
-                flowNodeCode: flowNodeCode,
-                FlowTitle: FlowTitle,
-                FreeNodeUser: ''
-            };
-            $.ajax({
-                type: 'POST',
-                url: '/MyApproval/ApprovalNew',
-                data: { para: JSON.stringify(para) },
-                async: false,
-                cache: false,
-                success: function (data) {
-                    $.loading(false);
-                    var str_json = JSON.parse(data);
-                    if (str_json.state == "success") {
-                        $.currentWindow().reload();
-                        //调用父页面方法刷新预警数量
-                        window.parent.getcount();
-                        var index = top.layer.getFrameIndex("Approval");
-                        top.layer.close(index);
-                    }
-                    else {
-                        $.modalAlert(str_json.message, "warning");
-                    }
-                }
-            });
+        var performOpinions = $("#approvalcontent").val();
+        //点击退回时，必须填写审批意见，否则提示：请填写退回原因
+        if (performState == 3 && performOpinions == "") {
+            $.modalMsg("请填写退回原因", "warning");
+            return false;
         }
+        $.loading(true, '请稍后...');
+        var FlowTitle = '';
+        var para = {
+            FlowCode: FlowCode,
+            performState: performState,
+            performOpinions: performOpinions,
+            FlowPerformID: FlowPerformID,
+            flowNodeCode: flowNodeCode,
+            FlowTitle: FlowTitle,
+            FreeNodeUser: ''
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/MyApproval/ApprovalNew',
+            data: { para: JSON.stringify(para) },
+            async: false,
+            cache: false,
+            success: function (data) {
+                $.loading(false);
+                var str_json = JSON.parse(data);
+                if (str_json.state == "success") {
+                    $.currentWindow().reload();
+                    //调用父页面方法刷新预警数量
+                    window.parent.getcount();
+                    var index = top.layer.getFrameIndex("Approval");
+                    top.layer.close(index);
+                }
+                else {
+                    $.modalAlert(str_json.message, "warning");
+                }
+            }
+        });
     }
 
     function BindgridList() {

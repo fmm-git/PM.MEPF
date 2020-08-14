@@ -1,0 +1,117 @@
+﻿@{
+    ViewBag.Title = "模型上传";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+    <script type="text/javascript">
+    $(function () {
+        //加载菜单按钮
+        $.LodeMenuBtn("/SystemManage/OrganizationMap/Index");
+        $('#layout').layout({
+            togglerContent_open: '<div id="triangle-left"></div>',
+            togglerContent_closed: '<div id="triangle-right"></div>',
+        });
+        ui_layout_toggler_click();
+        leftList();
+        gridList();
+    });
+        var rowData = null;
+    function leftList() {
+        var $leftgridList = $("#leftgridList");
+        $leftgridList.dataGrid({
+            url: "/SystemManage/Company/GetAllCompanyOrBySearch",
+            height: $(window).height() - 66,
+            colModel: [
+               { label: "组织机构编号", name: "CompanyCode", hidden: true, key: true },
+               { label: '组织机构', name: 'CompanyFullName', width: 220, align: 'left', sortable: false, },
+               { label: '组织机构类型', name: 'OrgType', hidden: true },
+               { label: '项目id', name: 'ProjectId', hidden: true },
+               { label: '组织机构id', name: 'ParentCompanyCode_F', hidden: true },
+               { label: '组织机构父级id', name: 'ParentCompanyCode', hidden: true }
+            ],
+            treeGrid: true,//启用树型Grid功能
+            treeGridModel: 'adjacency',//表示返回数据的读取类型，分为两种：和adjacency
+            ExpandColumn: 'CompanyFullName',//树型结构在哪列显示
+            rownumbers: false,
+            sortname: 'CompanyCode',
+            onCellSelect: function (id) {//单击
+                rowData = $("#leftgridList").jqGrid('getRowData', id);
+                var param = {};
+                param.SiteCode = rowData.CompanyCode;
+                param.ProjectId = rowData.ProjectId;
+                $("#gridList").jqGrid('setGridParam', {
+                    postData: param,
+                    page: 1
+                }).trigger('reloadGrid');
+            }
+        });
+    }
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "@Url.Action("GetGridJson", "OrganizationMap")",
+            height: $(window).height()*0.85,
+            colModel: [
+                { label: "主键", name: "ID", key: true, hidden: true, frozen: true },
+                { label: "SiteCode", name: "SiteCode", hidden: true},
+                { label: '站点', name: 'CompanyFullName', width: 200, align: 'left ' },
+                { label: '文件地址', name: 'Path', width: 250, align: 'left', sortable: false },
+                { label: '文件类型', name: 'TypeShow', width: 100, align: 'left ' },
+            ]
+        });
+        $("#btn_search").click(function () {
+            var param = $(".search").GetSearchCondition();
+            $gridList.jqGrid('setGridParam', {
+                postData: param,
+                page: 1
+            }).trigger('reloadGrid');
+        });
+    }
+    function btn_add() {
+        if (rowData==null ||rowData.OrgType != "5") {
+            $.modalMsg("请选择站点信息", "warning");
+            return false;
+        }
+        var where = "?siteCode=" + rowData.CompanyCode + "&projectId=" + rowData.ProjectId;
+        $.modalOpen({
+            id: "Form",
+            title: "模型上传",
+            url: "@Url.Action("Form", "OrganizationMap")" + where,
+            width: "600px",
+            height: "500px",
+            btn: null
+        });
+    }
+    function btn_delete() {
+        var keyValue = $("#gridList").jqGridRowValue().SiteCode;
+        if (keyValue != "" && keyValue != null && keyValue != undefined) {
+            $.deleteForm({
+                url: "@Url.Action("DeleteForm", "OrganizationMap")",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $("#gridList").trigger("reloadGrid");
+                }
+            });
+        } else {
+            $.modalMsg("请选择要删除的信息", "warning");
+            return false;
+        }
+    }
+    </script>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west" style="overflow-x:visible">
+        <table id="leftgridList"></table>
+    </div>
+    <div class="ui-layout-center">
+        <div class="topPanel divwidth1">
+            <div class="topPanel-btn divwidth2" id="toolbar">
+                <div class="btn-group">
+                    <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
+                </div>
+            </div>
+        </div>
+        <div class="gridPanel">
+            <table id="gridList" class="gridList"></table>
+        </div>
+    </div>
+</div>
+

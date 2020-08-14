@@ -7,105 +7,46 @@ namespace PM.DataEntity.Production.ViewModel
 {
     public class WorkOrderRequest : PageSearchRequest
     {
-        ///// <summary>
-        ///// 加工厂编号
-        ///// </summary>
-        //public string ProcessFactoryCode { get; set; }
-        /// <summary>
-        /// 类型编号
-        /// </summary>
-        public string TypeCode { get; set; }
-        /// <summary>
-        /// 加工状态
-        /// </summary>
-        public string ProcessingState { get; set; }
-        /// <summary>
-        /// 紧急程度
-        /// </summary>
-        public string UrgentDegree { get; set; }
-
-        /// <summary>
-        /// 组织机构类型
-        /// </summary>
-        public string OrgType { get; set; }
-        /// <summary>
-        /// 组织机构编号
-        /// </summary>
-        public string CompanyCode { get; set; }
-        /// <summary>
-        /// 审批状态
-        /// </summary>
-        public string Examinestatus { get; set; }
-        /// <summary>
-        /// 计划配送开始时间
-        /// </summary>
-        public DateTime? BegTime { get; set; }
-        /// <summary>
-        /// 计划配送结束时间
-        /// </summary>
-        public DateTime? EndTiem { get; set; }
-        /// <summary>
-        /// 订单状态类型
-        /// </summary>
-        public string OrderType { get; set; }
         /// <summary>
         /// 订单编号
         /// </summary>
         public string OrderCode { get; set; }
         /// <summary>
-        /// 领料状态
+        /// 专业
         /// </summary>
-        public string PickingState { get; set; }
-
-        //public string ProjectId { get; set; }
-
-        public string keyword { get; set; }
+        public string Major { get; set; }
         /// <summary>
-        /// 签收状态
+        /// 系统类型
         /// </summary>
-        public string SignState { get; set; }
+        public string SystemType { get; set; }
         /// <summary>
-        /// 配送状态
+        /// 订单状态
         /// </summary>
-        public string DistributionStart { get; set; }
+        public string OrderState { get; set; }
+        /// <summary>
+        /// 订单类型
+        /// </summary>
+        public string OrderType { get; set; }
+        /// <summary>
+        /// 紧急程度
+        /// </summary>
+        public string UrgentDegree { get; set; }
         /// <summary>
         /// 历史月份
         /// </summary>
         public DateTime? HistoryMonth { get; set; }
         /// <summary>
-        /// 订单状态
+        /// 签收类型
         /// </summary>
-        public string OrderStart { get; set; }
-
-
+        public string SignForType { get; set; }
         /// <summary>
-        /// 查询类型（主表查询条件，还是报表查询）
+        /// 安装类型
         /// </summary>
-        public string CxType { get; set; }
-        /// <summary>
-        /// 月份类型
-        /// </summary>
-        public string MonthType { get; set; }
-        /// <summary>
-        /// 是否未完成
-        /// </summary>
-        public bool IsNotOver { get; set; }
-        /// <summary>
-        /// 是否选中左边组织机构
-        /// </summary>
-        public string IsLeft { get; set; }
-        /// <summary>
-        /// 是否全部
-        /// </summary>
-        public string IsQB { get; set; }
-        /// <summary>
-        /// 订单进度状态
-        /// </summary>
-        public string OrderProcessingState { get; set; }
+        public string InstallType { get; set; }
         public bool IsOutPut { get; set; }
 
     }
-    public class WorkOrderDetail
+    public class WorkOrderDetailRequest : PageSearchRequest
     {
         public int ID { get; set; }
         /// <summary>
@@ -113,107 +54,30 @@ namespace PM.DataEntity.Production.ViewModel
         /// </summary>
         public string OrderCode { get; set; }
         /// <summary>
+        /// 系统类型
+        /// </summary>
+        public string SystemType { get; set; }
+        /// <summary>
+        /// 材料类型
+        /// </summary>
+        public string MaterialType { get; set; }
+        /// <summary>
+        /// 构件编号
+        /// </summary>
+        public string ComponentCode { get; set; }
+        /// <summary>
         /// 构件名称
         /// </summary>
         public string ComponentName { get; set; }
-        /// <summary>
-        /// 大样图
-        /// </summary>
-        public string LargePattern { get; set; }
-        /// <summary>
-        /// 原材料编号
-        /// </summary>
-        public string MaterialCode { get; set; }
-        /// <summary>
-        /// 原材料名称
-        /// </summary>
-        public string MaterialName { get; set; }
         /// <summary>
         /// 规格
         /// </summary>
         public string SpecificationModel { get; set; }
         /// <summary>
-        /// 计量单位
+        /// 长度
         /// </summary>
-        public string MeasurementUnitText { get; set; }
-        /// <summary>
-        /// 计量单位编号
-        /// </summary>
-        public string MeasurementUnit { get; set; }
-        /// <summary>
-        /// 单位重量
-        /// </summary>
-        public decimal MeasurementUnitZl { get; set; }
-        /// <summary>
-        /// 重量小计
-        /// </summary>
-        public decimal ItemUseNum { get; set; }
-        /// <summary>
-        /// 件数
-        /// </summary>
-        public int Number { get; set; }
-        /// <summary>
-        /// 重量小计
-        /// </summary>
-        public decimal WeightSmallPlan { get; set; }
-        /// <summary>
-        /// 加工状态
-        /// </summary>
-        public string DaetailWorkStrat { get; set; }
-        /// <summary>
-        /// 撤销状态
-        /// </summary>
-        public string RevokeStart { get; set; }
-        /// <summary>
-        /// 技术要求
-        /// </summary>
-        public string SkillRequirement { get; set; }
-        /// <summary>
-        /// 加工工艺
-        /// </summary>
-        public int ProcessingTechnology { get; set; }
-        /// <summary>
-        /// 加工工艺名称
-        /// </summary>
-        public string ProcessingTechnologyName { get; set; }
-        /// <summary>
-        /// 备注
-        /// </summary>
-        public string Remark { get; set; }
-        /// <summary>
-        /// 打包数量
-        /// </summary>
-        public int PackNumber { get; set; }
-        /// <summary>
-        /// 厂家
-        /// </summary>
-        public string Manufactor { get; set; }
-        /// <summary>
-        /// 炉批号
-        /// </summary>
-        public string HeatNo { get; set; }
-        /// <summary>
-        /// 检测报告编号
-        /// </summary>
-        public string TestReportNo { get; set; }
-
-        public int PackageNumber { get; set; }
-    }
-    public class WorkOrderPackResponse : PageSearchRequest
-    {
-        public int ID { get; set; }
-        public string OrderCode { get; set; }
-        public string TypeCode { get; set; }
-        public string TypeName { get; set; }
-        //public string SiteCode { get; set; }
-        public string SiteName { get; set; }
-        public DateTime? DistributionTime { get; set; }
-        public string ComponentName { get; set; }
-        public string Number { get; set; }
-        public string PackNumber { get; set; }
-        public string lldyNum { get; set; }
-        public string syNum { get; set; }
-        public string DistributionStart { get; set; }
+        public decimal Length { get; set; }
+        
     }
 
     /// <summary>
@@ -322,7 +186,9 @@ namespace PM.DataEntity.Production.ViewModel
         public string FinishProcessingDateTime { get; set; }
     }
 
-
+    /// <summary>
+    /// 项目清单信息
+    /// </summary>
     public class ProjectListRequest : PageSearchRequest 
     {
         public string id { get; set; }
@@ -338,5 +204,27 @@ namespace PM.DataEntity.Production.ViewModel
         public string gjbm { get; set; }
         public string ggcc { get; set; }
         public string cd { get; set; }
+        public string mj { get; set; }
+        /// <summary>
+        /// 模型数据库文件
+        /// </summary>
+        public string dbName { get; set; }
+    }
+
+    public class PackageQRCodeRequest:PageSearchRequest
+    {
+        public int ID { get; set; }
+        public string OrderCode { get; set; }
+        public string SiteName { get; set; }
+        public int SumNumber { get; set; }
+        public string Major { get; set; }
+        public string SignForState { get; set; }
+        public string PackCode { get; set; }
+        public string SystemType { get; set; }
+        public string MaterialType { get; set; }
+        public string ComponentName { get; set; }
+        public string OrderDetialId { get; set; }
+        public int ThisPackNumber { get; set; }
+        public DateTime PackDate { get; set; }
     }
 }

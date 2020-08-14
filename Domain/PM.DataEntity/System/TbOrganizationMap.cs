@@ -29,6 +29,8 @@ namespace PM.DataEntity
 		private string _Deviation;
 		private string _ProjectId;
 		private string _CompanyCode_F;
+		private string _CompanyCode;
+		private string _ParentCompanyCode;
 
 		/// <summary>
 		/// 
@@ -134,6 +136,32 @@ namespace PM.DataEntity
 				this._CompanyCode_F = value;
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		[Field("CompanyCode")]
+		public string CompanyCode
+		{
+			get{ return _CompanyCode; }
+			set
+			{
+				this.OnPropertyValueChange("CompanyCode");
+				this._CompanyCode = value;
+			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		[Field("ParentCompanyCode")]
+		public string ParentCompanyCode
+		{
+			get{ return _ParentCompanyCode; }
+			set
+			{
+				this.OnPropertyValueChange("ParentCompanyCode");
+				this._ParentCompanyCode = value;
+			}
+		}
 		#endregion
 
 		#region Method
@@ -167,6 +195,8 @@ namespace PM.DataEntity
 				_.Deviation,
 				_.ProjectId,
 				_.CompanyCode_F,
+				_.CompanyCode,
+				_.ParentCompanyCode,
 			};
         }
         /// <summary>
@@ -183,6 +213,8 @@ namespace PM.DataEntity
 				this._Deviation,
 				this._ProjectId,
 				this._CompanyCode_F,
+				this._CompanyCode,
+				this._ParentCompanyCode,
 			};
         }
         /// <summary>
@@ -237,6 +269,14 @@ namespace PM.DataEntity
 			/// 
 			/// </summary>
 			public readonly static Field CompanyCode_F = new Field("CompanyCode_F", "TbOrganizationMap", "");
+            /// <summary>
+			/// 
+			/// </summary>
+			public readonly static Field CompanyCode = new Field("CompanyCode", "TbOrganizationMap", "");
+            /// <summary>
+			/// 
+			/// </summary>
+			public readonly static Field ParentCompanyCode = new Field("ParentCompanyCode", "TbOrganizationMap", "");
         }
         #endregion
 	}

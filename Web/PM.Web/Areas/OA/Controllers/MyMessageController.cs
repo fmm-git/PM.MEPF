@@ -47,13 +47,13 @@ namespace PM.Web.Areas.OA.Controllers
                     EDT = Convert.ToDateTime(jo["EDT"]).AddDays(1);
                 }
             }
-            string usercode = Convert.ToString(Session["userid"]);
+            string usercode = Convert.ToString(PM.Common.OperatorProvider.Provider.CurrentUser.UserId);
             var data= _flowperform.GetMyMessage(pt,usercode,state,SDT,EDT);
             return Content(data.ToJson());
         }
         public string GetMessageState(string param)
         {
-            string usercode = Convert.ToString(Session["userid"]);
+            string usercode = Convert.ToString(PM.Common.OperatorProvider.Provider.CurrentUser.UserId);
             DateTime? SDT = null;
             DateTime? EDT = null;
             if (string.IsNullOrEmpty(param))
@@ -82,12 +82,6 @@ namespace PM.Web.Areas.OA.Controllers
             string ProjectId = OperatorProvider.Provider.CurrentUser.ProjectId;
             return _flowperform.GetCount(UserId, ProjectId);
         }
-        //public ActionResult UpdateStatus(string ID)
-        //{
-        //    var data = _flowperform.UpdateStatus(Convert.ToInt32(ID));
-        //    return Content(data.ToJson());
-        //}
-
 
         #region 新版我的消息
         /// <summary>

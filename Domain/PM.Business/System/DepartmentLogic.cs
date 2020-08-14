@@ -3,14 +3,11 @@ using Dos.ORM;
 using PM.Common;
 using PM.DataAccess.DbContext;
 using PM.DataEntity;
-using PM.Domain.WebBase;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PM.Business
 {
@@ -404,7 +401,7 @@ where 1=1  ";
                     return AjaxResult.Success();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return AjaxResult.Error();
             }
@@ -549,5 +546,52 @@ where 1=1  ";
 
         }
 
+        public string NextDeptCode(string ProjectId, string orgType)
+        {
+            string DeptCode = "";
+            if (!string.IsNullOrWhiteSpace(ProjectId))
+            {
+                ProjectId = OperatorProvider.Provider.CurrentUser.ProjectId;
+            }
+            string sql = @"select MAX(DepartmentCode) from TbDepartment where DepartmentProjectId=@ProjectId and DepartmentType=@orgType";
+            var dt = Db.Context.FromSql(sql)
+                .AddInParameter("@ProjectId", DbType.String, ProjectId)
+                .AddInParameter("@orgType", DbType.Int32, orgType).ToDataTable();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(dt.Rows[0][0].ToString()))
+                {
+                    var length = dt.Rows[0][0].ToString().Length;
+                    string Code1 = dt.Rows[0][0].ToString().Substring(0, 1);
+                    string Code2 = dt.Rows[0][0].ToString().Substring(1, length - 1);
+                    int intNum = Int32.Parse(Code2) + 10;
+                    DeptCode = Code1 + intNum;
+                }
+                else
+                {
+                    if (orgType == "2")
+                    {
+                        DeptCode = "B10010";
+                    }
+                    else if (orgType == "3")
+                    {
+                        DeptCode = "B20010";
+                    }
+                    else if (orgType == "4")
+                    {
+                        DeptCode = "B30010";
+                    }
+                    else if (orgType == "5")
+                    {
+                        DeptCode = "B40010";
+                    }
+                    else
+                    {
+                        DeptCode = "B50010";
+                    }
+                }
+            }
+            return DeptCode;
+        }
     }
 }

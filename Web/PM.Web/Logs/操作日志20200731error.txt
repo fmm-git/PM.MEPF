@@ -31093,3 +31093,1851 @@ Parameters:
 
 
 -----------------------------------------------------------------------------
+2020-07-31 18:22:25
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:34:17
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:35:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:37:53
+Text:	 SELECT   * FROM [TbWorkOrderDetail]  WHERE [TbWorkOrderDetail].[MxGjId] IN (@MxGjId1) 	
+Parameters:
+@MxGjId1[String] = 0b200a5c-6008-48d9-85f6-cef05572f131
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:37:53
+Text:	 SELECT   * FROM [TbModelOtherInfo]  WHERE [TbModelOtherInfo].[ComponentCode] IN (@ComponentCode2) 	
+Parameters:
+@ComponentCode2[String] = L21_Z17_00KT_DXT_DXT_GJ_ST_000
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:09
+Text:	 SELECT   * FROM [TbWorkOrderDetail]  WHERE [TbWorkOrderDetail].[MxGjId] IN (@MxGjId3,@MxGjId4) 	
+Parameters:
+@MxGjId3[String] = 0b200a5c-6008-48d9-85f6-cef05572f190
+@MxGjId4[String] = 0b200a5c-6008-48d9-85f6-cef05572f192
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:09
+Text:	 SELECT   * FROM [TbModelOtherInfo]  WHERE [TbModelOtherInfo].[ComponentCode] IN (@ComponentCode5,@ComponentCode6) 	
+Parameters:
+@ComponentCode5[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_011
+@ComponentCode6[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_012
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:13
+Text:	 SELECT   * FROM [TbWorkOrderDetail]  WHERE [TbWorkOrderDetail].[MxGjId] IN (@MxGjId7,@MxGjId8) 	
+Parameters:
+@MxGjId7[String] = 776bb48d-0943-425f-9421-5c0ffea7401d
+@MxGjId8[String] = 776bb48d-0943-425f-9421-5c0ffea7422b
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:13
+Text:	 SELECT   * FROM [TbModelOtherInfo]  WHERE [TbModelOtherInfo].[ComponentCode] IN (@ComponentCode9,@ComponentCode10) 	
+Parameters:
+@ComponentCode9[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_027
+@ComponentCode10[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_026
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:17
+Text:	 SELECT   * FROM [TbWorkOrderDetail]  WHERE [TbWorkOrderDetail].[MxGjId] IN (@MxGjId11,@MxGjId12,@MxGjId13) 	
+Parameters:
+@MxGjId11[String] = 776bb48d-0943-425f-9421-5c0ffeb8bf72
+@MxGjId12[String] = 776bb48d-0943-425f-9421-5c0ffeb8bfd6
+@MxGjId13[String] = df74ae86-9d86-4879-ad6f-6b2d0d776200
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:17
+Text:	 SELECT   * FROM [TbModelOtherInfo]  WHERE [TbModelOtherInfo].[ComponentCode] IN (@ComponentCode14,@ComponentCode15,@ComponentCode16) 	
+Parameters:
+@ComponentCode14[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_028
+@ComponentCode15[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_029
+@ComponentCode16[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_008
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:21
+Text:	 SELECT   * FROM [TbWorkOrderDetail]  WHERE [TbWorkOrderDetail].[MxGjId] IN (@MxGjId17) 	
+Parameters:
+@MxGjId17[String] = e80a5f70-a379-4ae7-bd96-58c83ca8a445
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:21
+Text:	 SELECT   * FROM [TbModelOtherInfo]  WHERE [TbModelOtherInfo].[ComponentCode] IN (@ComponentCode18) 	
+Parameters:
+@ComponentCode18[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_001
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:24
+Text:	 SELECT   * FROM [TbWorkOrderDetail]  WHERE [TbWorkOrderDetail].[MxGjId] IN (@MxGjId19,@MxGjId20,@MxGjId21,@MxGjId22) 	
+Parameters:
+@MxGjId19[String] = 214e77bd-523a-411d-8a60-9827b5dd65aa
+@MxGjId20[String] = 214e77bd-523a-411d-8a60-9827b5dd6771
+@MxGjId21[String] = aa169fcc-7a43-45d4-9d69-be9cdc3147af
+@MxGjId22[String] = e06f5575-aed8-4989-807e-bdb88ed5d9e9
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:24
+Text:	 SELECT   * FROM [TbModelOtherInfo]  WHERE [TbModelOtherInfo].[ComponentCode] IN (@ComponentCode23,@ComponentCode24,@ComponentCode25,@ComponentCode26) 	
+Parameters:
+@ComponentCode23[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_006
+@ComponentCode24[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_007
+@ComponentCode25[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_010
+@ComponentCode26[String] = L21_Z17_00KT_DXT_DXT_GJ_WT_013
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:38:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:41:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:44:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:47:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:50:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:53:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:56:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 18:59:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:02:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:45
+Text:	 SELECT   TOP 1 * FROM [TbUser]  WHERE ([TbUser].[UserCode] = @UserCode27) AND ([TbUser].[UserPwd] = @UserPwd28) 	
+Parameters:
+@UserCode27[String] = 500000
+@UserPwd28[String] = c4ca4238a0b923820dcc509a6f75849b
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:45
+Text:	SELECT UserClosed FROM TbUser WHERE UserCode=@UserName	
+Parameters:
+@UserName[String] = 500000
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:45
+Text:	select top 1 ur.ProjectId,pro.ProjectName,ur.OrgId,cm.CompanyFullName,cm.ParentCompanyCode,ur.OrgType,ur.UserCode as UserId,u.UserCode,u.UserName from TbUserRole ur 
+left join TbCompany cm on ur.OrgId=cm.CompanyCode
+left join TbProjectInfo pro on ur.ProjectId=pro.ProjectId
+left join TbUser u on ur.UserCode=u.UserId
+where u.UserCode=@UserCode and ur.Flag=0 group by ur.ProjectId,pro.ProjectName,ur.OrgId,cm.CompanyFullName,cm.ParentCompanyCode,ur.OrgType,ur.UserCode,u.UserCode,u.UserName order by OrgId asc	
+Parameters:
+@UserCode[String] = 500000
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:45
+Text:	select distinct ur.RoleCode as RoleId,r.RoleCode,r.RoleName from TbUserRole ur
+left join TbUser u on ur.UserCode=u.UserId
+left join TbRole r on ur.RoleCode=r.RoleId
+where u.UserCode=@UserCode and ProjectId=@ProjectId and OrgId=@OrgId and ur.Flag=0	
+Parameters:
+@UserCode[String] = 500000
+@ProjectId[String] = 6372912251695766465
+@OrgId[String] = 6372921375874657752
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:45
+Text:	 SELECT   TOP 1 [TbCarInfoDetail].[ID] FROM [TbCarInfoDetail]  WHERE [TbCarInfoDetail].[UserCode] = @UserCode29 	
+Parameters:
+@UserCode29[String] = 500000
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:45
+Text:	INSERT INTO [TbSysLog] ([ActionMenu],[ActionType],[HostName],[LogDate],[UserCode],[UserIP]) VALUES (@ActionMenu30,@ActionType31,@HostName32,@LogDate33,@UserCode34,@UserIP35);select scope_identity()	
+Parameters:
+@ActionMenu30[String] = 0
+@ActionType31[String] = 登录系统
+@HostName32[String] = 
+@LogDate33[DateTime] = 2020/7/31 19:03:45
+@UserCode34[String] = 500000
+@UserIP35[String] = 192.168.3.222
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:47
+Text:	select tsm.* from TbRoleMenu tum
+                           left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                           where tsm.IsShow=0 and tsm.MenuType='PC' and tum.RoleCode in('6372919444627396738','6372919451594895243') order by tsm.Sort asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:47
+Text:	select 
+                        	tsm.*
+                        from TbUserMenu tum
+                        left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                        where tsm.IsShow=0 and tsm.MenuType='PC' and tum.UserCode=@userCode order by tsm.Sort asc	
+Parameters:
+@userCode[String] = 6372930471544160074
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:48
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type36) 	
+Parameters:
+@Type36[Int32] = 1
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:48
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type37) 	
+Parameters:
+@Type37[Int32] = 2
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:48
+Text:	SELECT mm.MenuUrl, pp.UserCode, pp.menuCode, pp.OperationView, pp.OperationAdd
+	                        , pp.OperationEdit, pp.OperationDel, pp.OperationExamination, pp.OperationOutput, pp.OperationOther1
+	                        , mm.OperationOther1Fun, mm.OperationOther1IconCls, pp.OperationOther2, mm.OperationOther2Fun, mm.OperationOther2IconCls
+	                        , pp.OperationOther3, mm.OperationOther3Fun, mm.OperationOther3IconCls, pp.OperationOther4, mm.OperationOther4Fun
+	                        , mm.OperationOther4IconCls, pp.OperationOther5, mm.OperationOther5Fun, mm.OperationOther5IconCls
+                        FROM (
+	                        SELECT UserCode, menuCode, MAX(OperationView) AS OperationView
+		                        , MAX(OperationAdd) AS OperationAdd, MAX(OperationEdit) AS OperationEdit
+		                        , MAX(OperationDel) AS OperationDel, MAX(OperationExamination) AS OperationExamination
+		                        , MAX(OperationOutput) AS OperationOutput, MAX(OperationOther1) AS OperationOther1
+		                        , MAX(OperationOther2) AS OperationOther2, MAX(OperationOther3) AS OperationOther3
+		                        , MAX(OperationOther4) AS OperationOther4, MAX(OperationOther5) AS OperationOther5
+	                        FROM (
+		                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+			                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+			                        , OperationOther3, OperationOther4, OperationOther5
+		                        FROM (
+			                        SELECT a.UserCode, b.menuCode, MAX(b.OperationView) AS OperationView
+				                        , MAX(b.OperationAdd) AS OperationAdd, MAX(b.OperationEdit) AS OperationEdit
+				                        , MAX(b.OperationDel) AS OperationDel, MAX(b.OperationExamination) AS OperationExamination
+				                        , MAX(b.OperationOutput) AS OperationOutput, MAX(b.OperationOther1) AS OperationOther1
+				                        , MAX(b.OperationOther2) AS OperationOther2, MAX(b.OperationOther3) AS OperationOther3
+				                        , MAX(b.OperationOther4) AS OperationOther4, MAX(b.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbUserRole a
+				                        INNER JOIN dbo.TbRoleMenu b ON a.RoleCode = b.RoleCode
+                                        where b.RoleCode in('6372919444627396738','6372919451594895243')
+			                        GROUP BY a.UserCode, b.menuCode
+			                        UNION ALL
+			                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+				                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+				                        , OperationOther3, OperationOther4, OperationOther5
+			                        FROM dbo.TbUserMenu
+			                        union all
+			                        SELECT p.UserCode, d.menuCode, MAX(d.OperationView) AS OperationView
+				                        , MAX(d.OperationAdd) AS OperationAdd, MAX(d.OperationEdit) AS OperationEdit
+				                        , MAX(d.OperationDel) AS OperationDel, MAX(d.OperationExamination) AS OperationExamination
+				                        , MAX(d.OperationOutput) AS OperationOutput, MAX(d.OperationOther1) AS OperationOther1
+				                        , MAX(d.OperationOther2) AS OperationOther2, MAX(d.OperationOther3) AS OperationOther3
+				                        , MAX(d.OperationOther4) AS OperationOther4, MAX(d.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbPositionUser p
+				                        INNER JOIN dbo.TbPositionMenu d ON p.PositionCode = d.PositionCode
+			                        GROUP BY p.UserCode, d.menuCode
+			
+		                        ) c
+	                        ) aa
+	                        GROUP BY UserCode, menuCode
+                        ) pp
+                        INNER JOIN dbo.TbSysMenu mm ON pp.menuCode = mm.menuCode 
+                        left join dbo.TbUser u on pp.UserCode=u.UserId
+                        where u.UserCode=@UserCode And mm.MenuUrl=@menuURI	
+Parameters:
+@UserCode[String] = 500000
+@menuURI[String] = /BIM/GISGridList
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:48
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921375874657752
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:48
+Text:	 SELECT count(*) as r_cnt FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode65)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode]) WHERE (([TbWorkOrder].[ProjectId] = @ProjectId38) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode39,@SiteCode40,@SiteCode41,@SiteCode42,@SiteCode43,@SiteCode44,@SiteCode45,@SiteCode46,@SiteCode47,@SiteCode48,@SiteCode49,@SiteCode50,@SiteCode51,@SiteCode52,@SiteCode53,@SiteCode54,@SiteCode55,@SiteCode56,@SiteCode57,@SiteCode58,@SiteCode59,@SiteCode60,@SiteCode61,@SiteCode62,@SiteCode63,@SiteCode64)))	
+Parameters:
+@ProjectId38[String] = 6372912251695766465
+@SiteCode39[String] = 6373083923489249281
+@SiteCode40[String] = 6373083925531366080
+@SiteCode41[String] = 6373083927883400612
+@SiteCode42[String] = 6373083918575368225
+@SiteCode43[String] = 6373083920445075162
+@SiteCode44[String] = 6373083908618598731
+@SiteCode45[String] = 6373083911842783146
+@SiteCode46[String] = 6373083913928202424
+@SiteCode47[String] = 6373083877551621804
+@SiteCode48[String] = 6373083879921857377
+@SiteCode49[String] = 6373083881542550067
+@SiteCode50[String] = 6373083883689772886
+@SiteCode51[String] = 6373083887136270013
+@SiteCode52[String] = 6373083889697116488
+@SiteCode53[String] = 6373083891969846476
+@SiteCode54[String] = 6373083894422586761
+@SiteCode55[String] = 6373083897509963358
+@SiteCode56[String] = 6373083900444931227
+@SiteCode57[String] = 6373083829464571372
+@SiteCode58[String] = 6373083833327492328
+@SiteCode59[String] = 6373083841964286321
+@SiteCode60[String] = 6373083844982558950
+@SiteCode61[String] = 6373083847585007801
+@SiteCode62[String] = 6373083856887939900
+@SiteCode63[String] = 6373083859102666584
+@SiteCode64[String] = 6373083864919499284
+@FDictionaryCode65[String] = OrderState
+@FDictionaryCode66[String] = UrgentDegree
+@FDictionaryCode67[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:48
+Text:	 SELECT   TOP 50 [TbWorkOrder].*,[TbCompany].[CompanyFullName] AS [SiteName],[TbSysDictionaryData].[DictionaryText] AS [OrderStateNew],[TbUser].[UserName],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[UrgentDegree]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode66) ) AS [UrgentDegreeNew],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[OrderType]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode67) ) AS [OrderTypeNew] FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode65)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode])  WHERE (([TbWorkOrder].[ProjectId] = @ProjectId38) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode39,@SiteCode40,@SiteCode41,@SiteCode42,@SiteCode43,@SiteCode44,@SiteCode45,@SiteCode46,@SiteCode47,@SiteCode48,@SiteCode49,@SiteCode50,@SiteCode51,@SiteCode52,@SiteCode53,@SiteCode54,@SiteCode55,@SiteCode56,@SiteCode57,@SiteCode58,@SiteCode59,@SiteCode60,@SiteCode61,@SiteCode62,@SiteCode63,@SiteCode64))) ORDER BY [TbWorkOrder].[ID] DESC 	
+Parameters:
+@ProjectId38[String] = 6372912251695766465
+@SiteCode39[String] = 6373083923489249281
+@SiteCode40[String] = 6373083925531366080
+@SiteCode41[String] = 6373083927883400612
+@SiteCode42[String] = 6373083918575368225
+@SiteCode43[String] = 6373083920445075162
+@SiteCode44[String] = 6373083908618598731
+@SiteCode45[String] = 6373083911842783146
+@SiteCode46[String] = 6373083913928202424
+@SiteCode47[String] = 6373083877551621804
+@SiteCode48[String] = 6373083879921857377
+@SiteCode49[String] = 6373083881542550067
+@SiteCode50[String] = 6373083883689772886
+@SiteCode51[String] = 6373083887136270013
+@SiteCode52[String] = 6373083889697116488
+@SiteCode53[String] = 6373083891969846476
+@SiteCode54[String] = 6373083894422586761
+@SiteCode55[String] = 6373083897509963358
+@SiteCode56[String] = 6373083900444931227
+@SiteCode57[String] = 6373083829464571372
+@SiteCode58[String] = 6373083833327492328
+@SiteCode59[String] = 6373083841964286321
+@SiteCode60[String] = 6373083844982558950
+@SiteCode61[String] = 6373083847585007801
+@SiteCode62[String] = 6373083856887939900
+@SiteCode63[String] = 6373083859102666584
+@SiteCode64[String] = 6373083864919499284
+@FDictionaryCode65[String] = OrderState
+@FDictionaryCode66[String] = UrgentDegree
+@FDictionaryCode67[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:48
+Text:	select a.*,a.FullCode as ProjectId,b.CompanyFullName as ParentCompanyName from TbCompany a
+left join TbCompany b on a.ParentCompanyCode=b.CompanyCode 
+where 1=1  order by a.id asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:48
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=2;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:03:48
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=1 order by CompanyCode asc;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:42
+Text:	select tsm.* from TbRoleMenu tum
+                           left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                           where tsm.IsShow=0 and tsm.MenuType='PC' and tum.RoleCode in('6372919444627396738','6372919451594895243') order by tsm.Sort asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:42
+Text:	select 
+                        	tsm.*
+                        from TbUserMenu tum
+                        left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                        where tsm.IsShow=0 and tsm.MenuType='PC' and tum.UserCode=@userCode order by tsm.Sort asc	
+Parameters:
+@userCode[String] = 6372930471544160074
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:42
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:43
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type68) 	
+Parameters:
+@Type68[Int32] = 1
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:43
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type69) 	
+Parameters:
+@Type69[Int32] = 2
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:43
+Text:	SELECT mm.MenuUrl, pp.UserCode, pp.menuCode, pp.OperationView, pp.OperationAdd
+	                        , pp.OperationEdit, pp.OperationDel, pp.OperationExamination, pp.OperationOutput, pp.OperationOther1
+	                        , mm.OperationOther1Fun, mm.OperationOther1IconCls, pp.OperationOther2, mm.OperationOther2Fun, mm.OperationOther2IconCls
+	                        , pp.OperationOther3, mm.OperationOther3Fun, mm.OperationOther3IconCls, pp.OperationOther4, mm.OperationOther4Fun
+	                        , mm.OperationOther4IconCls, pp.OperationOther5, mm.OperationOther5Fun, mm.OperationOther5IconCls
+                        FROM (
+	                        SELECT UserCode, menuCode, MAX(OperationView) AS OperationView
+		                        , MAX(OperationAdd) AS OperationAdd, MAX(OperationEdit) AS OperationEdit
+		                        , MAX(OperationDel) AS OperationDel, MAX(OperationExamination) AS OperationExamination
+		                        , MAX(OperationOutput) AS OperationOutput, MAX(OperationOther1) AS OperationOther1
+		                        , MAX(OperationOther2) AS OperationOther2, MAX(OperationOther3) AS OperationOther3
+		                        , MAX(OperationOther4) AS OperationOther4, MAX(OperationOther5) AS OperationOther5
+	                        FROM (
+		                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+			                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+			                        , OperationOther3, OperationOther4, OperationOther5
+		                        FROM (
+			                        SELECT a.UserCode, b.menuCode, MAX(b.OperationView) AS OperationView
+				                        , MAX(b.OperationAdd) AS OperationAdd, MAX(b.OperationEdit) AS OperationEdit
+				                        , MAX(b.OperationDel) AS OperationDel, MAX(b.OperationExamination) AS OperationExamination
+				                        , MAX(b.OperationOutput) AS OperationOutput, MAX(b.OperationOther1) AS OperationOther1
+				                        , MAX(b.OperationOther2) AS OperationOther2, MAX(b.OperationOther3) AS OperationOther3
+				                        , MAX(b.OperationOther4) AS OperationOther4, MAX(b.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbUserRole a
+				                        INNER JOIN dbo.TbRoleMenu b ON a.RoleCode = b.RoleCode
+                                        where b.RoleCode in('6372919444627396738','6372919451594895243')
+			                        GROUP BY a.UserCode, b.menuCode
+			                        UNION ALL
+			                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+				                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+				                        , OperationOther3, OperationOther4, OperationOther5
+			                        FROM dbo.TbUserMenu
+			                        union all
+			                        SELECT p.UserCode, d.menuCode, MAX(d.OperationView) AS OperationView
+				                        , MAX(d.OperationAdd) AS OperationAdd, MAX(d.OperationEdit) AS OperationEdit
+				                        , MAX(d.OperationDel) AS OperationDel, MAX(d.OperationExamination) AS OperationExamination
+				                        , MAX(d.OperationOutput) AS OperationOutput, MAX(d.OperationOther1) AS OperationOther1
+				                        , MAX(d.OperationOther2) AS OperationOther2, MAX(d.OperationOther3) AS OperationOther3
+				                        , MAX(d.OperationOther4) AS OperationOther4, MAX(d.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbPositionUser p
+				                        INNER JOIN dbo.TbPositionMenu d ON p.PositionCode = d.PositionCode
+			                        GROUP BY p.UserCode, d.menuCode
+			
+		                        ) c
+	                        ) aa
+	                        GROUP BY UserCode, menuCode
+                        ) pp
+                        INNER JOIN dbo.TbSysMenu mm ON pp.menuCode = mm.menuCode 
+                        left join dbo.TbUser u on pp.UserCode=u.UserId
+                        where u.UserCode=@UserCode And mm.MenuUrl=@menuURI	
+Parameters:
+@UserCode[String] = 500000
+@menuURI[String] = /BIM/GISGridList
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:43
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921375874657752
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:43
+Text:	 SELECT count(*) as r_cnt FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode97)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode]) WHERE (([TbWorkOrder].[ProjectId] = @ProjectId70) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode71,@SiteCode72,@SiteCode73,@SiteCode74,@SiteCode75,@SiteCode76,@SiteCode77,@SiteCode78,@SiteCode79,@SiteCode80,@SiteCode81,@SiteCode82,@SiteCode83,@SiteCode84,@SiteCode85,@SiteCode86,@SiteCode87,@SiteCode88,@SiteCode89,@SiteCode90,@SiteCode91,@SiteCode92,@SiteCode93,@SiteCode94,@SiteCode95,@SiteCode96)))	
+Parameters:
+@ProjectId70[String] = 6372912251695766465
+@SiteCode71[String] = 6373083923489249281
+@SiteCode72[String] = 6373083925531366080
+@SiteCode73[String] = 6373083927883400612
+@SiteCode74[String] = 6373083918575368225
+@SiteCode75[String] = 6373083920445075162
+@SiteCode76[String] = 6373083908618598731
+@SiteCode77[String] = 6373083911842783146
+@SiteCode78[String] = 6373083913928202424
+@SiteCode79[String] = 6373083877551621804
+@SiteCode80[String] = 6373083879921857377
+@SiteCode81[String] = 6373083881542550067
+@SiteCode82[String] = 6373083883689772886
+@SiteCode83[String] = 6373083887136270013
+@SiteCode84[String] = 6373083889697116488
+@SiteCode85[String] = 6373083891969846476
+@SiteCode86[String] = 6373083894422586761
+@SiteCode87[String] = 6373083897509963358
+@SiteCode88[String] = 6373083900444931227
+@SiteCode89[String] = 6373083829464571372
+@SiteCode90[String] = 6373083833327492328
+@SiteCode91[String] = 6373083841964286321
+@SiteCode92[String] = 6373083844982558950
+@SiteCode93[String] = 6373083847585007801
+@SiteCode94[String] = 6373083856887939900
+@SiteCode95[String] = 6373083859102666584
+@SiteCode96[String] = 6373083864919499284
+@FDictionaryCode97[String] = OrderState
+@FDictionaryCode98[String] = UrgentDegree
+@FDictionaryCode99[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:43
+Text:	 SELECT   TOP 50 [TbWorkOrder].*,[TbCompany].[CompanyFullName] AS [SiteName],[TbSysDictionaryData].[DictionaryText] AS [OrderStateNew],[TbUser].[UserName],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[UrgentDegree]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode98) ) AS [UrgentDegreeNew],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[OrderType]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode99) ) AS [OrderTypeNew] FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode97)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode])  WHERE (([TbWorkOrder].[ProjectId] = @ProjectId70) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode71,@SiteCode72,@SiteCode73,@SiteCode74,@SiteCode75,@SiteCode76,@SiteCode77,@SiteCode78,@SiteCode79,@SiteCode80,@SiteCode81,@SiteCode82,@SiteCode83,@SiteCode84,@SiteCode85,@SiteCode86,@SiteCode87,@SiteCode88,@SiteCode89,@SiteCode90,@SiteCode91,@SiteCode92,@SiteCode93,@SiteCode94,@SiteCode95,@SiteCode96))) ORDER BY [TbWorkOrder].[ID] DESC 	
+Parameters:
+@ProjectId70[String] = 6372912251695766465
+@SiteCode71[String] = 6373083923489249281
+@SiteCode72[String] = 6373083925531366080
+@SiteCode73[String] = 6373083927883400612
+@SiteCode74[String] = 6373083918575368225
+@SiteCode75[String] = 6373083920445075162
+@SiteCode76[String] = 6373083908618598731
+@SiteCode77[String] = 6373083911842783146
+@SiteCode78[String] = 6373083913928202424
+@SiteCode79[String] = 6373083877551621804
+@SiteCode80[String] = 6373083879921857377
+@SiteCode81[String] = 6373083881542550067
+@SiteCode82[String] = 6373083883689772886
+@SiteCode83[String] = 6373083887136270013
+@SiteCode84[String] = 6373083889697116488
+@SiteCode85[String] = 6373083891969846476
+@SiteCode86[String] = 6373083894422586761
+@SiteCode87[String] = 6373083897509963358
+@SiteCode88[String] = 6373083900444931227
+@SiteCode89[String] = 6373083829464571372
+@SiteCode90[String] = 6373083833327492328
+@SiteCode91[String] = 6373083841964286321
+@SiteCode92[String] = 6373083844982558950
+@SiteCode93[String] = 6373083847585007801
+@SiteCode94[String] = 6373083856887939900
+@SiteCode95[String] = 6373083859102666584
+@SiteCode96[String] = 6373083864919499284
+@FDictionaryCode97[String] = OrderState
+@FDictionaryCode98[String] = UrgentDegree
+@FDictionaryCode99[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:43
+Text:	select a.*,a.FullCode as ProjectId,b.CompanyFullName as ParentCompanyName from TbCompany a
+left join TbCompany b on a.ParentCompanyCode=b.CompanyCode 
+where 1=1  order by a.id asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:43
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=2;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:43
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=1 order by CompanyCode asc;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:05:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:28
+Text:	select tsm.* from TbRoleMenu tum
+                           left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                           where tsm.IsShow=0 and tsm.MenuType='PC' and tum.RoleCode in('6372919444627396738','6372919451594895243') order by tsm.Sort asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:28
+Text:	select 
+                        	tsm.*
+                        from TbUserMenu tum
+                        left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                        where tsm.IsShow=0 and tsm.MenuType='PC' and tum.UserCode=@userCode order by tsm.Sort asc	
+Parameters:
+@userCode[String] = 6372930471544160074
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:28
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:28
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type100) 	
+Parameters:
+@Type100[Int32] = 1
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:28
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type101) 	
+Parameters:
+@Type101[Int32] = 2
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:28
+Text:	SELECT mm.MenuUrl, pp.UserCode, pp.menuCode, pp.OperationView, pp.OperationAdd
+	                        , pp.OperationEdit, pp.OperationDel, pp.OperationExamination, pp.OperationOutput, pp.OperationOther1
+	                        , mm.OperationOther1Fun, mm.OperationOther1IconCls, pp.OperationOther2, mm.OperationOther2Fun, mm.OperationOther2IconCls
+	                        , pp.OperationOther3, mm.OperationOther3Fun, mm.OperationOther3IconCls, pp.OperationOther4, mm.OperationOther4Fun
+	                        , mm.OperationOther4IconCls, pp.OperationOther5, mm.OperationOther5Fun, mm.OperationOther5IconCls
+                        FROM (
+	                        SELECT UserCode, menuCode, MAX(OperationView) AS OperationView
+		                        , MAX(OperationAdd) AS OperationAdd, MAX(OperationEdit) AS OperationEdit
+		                        , MAX(OperationDel) AS OperationDel, MAX(OperationExamination) AS OperationExamination
+		                        , MAX(OperationOutput) AS OperationOutput, MAX(OperationOther1) AS OperationOther1
+		                        , MAX(OperationOther2) AS OperationOther2, MAX(OperationOther3) AS OperationOther3
+		                        , MAX(OperationOther4) AS OperationOther4, MAX(OperationOther5) AS OperationOther5
+	                        FROM (
+		                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+			                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+			                        , OperationOther3, OperationOther4, OperationOther5
+		                        FROM (
+			                        SELECT a.UserCode, b.menuCode, MAX(b.OperationView) AS OperationView
+				                        , MAX(b.OperationAdd) AS OperationAdd, MAX(b.OperationEdit) AS OperationEdit
+				                        , MAX(b.OperationDel) AS OperationDel, MAX(b.OperationExamination) AS OperationExamination
+				                        , MAX(b.OperationOutput) AS OperationOutput, MAX(b.OperationOther1) AS OperationOther1
+				                        , MAX(b.OperationOther2) AS OperationOther2, MAX(b.OperationOther3) AS OperationOther3
+				                        , MAX(b.OperationOther4) AS OperationOther4, MAX(b.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbUserRole a
+				                        INNER JOIN dbo.TbRoleMenu b ON a.RoleCode = b.RoleCode
+                                        where b.RoleCode in('6372919444627396738','6372919451594895243')
+			                        GROUP BY a.UserCode, b.menuCode
+			                        UNION ALL
+			                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+				                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+				                        , OperationOther3, OperationOther4, OperationOther5
+			                        FROM dbo.TbUserMenu
+			                        union all
+			                        SELECT p.UserCode, d.menuCode, MAX(d.OperationView) AS OperationView
+				                        , MAX(d.OperationAdd) AS OperationAdd, MAX(d.OperationEdit) AS OperationEdit
+				                        , MAX(d.OperationDel) AS OperationDel, MAX(d.OperationExamination) AS OperationExamination
+				                        , MAX(d.OperationOutput) AS OperationOutput, MAX(d.OperationOther1) AS OperationOther1
+				                        , MAX(d.OperationOther2) AS OperationOther2, MAX(d.OperationOther3) AS OperationOther3
+				                        , MAX(d.OperationOther4) AS OperationOther4, MAX(d.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbPositionUser p
+				                        INNER JOIN dbo.TbPositionMenu d ON p.PositionCode = d.PositionCode
+			                        GROUP BY p.UserCode, d.menuCode
+			
+		                        ) c
+	                        ) aa
+	                        GROUP BY UserCode, menuCode
+                        ) pp
+                        INNER JOIN dbo.TbSysMenu mm ON pp.menuCode = mm.menuCode 
+                        left join dbo.TbUser u on pp.UserCode=u.UserId
+                        where u.UserCode=@UserCode And mm.MenuUrl=@menuURI	
+Parameters:
+@UserCode[String] = 500000
+@menuURI[String] = /BIM/GISGridList
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:28
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921375874657752
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:28
+Text:	 SELECT count(*) as r_cnt FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode129)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode]) WHERE (([TbWorkOrder].[ProjectId] = @ProjectId102) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode103,@SiteCode104,@SiteCode105,@SiteCode106,@SiteCode107,@SiteCode108,@SiteCode109,@SiteCode110,@SiteCode111,@SiteCode112,@SiteCode113,@SiteCode114,@SiteCode115,@SiteCode116,@SiteCode117,@SiteCode118,@SiteCode119,@SiteCode120,@SiteCode121,@SiteCode122,@SiteCode123,@SiteCode124,@SiteCode125,@SiteCode126,@SiteCode127,@SiteCode128)))	
+Parameters:
+@ProjectId102[String] = 6372912251695766465
+@SiteCode103[String] = 6373083923489249281
+@SiteCode104[String] = 6373083925531366080
+@SiteCode105[String] = 6373083927883400612
+@SiteCode106[String] = 6373083918575368225
+@SiteCode107[String] = 6373083920445075162
+@SiteCode108[String] = 6373083908618598731
+@SiteCode109[String] = 6373083911842783146
+@SiteCode110[String] = 6373083913928202424
+@SiteCode111[String] = 6373083877551621804
+@SiteCode112[String] = 6373083879921857377
+@SiteCode113[String] = 6373083881542550067
+@SiteCode114[String] = 6373083883689772886
+@SiteCode115[String] = 6373083887136270013
+@SiteCode116[String] = 6373083889697116488
+@SiteCode117[String] = 6373083891969846476
+@SiteCode118[String] = 6373083894422586761
+@SiteCode119[String] = 6373083897509963358
+@SiteCode120[String] = 6373083900444931227
+@SiteCode121[String] = 6373083829464571372
+@SiteCode122[String] = 6373083833327492328
+@SiteCode123[String] = 6373083841964286321
+@SiteCode124[String] = 6373083844982558950
+@SiteCode125[String] = 6373083847585007801
+@SiteCode126[String] = 6373083856887939900
+@SiteCode127[String] = 6373083859102666584
+@SiteCode128[String] = 6373083864919499284
+@FDictionaryCode129[String] = OrderState
+@FDictionaryCode130[String] = UrgentDegree
+@FDictionaryCode131[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:28
+Text:	 SELECT   TOP 50 [TbWorkOrder].*,[TbCompany].[CompanyFullName] AS [SiteName],[TbSysDictionaryData].[DictionaryText] AS [OrderStateNew],[TbUser].[UserName],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[UrgentDegree]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode130) ) AS [UrgentDegreeNew],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[OrderType]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode131) ) AS [OrderTypeNew] FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode129)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode])  WHERE (([TbWorkOrder].[ProjectId] = @ProjectId102) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode103,@SiteCode104,@SiteCode105,@SiteCode106,@SiteCode107,@SiteCode108,@SiteCode109,@SiteCode110,@SiteCode111,@SiteCode112,@SiteCode113,@SiteCode114,@SiteCode115,@SiteCode116,@SiteCode117,@SiteCode118,@SiteCode119,@SiteCode120,@SiteCode121,@SiteCode122,@SiteCode123,@SiteCode124,@SiteCode125,@SiteCode126,@SiteCode127,@SiteCode128))) ORDER BY [TbWorkOrder].[ID] DESC 	
+Parameters:
+@ProjectId102[String] = 6372912251695766465
+@SiteCode103[String] = 6373083923489249281
+@SiteCode104[String] = 6373083925531366080
+@SiteCode105[String] = 6373083927883400612
+@SiteCode106[String] = 6373083918575368225
+@SiteCode107[String] = 6373083920445075162
+@SiteCode108[String] = 6373083908618598731
+@SiteCode109[String] = 6373083911842783146
+@SiteCode110[String] = 6373083913928202424
+@SiteCode111[String] = 6373083877551621804
+@SiteCode112[String] = 6373083879921857377
+@SiteCode113[String] = 6373083881542550067
+@SiteCode114[String] = 6373083883689772886
+@SiteCode115[String] = 6373083887136270013
+@SiteCode116[String] = 6373083889697116488
+@SiteCode117[String] = 6373083891969846476
+@SiteCode118[String] = 6373083894422586761
+@SiteCode119[String] = 6373083897509963358
+@SiteCode120[String] = 6373083900444931227
+@SiteCode121[String] = 6373083829464571372
+@SiteCode122[String] = 6373083833327492328
+@SiteCode123[String] = 6373083841964286321
+@SiteCode124[String] = 6373083844982558950
+@SiteCode125[String] = 6373083847585007801
+@SiteCode126[String] = 6373083856887939900
+@SiteCode127[String] = 6373083859102666584
+@SiteCode128[String] = 6373083864919499284
+@FDictionaryCode129[String] = OrderState
+@FDictionaryCode130[String] = UrgentDegree
+@FDictionaryCode131[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:08:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:49
+Text:	select tsm.* from TbRoleMenu tum
+                           left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                           where tsm.IsShow=0 and tsm.MenuType='PC' and tum.RoleCode in('6372919444627396738','6372919451594895243') order by tsm.Sort asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:49
+Text:	select 
+                        	tsm.*
+                        from TbUserMenu tum
+                        left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                        where tsm.IsShow=0 and tsm.MenuType='PC' and tum.UserCode=@userCode order by tsm.Sort asc	
+Parameters:
+@userCode[String] = 6372930471544160074
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:49
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:49
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type132) 	
+Parameters:
+@Type132[Int32] = 1
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:49
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type133) 	
+Parameters:
+@Type133[Int32] = 2
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:49
+Text:	SELECT mm.MenuUrl, pp.UserCode, pp.menuCode, pp.OperationView, pp.OperationAdd
+	                        , pp.OperationEdit, pp.OperationDel, pp.OperationExamination, pp.OperationOutput, pp.OperationOther1
+	                        , mm.OperationOther1Fun, mm.OperationOther1IconCls, pp.OperationOther2, mm.OperationOther2Fun, mm.OperationOther2IconCls
+	                        , pp.OperationOther3, mm.OperationOther3Fun, mm.OperationOther3IconCls, pp.OperationOther4, mm.OperationOther4Fun
+	                        , mm.OperationOther4IconCls, pp.OperationOther5, mm.OperationOther5Fun, mm.OperationOther5IconCls
+                        FROM (
+	                        SELECT UserCode, menuCode, MAX(OperationView) AS OperationView
+		                        , MAX(OperationAdd) AS OperationAdd, MAX(OperationEdit) AS OperationEdit
+		                        , MAX(OperationDel) AS OperationDel, MAX(OperationExamination) AS OperationExamination
+		                        , MAX(OperationOutput) AS OperationOutput, MAX(OperationOther1) AS OperationOther1
+		                        , MAX(OperationOther2) AS OperationOther2, MAX(OperationOther3) AS OperationOther3
+		                        , MAX(OperationOther4) AS OperationOther4, MAX(OperationOther5) AS OperationOther5
+	                        FROM (
+		                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+			                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+			                        , OperationOther3, OperationOther4, OperationOther5
+		                        FROM (
+			                        SELECT a.UserCode, b.menuCode, MAX(b.OperationView) AS OperationView
+				                        , MAX(b.OperationAdd) AS OperationAdd, MAX(b.OperationEdit) AS OperationEdit
+				                        , MAX(b.OperationDel) AS OperationDel, MAX(b.OperationExamination) AS OperationExamination
+				                        , MAX(b.OperationOutput) AS OperationOutput, MAX(b.OperationOther1) AS OperationOther1
+				                        , MAX(b.OperationOther2) AS OperationOther2, MAX(b.OperationOther3) AS OperationOther3
+				                        , MAX(b.OperationOther4) AS OperationOther4, MAX(b.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbUserRole a
+				                        INNER JOIN dbo.TbRoleMenu b ON a.RoleCode = b.RoleCode
+                                        where b.RoleCode in('6372919444627396738','6372919451594895243')
+			                        GROUP BY a.UserCode, b.menuCode
+			                        UNION ALL
+			                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+				                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+				                        , OperationOther3, OperationOther4, OperationOther5
+			                        FROM dbo.TbUserMenu
+			                        union all
+			                        SELECT p.UserCode, d.menuCode, MAX(d.OperationView) AS OperationView
+				                        , MAX(d.OperationAdd) AS OperationAdd, MAX(d.OperationEdit) AS OperationEdit
+				                        , MAX(d.OperationDel) AS OperationDel, MAX(d.OperationExamination) AS OperationExamination
+				                        , MAX(d.OperationOutput) AS OperationOutput, MAX(d.OperationOther1) AS OperationOther1
+				                        , MAX(d.OperationOther2) AS OperationOther2, MAX(d.OperationOther3) AS OperationOther3
+				                        , MAX(d.OperationOther4) AS OperationOther4, MAX(d.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbPositionUser p
+				                        INNER JOIN dbo.TbPositionMenu d ON p.PositionCode = d.PositionCode
+			                        GROUP BY p.UserCode, d.menuCode
+			
+		                        ) c
+	                        ) aa
+	                        GROUP BY UserCode, menuCode
+                        ) pp
+                        INNER JOIN dbo.TbSysMenu mm ON pp.menuCode = mm.menuCode 
+                        left join dbo.TbUser u on pp.UserCode=u.UserId
+                        where u.UserCode=@UserCode And mm.MenuUrl=@menuURI	
+Parameters:
+@UserCode[String] = 500000
+@menuURI[String] = /BIM/GISGridList
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:50
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921375874657752
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:50
+Text:	 SELECT count(*) as r_cnt FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode161)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode]) WHERE (([TbWorkOrder].[ProjectId] = @ProjectId134) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode135,@SiteCode136,@SiteCode137,@SiteCode138,@SiteCode139,@SiteCode140,@SiteCode141,@SiteCode142,@SiteCode143,@SiteCode144,@SiteCode145,@SiteCode146,@SiteCode147,@SiteCode148,@SiteCode149,@SiteCode150,@SiteCode151,@SiteCode152,@SiteCode153,@SiteCode154,@SiteCode155,@SiteCode156,@SiteCode157,@SiteCode158,@SiteCode159,@SiteCode160)))	
+Parameters:
+@ProjectId134[String] = 6372912251695766465
+@SiteCode135[String] = 6373083923489249281
+@SiteCode136[String] = 6373083925531366080
+@SiteCode137[String] = 6373083927883400612
+@SiteCode138[String] = 6373083918575368225
+@SiteCode139[String] = 6373083920445075162
+@SiteCode140[String] = 6373083908618598731
+@SiteCode141[String] = 6373083911842783146
+@SiteCode142[String] = 6373083913928202424
+@SiteCode143[String] = 6373083877551621804
+@SiteCode144[String] = 6373083879921857377
+@SiteCode145[String] = 6373083881542550067
+@SiteCode146[String] = 6373083883689772886
+@SiteCode147[String] = 6373083887136270013
+@SiteCode148[String] = 6373083889697116488
+@SiteCode149[String] = 6373083891969846476
+@SiteCode150[String] = 6373083894422586761
+@SiteCode151[String] = 6373083897509963358
+@SiteCode152[String] = 6373083900444931227
+@SiteCode153[String] = 6373083829464571372
+@SiteCode154[String] = 6373083833327492328
+@SiteCode155[String] = 6373083841964286321
+@SiteCode156[String] = 6373083844982558950
+@SiteCode157[String] = 6373083847585007801
+@SiteCode158[String] = 6373083856887939900
+@SiteCode159[String] = 6373083859102666584
+@SiteCode160[String] = 6373083864919499284
+@FDictionaryCode161[String] = OrderState
+@FDictionaryCode162[String] = UrgentDegree
+@FDictionaryCode163[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:50
+Text:	 SELECT   TOP 50 [TbWorkOrder].*,[TbCompany].[CompanyFullName] AS [SiteName],[TbSysDictionaryData].[DictionaryText] AS [OrderStateNew],[TbUser].[UserName],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[UrgentDegree]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode162) ) AS [UrgentDegreeNew],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[OrderType]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode163) ) AS [OrderTypeNew] FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode161)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode])  WHERE (([TbWorkOrder].[ProjectId] = @ProjectId134) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode135,@SiteCode136,@SiteCode137,@SiteCode138,@SiteCode139,@SiteCode140,@SiteCode141,@SiteCode142,@SiteCode143,@SiteCode144,@SiteCode145,@SiteCode146,@SiteCode147,@SiteCode148,@SiteCode149,@SiteCode150,@SiteCode151,@SiteCode152,@SiteCode153,@SiteCode154,@SiteCode155,@SiteCode156,@SiteCode157,@SiteCode158,@SiteCode159,@SiteCode160))) ORDER BY [TbWorkOrder].[ID] DESC 	
+Parameters:
+@ProjectId134[String] = 6372912251695766465
+@SiteCode135[String] = 6373083923489249281
+@SiteCode136[String] = 6373083925531366080
+@SiteCode137[String] = 6373083927883400612
+@SiteCode138[String] = 6373083918575368225
+@SiteCode139[String] = 6373083920445075162
+@SiteCode140[String] = 6373083908618598731
+@SiteCode141[String] = 6373083911842783146
+@SiteCode142[String] = 6373083913928202424
+@SiteCode143[String] = 6373083877551621804
+@SiteCode144[String] = 6373083879921857377
+@SiteCode145[String] = 6373083881542550067
+@SiteCode146[String] = 6373083883689772886
+@SiteCode147[String] = 6373083887136270013
+@SiteCode148[String] = 6373083889697116488
+@SiteCode149[String] = 6373083891969846476
+@SiteCode150[String] = 6373083894422586761
+@SiteCode151[String] = 6373083897509963358
+@SiteCode152[String] = 6373083900444931227
+@SiteCode153[String] = 6373083829464571372
+@SiteCode154[String] = 6373083833327492328
+@SiteCode155[String] = 6373083841964286321
+@SiteCode156[String] = 6373083844982558950
+@SiteCode157[String] = 6373083847585007801
+@SiteCode158[String] = 6373083856887939900
+@SiteCode159[String] = 6373083859102666584
+@SiteCode160[String] = 6373083864919499284
+@FDictionaryCode161[String] = OrderState
+@FDictionaryCode162[String] = UrgentDegree
+@FDictionaryCode163[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:50
+Text:	select a.*,a.FullCode as ProjectId,b.CompanyFullName as ParentCompanyName from TbCompany a
+left join TbCompany b on a.ParentCompanyCode=b.CompanyCode 
+where 1=1  order by a.id asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:50
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=2;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:09:50
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=1 order by CompanyCode asc;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:11:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:12:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:20
+Text:	select tsm.* from TbRoleMenu tum
+                           left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                           where tsm.IsShow=0 and tsm.MenuType='PC' and tum.RoleCode in('6372919444627396738','6372919451594895243') order by tsm.Sort asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:20
+Text:	select 
+                        	tsm.*
+                        from TbUserMenu tum
+                        left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                        where tsm.IsShow=0 and tsm.MenuType='PC' and tum.UserCode=@userCode order by tsm.Sort asc	
+Parameters:
+@userCode[String] = 6372930471544160074
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:20
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:21
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type164) 	
+Parameters:
+@Type164[Int32] = 1
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:21
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type165) 	
+Parameters:
+@Type165[Int32] = 2
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:21
+Text:	SELECT mm.MenuUrl, pp.UserCode, pp.menuCode, pp.OperationView, pp.OperationAdd
+	                        , pp.OperationEdit, pp.OperationDel, pp.OperationExamination, pp.OperationOutput, pp.OperationOther1
+	                        , mm.OperationOther1Fun, mm.OperationOther1IconCls, pp.OperationOther2, mm.OperationOther2Fun, mm.OperationOther2IconCls
+	                        , pp.OperationOther3, mm.OperationOther3Fun, mm.OperationOther3IconCls, pp.OperationOther4, mm.OperationOther4Fun
+	                        , mm.OperationOther4IconCls, pp.OperationOther5, mm.OperationOther5Fun, mm.OperationOther5IconCls
+                        FROM (
+	                        SELECT UserCode, menuCode, MAX(OperationView) AS OperationView
+		                        , MAX(OperationAdd) AS OperationAdd, MAX(OperationEdit) AS OperationEdit
+		                        , MAX(OperationDel) AS OperationDel, MAX(OperationExamination) AS OperationExamination
+		                        , MAX(OperationOutput) AS OperationOutput, MAX(OperationOther1) AS OperationOther1
+		                        , MAX(OperationOther2) AS OperationOther2, MAX(OperationOther3) AS OperationOther3
+		                        , MAX(OperationOther4) AS OperationOther4, MAX(OperationOther5) AS OperationOther5
+	                        FROM (
+		                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+			                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+			                        , OperationOther3, OperationOther4, OperationOther5
+		                        FROM (
+			                        SELECT a.UserCode, b.menuCode, MAX(b.OperationView) AS OperationView
+				                        , MAX(b.OperationAdd) AS OperationAdd, MAX(b.OperationEdit) AS OperationEdit
+				                        , MAX(b.OperationDel) AS OperationDel, MAX(b.OperationExamination) AS OperationExamination
+				                        , MAX(b.OperationOutput) AS OperationOutput, MAX(b.OperationOther1) AS OperationOther1
+				                        , MAX(b.OperationOther2) AS OperationOther2, MAX(b.OperationOther3) AS OperationOther3
+				                        , MAX(b.OperationOther4) AS OperationOther4, MAX(b.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbUserRole a
+				                        INNER JOIN dbo.TbRoleMenu b ON a.RoleCode = b.RoleCode
+                                        where b.RoleCode in('6372919444627396738','6372919451594895243')
+			                        GROUP BY a.UserCode, b.menuCode
+			                        UNION ALL
+			                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+				                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+				                        , OperationOther3, OperationOther4, OperationOther5
+			                        FROM dbo.TbUserMenu
+			                        union all
+			                        SELECT p.UserCode, d.menuCode, MAX(d.OperationView) AS OperationView
+				                        , MAX(d.OperationAdd) AS OperationAdd, MAX(d.OperationEdit) AS OperationEdit
+				                        , MAX(d.OperationDel) AS OperationDel, MAX(d.OperationExamination) AS OperationExamination
+				                        , MAX(d.OperationOutput) AS OperationOutput, MAX(d.OperationOther1) AS OperationOther1
+				                        , MAX(d.OperationOther2) AS OperationOther2, MAX(d.OperationOther3) AS OperationOther3
+				                        , MAX(d.OperationOther4) AS OperationOther4, MAX(d.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbPositionUser p
+				                        INNER JOIN dbo.TbPositionMenu d ON p.PositionCode = d.PositionCode
+			                        GROUP BY p.UserCode, d.menuCode
+			
+		                        ) c
+	                        ) aa
+	                        GROUP BY UserCode, menuCode
+                        ) pp
+                        INNER JOIN dbo.TbSysMenu mm ON pp.menuCode = mm.menuCode 
+                        left join dbo.TbUser u on pp.UserCode=u.UserId
+                        where u.UserCode=@UserCode And mm.MenuUrl=@menuURI	
+Parameters:
+@UserCode[String] = 500000
+@menuURI[String] = /BIM/GISGridList
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:21
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921375874657752
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:21
+Text:	 SELECT count(*) as r_cnt FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode193)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode]) WHERE (([TbWorkOrder].[ProjectId] = @ProjectId166) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode167,@SiteCode168,@SiteCode169,@SiteCode170,@SiteCode171,@SiteCode172,@SiteCode173,@SiteCode174,@SiteCode175,@SiteCode176,@SiteCode177,@SiteCode178,@SiteCode179,@SiteCode180,@SiteCode181,@SiteCode182,@SiteCode183,@SiteCode184,@SiteCode185,@SiteCode186,@SiteCode187,@SiteCode188,@SiteCode189,@SiteCode190,@SiteCode191,@SiteCode192)))	
+Parameters:
+@ProjectId166[String] = 6372912251695766465
+@SiteCode167[String] = 6373083923489249281
+@SiteCode168[String] = 6373083925531366080
+@SiteCode169[String] = 6373083927883400612
+@SiteCode170[String] = 6373083918575368225
+@SiteCode171[String] = 6373083920445075162
+@SiteCode172[String] = 6373083908618598731
+@SiteCode173[String] = 6373083911842783146
+@SiteCode174[String] = 6373083913928202424
+@SiteCode175[String] = 6373083877551621804
+@SiteCode176[String] = 6373083879921857377
+@SiteCode177[String] = 6373083881542550067
+@SiteCode178[String] = 6373083883689772886
+@SiteCode179[String] = 6373083887136270013
+@SiteCode180[String] = 6373083889697116488
+@SiteCode181[String] = 6373083891969846476
+@SiteCode182[String] = 6373083894422586761
+@SiteCode183[String] = 6373083897509963358
+@SiteCode184[String] = 6373083900444931227
+@SiteCode185[String] = 6373083829464571372
+@SiteCode186[String] = 6373083833327492328
+@SiteCode187[String] = 6373083841964286321
+@SiteCode188[String] = 6373083844982558950
+@SiteCode189[String] = 6373083847585007801
+@SiteCode190[String] = 6373083856887939900
+@SiteCode191[String] = 6373083859102666584
+@SiteCode192[String] = 6373083864919499284
+@FDictionaryCode193[String] = OrderState
+@FDictionaryCode194[String] = UrgentDegree
+@FDictionaryCode195[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:21
+Text:	 SELECT   TOP 50 [TbWorkOrder].*,[TbCompany].[CompanyFullName] AS [SiteName],[TbSysDictionaryData].[DictionaryText] AS [OrderStateNew],[TbUser].[UserName],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[UrgentDegree]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode194) ) AS [UrgentDegreeNew],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[OrderType]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode195) ) AS [OrderTypeNew] FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode193)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode])  WHERE (([TbWorkOrder].[ProjectId] = @ProjectId166) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode167,@SiteCode168,@SiteCode169,@SiteCode170,@SiteCode171,@SiteCode172,@SiteCode173,@SiteCode174,@SiteCode175,@SiteCode176,@SiteCode177,@SiteCode178,@SiteCode179,@SiteCode180,@SiteCode181,@SiteCode182,@SiteCode183,@SiteCode184,@SiteCode185,@SiteCode186,@SiteCode187,@SiteCode188,@SiteCode189,@SiteCode190,@SiteCode191,@SiteCode192))) ORDER BY [TbWorkOrder].[ID] DESC 	
+Parameters:
+@ProjectId166[String] = 6372912251695766465
+@SiteCode167[String] = 6373083923489249281
+@SiteCode168[String] = 6373083925531366080
+@SiteCode169[String] = 6373083927883400612
+@SiteCode170[String] = 6373083918575368225
+@SiteCode171[String] = 6373083920445075162
+@SiteCode172[String] = 6373083908618598731
+@SiteCode173[String] = 6373083911842783146
+@SiteCode174[String] = 6373083913928202424
+@SiteCode175[String] = 6373083877551621804
+@SiteCode176[String] = 6373083879921857377
+@SiteCode177[String] = 6373083881542550067
+@SiteCode178[String] = 6373083883689772886
+@SiteCode179[String] = 6373083887136270013
+@SiteCode180[String] = 6373083889697116488
+@SiteCode181[String] = 6373083891969846476
+@SiteCode182[String] = 6373083894422586761
+@SiteCode183[String] = 6373083897509963358
+@SiteCode184[String] = 6373083900444931227
+@SiteCode185[String] = 6373083829464571372
+@SiteCode186[String] = 6373083833327492328
+@SiteCode187[String] = 6373083841964286321
+@SiteCode188[String] = 6373083844982558950
+@SiteCode189[String] = 6373083847585007801
+@SiteCode190[String] = 6373083856887939900
+@SiteCode191[String] = 6373083859102666584
+@SiteCode192[String] = 6373083864919499284
+@FDictionaryCode193[String] = OrderState
+@FDictionaryCode194[String] = UrgentDegree
+@FDictionaryCode195[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:21
+Text:	select a.*,a.FullCode as ProjectId,b.CompanyFullName as ParentCompanyName from TbCompany a
+left join TbCompany b on a.ParentCompanyCode=b.CompanyCode 
+where 1=1  order by a.id asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:21
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=2;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:13:21
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=1 order by CompanyCode asc;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	select tsm.* from TbRoleMenu tum
+                           left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                           where tsm.IsShow=0 and tsm.MenuType='PC' and tum.RoleCode in('6372919444627396738','6372919451594895243') order by tsm.Sort asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	select 
+                        	tsm.*
+                        from TbUserMenu tum
+                        left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                        where tsm.IsShow=0 and tsm.MenuType='PC' and tum.UserCode=@userCode order by tsm.Sort asc	
+Parameters:
+@userCode[String] = 6372930471544160074
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type196) 	
+Parameters:
+@Type196[Int32] = 1
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type197) 	
+Parameters:
+@Type197[Int32] = 2
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	SELECT mm.MenuUrl, pp.UserCode, pp.menuCode, pp.OperationView, pp.OperationAdd
+	                        , pp.OperationEdit, pp.OperationDel, pp.OperationExamination, pp.OperationOutput, pp.OperationOther1
+	                        , mm.OperationOther1Fun, mm.OperationOther1IconCls, pp.OperationOther2, mm.OperationOther2Fun, mm.OperationOther2IconCls
+	                        , pp.OperationOther3, mm.OperationOther3Fun, mm.OperationOther3IconCls, pp.OperationOther4, mm.OperationOther4Fun
+	                        , mm.OperationOther4IconCls, pp.OperationOther5, mm.OperationOther5Fun, mm.OperationOther5IconCls
+                        FROM (
+	                        SELECT UserCode, menuCode, MAX(OperationView) AS OperationView
+		                        , MAX(OperationAdd) AS OperationAdd, MAX(OperationEdit) AS OperationEdit
+		                        , MAX(OperationDel) AS OperationDel, MAX(OperationExamination) AS OperationExamination
+		                        , MAX(OperationOutput) AS OperationOutput, MAX(OperationOther1) AS OperationOther1
+		                        , MAX(OperationOther2) AS OperationOther2, MAX(OperationOther3) AS OperationOther3
+		                        , MAX(OperationOther4) AS OperationOther4, MAX(OperationOther5) AS OperationOther5
+	                        FROM (
+		                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+			                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+			                        , OperationOther3, OperationOther4, OperationOther5
+		                        FROM (
+			                        SELECT a.UserCode, b.menuCode, MAX(b.OperationView) AS OperationView
+				                        , MAX(b.OperationAdd) AS OperationAdd, MAX(b.OperationEdit) AS OperationEdit
+				                        , MAX(b.OperationDel) AS OperationDel, MAX(b.OperationExamination) AS OperationExamination
+				                        , MAX(b.OperationOutput) AS OperationOutput, MAX(b.OperationOther1) AS OperationOther1
+				                        , MAX(b.OperationOther2) AS OperationOther2, MAX(b.OperationOther3) AS OperationOther3
+				                        , MAX(b.OperationOther4) AS OperationOther4, MAX(b.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbUserRole a
+				                        INNER JOIN dbo.TbRoleMenu b ON a.RoleCode = b.RoleCode
+                                        where b.RoleCode in('6372919444627396738','6372919451594895243')
+			                        GROUP BY a.UserCode, b.menuCode
+			                        UNION ALL
+			                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+				                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+				                        , OperationOther3, OperationOther4, OperationOther5
+			                        FROM dbo.TbUserMenu
+			                        union all
+			                        SELECT p.UserCode, d.menuCode, MAX(d.OperationView) AS OperationView
+				                        , MAX(d.OperationAdd) AS OperationAdd, MAX(d.OperationEdit) AS OperationEdit
+				                        , MAX(d.OperationDel) AS OperationDel, MAX(d.OperationExamination) AS OperationExamination
+				                        , MAX(d.OperationOutput) AS OperationOutput, MAX(d.OperationOther1) AS OperationOther1
+				                        , MAX(d.OperationOther2) AS OperationOther2, MAX(d.OperationOther3) AS OperationOther3
+				                        , MAX(d.OperationOther4) AS OperationOther4, MAX(d.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbPositionUser p
+				                        INNER JOIN dbo.TbPositionMenu d ON p.PositionCode = d.PositionCode
+			                        GROUP BY p.UserCode, d.menuCode
+			
+		                        ) c
+	                        ) aa
+	                        GROUP BY UserCode, menuCode
+                        ) pp
+                        INNER JOIN dbo.TbSysMenu mm ON pp.menuCode = mm.menuCode 
+                        left join dbo.TbUser u on pp.UserCode=u.UserId
+                        where u.UserCode=@UserCode And mm.MenuUrl=@menuURI	
+Parameters:
+@UserCode[String] = 500000
+@menuURI[String] = /BIM/GISGridList
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921375874657752
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	 SELECT count(*) as r_cnt FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode225)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode]) WHERE (([TbWorkOrder].[ProjectId] = @ProjectId198) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode199,@SiteCode200,@SiteCode201,@SiteCode202,@SiteCode203,@SiteCode204,@SiteCode205,@SiteCode206,@SiteCode207,@SiteCode208,@SiteCode209,@SiteCode210,@SiteCode211,@SiteCode212,@SiteCode213,@SiteCode214,@SiteCode215,@SiteCode216,@SiteCode217,@SiteCode218,@SiteCode219,@SiteCode220,@SiteCode221,@SiteCode222,@SiteCode223,@SiteCode224)))	
+Parameters:
+@ProjectId198[String] = 6372912251695766465
+@SiteCode199[String] = 6373083923489249281
+@SiteCode200[String] = 6373083925531366080
+@SiteCode201[String] = 6373083927883400612
+@SiteCode202[String] = 6373083918575368225
+@SiteCode203[String] = 6373083920445075162
+@SiteCode204[String] = 6373083908618598731
+@SiteCode205[String] = 6373083911842783146
+@SiteCode206[String] = 6373083913928202424
+@SiteCode207[String] = 6373083877551621804
+@SiteCode208[String] = 6373083879921857377
+@SiteCode209[String] = 6373083881542550067
+@SiteCode210[String] = 6373083883689772886
+@SiteCode211[String] = 6373083887136270013
+@SiteCode212[String] = 6373083889697116488
+@SiteCode213[String] = 6373083891969846476
+@SiteCode214[String] = 6373083894422586761
+@SiteCode215[String] = 6373083897509963358
+@SiteCode216[String] = 6373083900444931227
+@SiteCode217[String] = 6373083829464571372
+@SiteCode218[String] = 6373083833327492328
+@SiteCode219[String] = 6373083841964286321
+@SiteCode220[String] = 6373083844982558950
+@SiteCode221[String] = 6373083847585007801
+@SiteCode222[String] = 6373083856887939900
+@SiteCode223[String] = 6373083859102666584
+@SiteCode224[String] = 6373083864919499284
+@FDictionaryCode225[String] = OrderState
+@FDictionaryCode226[String] = UrgentDegree
+@FDictionaryCode227[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	 SELECT   TOP 50 [TbWorkOrder].*,[TbCompany].[CompanyFullName] AS [SiteName],[TbSysDictionaryData].[DictionaryText] AS [OrderStateNew],[TbUser].[UserName],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[UrgentDegree]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode226) ) AS [UrgentDegreeNew],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[OrderType]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode227) ) AS [OrderTypeNew] FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode225)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode])  WHERE (([TbWorkOrder].[ProjectId] = @ProjectId198) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode199,@SiteCode200,@SiteCode201,@SiteCode202,@SiteCode203,@SiteCode204,@SiteCode205,@SiteCode206,@SiteCode207,@SiteCode208,@SiteCode209,@SiteCode210,@SiteCode211,@SiteCode212,@SiteCode213,@SiteCode214,@SiteCode215,@SiteCode216,@SiteCode217,@SiteCode218,@SiteCode219,@SiteCode220,@SiteCode221,@SiteCode222,@SiteCode223,@SiteCode224))) ORDER BY [TbWorkOrder].[ID] DESC 	
+Parameters:
+@ProjectId198[String] = 6372912251695766465
+@SiteCode199[String] = 6373083923489249281
+@SiteCode200[String] = 6373083925531366080
+@SiteCode201[String] = 6373083927883400612
+@SiteCode202[String] = 6373083918575368225
+@SiteCode203[String] = 6373083920445075162
+@SiteCode204[String] = 6373083908618598731
+@SiteCode205[String] = 6373083911842783146
+@SiteCode206[String] = 6373083913928202424
+@SiteCode207[String] = 6373083877551621804
+@SiteCode208[String] = 6373083879921857377
+@SiteCode209[String] = 6373083881542550067
+@SiteCode210[String] = 6373083883689772886
+@SiteCode211[String] = 6373083887136270013
+@SiteCode212[String] = 6373083889697116488
+@SiteCode213[String] = 6373083891969846476
+@SiteCode214[String] = 6373083894422586761
+@SiteCode215[String] = 6373083897509963358
+@SiteCode216[String] = 6373083900444931227
+@SiteCode217[String] = 6373083829464571372
+@SiteCode218[String] = 6373083833327492328
+@SiteCode219[String] = 6373083841964286321
+@SiteCode220[String] = 6373083844982558950
+@SiteCode221[String] = 6373083847585007801
+@SiteCode222[String] = 6373083856887939900
+@SiteCode223[String] = 6373083859102666584
+@SiteCode224[String] = 6373083864919499284
+@FDictionaryCode225[String] = OrderState
+@FDictionaryCode226[String] = UrgentDegree
+@FDictionaryCode227[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	select a.*,a.FullCode as ProjectId,b.CompanyFullName as ParentCompanyName from TbCompany a
+left join TbCompany b on a.ParentCompanyCode=b.CompanyCode 
+where 1=1  order by a.id asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=2;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:35
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=1 order by CompanyCode asc;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:14:59
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	select tsm.* from TbRoleMenu tum
+                           left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                           where tsm.IsShow=0 and tsm.MenuType='PC' and tum.RoleCode in('6372919444627396738','6372919451594895243') order by tsm.Sort asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	select 
+                        	tsm.*
+                        from TbUserMenu tum
+                        left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                        where tsm.IsShow=0 and tsm.MenuType='PC' and tum.UserCode=@userCode order by tsm.Sort asc	
+Parameters:
+@userCode[String] = 6372930471544160074
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type228) 	
+Parameters:
+@Type228[Int32] = 1
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ([TbOrganizationMap].[Type] = @Type229) 	
+Parameters:
+@Type229[Int32] = 2
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	SELECT mm.MenuUrl, pp.UserCode, pp.menuCode, pp.OperationView, pp.OperationAdd
+	                        , pp.OperationEdit, pp.OperationDel, pp.OperationExamination, pp.OperationOutput, pp.OperationOther1
+	                        , mm.OperationOther1Fun, mm.OperationOther1IconCls, pp.OperationOther2, mm.OperationOther2Fun, mm.OperationOther2IconCls
+	                        , pp.OperationOther3, mm.OperationOther3Fun, mm.OperationOther3IconCls, pp.OperationOther4, mm.OperationOther4Fun
+	                        , mm.OperationOther4IconCls, pp.OperationOther5, mm.OperationOther5Fun, mm.OperationOther5IconCls
+                        FROM (
+	                        SELECT UserCode, menuCode, MAX(OperationView) AS OperationView
+		                        , MAX(OperationAdd) AS OperationAdd, MAX(OperationEdit) AS OperationEdit
+		                        , MAX(OperationDel) AS OperationDel, MAX(OperationExamination) AS OperationExamination
+		                        , MAX(OperationOutput) AS OperationOutput, MAX(OperationOther1) AS OperationOther1
+		                        , MAX(OperationOther2) AS OperationOther2, MAX(OperationOther3) AS OperationOther3
+		                        , MAX(OperationOther4) AS OperationOther4, MAX(OperationOther5) AS OperationOther5
+	                        FROM (
+		                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+			                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+			                        , OperationOther3, OperationOther4, OperationOther5
+		                        FROM (
+			                        SELECT a.UserCode, b.menuCode, MAX(b.OperationView) AS OperationView
+				                        , MAX(b.OperationAdd) AS OperationAdd, MAX(b.OperationEdit) AS OperationEdit
+				                        , MAX(b.OperationDel) AS OperationDel, MAX(b.OperationExamination) AS OperationExamination
+				                        , MAX(b.OperationOutput) AS OperationOutput, MAX(b.OperationOther1) AS OperationOther1
+				                        , MAX(b.OperationOther2) AS OperationOther2, MAX(b.OperationOther3) AS OperationOther3
+				                        , MAX(b.OperationOther4) AS OperationOther4, MAX(b.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbUserRole a
+				                        INNER JOIN dbo.TbRoleMenu b ON a.RoleCode = b.RoleCode
+                                        where b.RoleCode in('6372919444627396738','6372919451594895243')
+			                        GROUP BY a.UserCode, b.menuCode
+			                        UNION ALL
+			                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+				                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+				                        , OperationOther3, OperationOther4, OperationOther5
+			                        FROM dbo.TbUserMenu
+			                        union all
+			                        SELECT p.UserCode, d.menuCode, MAX(d.OperationView) AS OperationView
+				                        , MAX(d.OperationAdd) AS OperationAdd, MAX(d.OperationEdit) AS OperationEdit
+				                        , MAX(d.OperationDel) AS OperationDel, MAX(d.OperationExamination) AS OperationExamination
+				                        , MAX(d.OperationOutput) AS OperationOutput, MAX(d.OperationOther1) AS OperationOther1
+				                        , MAX(d.OperationOther2) AS OperationOther2, MAX(d.OperationOther3) AS OperationOther3
+				                        , MAX(d.OperationOther4) AS OperationOther4, MAX(d.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbPositionUser p
+				                        INNER JOIN dbo.TbPositionMenu d ON p.PositionCode = d.PositionCode
+			                        GROUP BY p.UserCode, d.menuCode
+			
+		                        ) c
+	                        ) aa
+	                        GROUP BY UserCode, menuCode
+                        ) pp
+                        INNER JOIN dbo.TbSysMenu mm ON pp.menuCode = mm.menuCode 
+                        left join dbo.TbUser u on pp.UserCode=u.UserId
+                        where u.UserCode=@UserCode And mm.MenuUrl=@menuURI	
+Parameters:
+@UserCode[String] = 500000
+@menuURI[String] = /BIM/GISGridList
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921375874657752
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	 SELECT count(*) as r_cnt FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode257)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode]) WHERE (([TbWorkOrder].[ProjectId] = @ProjectId230) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode231,@SiteCode232,@SiteCode233,@SiteCode234,@SiteCode235,@SiteCode236,@SiteCode237,@SiteCode238,@SiteCode239,@SiteCode240,@SiteCode241,@SiteCode242,@SiteCode243,@SiteCode244,@SiteCode245,@SiteCode246,@SiteCode247,@SiteCode248,@SiteCode249,@SiteCode250,@SiteCode251,@SiteCode252,@SiteCode253,@SiteCode254,@SiteCode255,@SiteCode256)))	
+Parameters:
+@ProjectId230[String] = 6372912251695766465
+@SiteCode231[String] = 6373083923489249281
+@SiteCode232[String] = 6373083925531366080
+@SiteCode233[String] = 6373083927883400612
+@SiteCode234[String] = 6373083918575368225
+@SiteCode235[String] = 6373083920445075162
+@SiteCode236[String] = 6373083908618598731
+@SiteCode237[String] = 6373083911842783146
+@SiteCode238[String] = 6373083913928202424
+@SiteCode239[String] = 6373083877551621804
+@SiteCode240[String] = 6373083879921857377
+@SiteCode241[String] = 6373083881542550067
+@SiteCode242[String] = 6373083883689772886
+@SiteCode243[String] = 6373083887136270013
+@SiteCode244[String] = 6373083889697116488
+@SiteCode245[String] = 6373083891969846476
+@SiteCode246[String] = 6373083894422586761
+@SiteCode247[String] = 6373083897509963358
+@SiteCode248[String] = 6373083900444931227
+@SiteCode249[String] = 6373083829464571372
+@SiteCode250[String] = 6373083833327492328
+@SiteCode251[String] = 6373083841964286321
+@SiteCode252[String] = 6373083844982558950
+@SiteCode253[String] = 6373083847585007801
+@SiteCode254[String] = 6373083856887939900
+@SiteCode255[String] = 6373083859102666584
+@SiteCode256[String] = 6373083864919499284
+@FDictionaryCode257[String] = OrderState
+@FDictionaryCode258[String] = UrgentDegree
+@FDictionaryCode259[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	 SELECT   TOP 50 [TbWorkOrder].*,[TbCompany].[CompanyFullName] AS [SiteName],[TbSysDictionaryData].[DictionaryText] AS [OrderStateNew],[TbUser].[UserName],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[UrgentDegree]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode258) ) AS [UrgentDegreeNew],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[OrderType]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode259) ) AS [OrderTypeNew] FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode257)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode])  WHERE (([TbWorkOrder].[ProjectId] = @ProjectId230) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode231,@SiteCode232,@SiteCode233,@SiteCode234,@SiteCode235,@SiteCode236,@SiteCode237,@SiteCode238,@SiteCode239,@SiteCode240,@SiteCode241,@SiteCode242,@SiteCode243,@SiteCode244,@SiteCode245,@SiteCode246,@SiteCode247,@SiteCode248,@SiteCode249,@SiteCode250,@SiteCode251,@SiteCode252,@SiteCode253,@SiteCode254,@SiteCode255,@SiteCode256))) ORDER BY [TbWorkOrder].[ID] DESC 	
+Parameters:
+@ProjectId230[String] = 6372912251695766465
+@SiteCode231[String] = 6373083923489249281
+@SiteCode232[String] = 6373083925531366080
+@SiteCode233[String] = 6373083927883400612
+@SiteCode234[String] = 6373083918575368225
+@SiteCode235[String] = 6373083920445075162
+@SiteCode236[String] = 6373083908618598731
+@SiteCode237[String] = 6373083911842783146
+@SiteCode238[String] = 6373083913928202424
+@SiteCode239[String] = 6373083877551621804
+@SiteCode240[String] = 6373083879921857377
+@SiteCode241[String] = 6373083881542550067
+@SiteCode242[String] = 6373083883689772886
+@SiteCode243[String] = 6373083887136270013
+@SiteCode244[String] = 6373083889697116488
+@SiteCode245[String] = 6373083891969846476
+@SiteCode246[String] = 6373083894422586761
+@SiteCode247[String] = 6373083897509963358
+@SiteCode248[String] = 6373083900444931227
+@SiteCode249[String] = 6373083829464571372
+@SiteCode250[String] = 6373083833327492328
+@SiteCode251[String] = 6373083841964286321
+@SiteCode252[String] = 6373083844982558950
+@SiteCode253[String] = 6373083847585007801
+@SiteCode254[String] = 6373083856887939900
+@SiteCode255[String] = 6373083859102666584
+@SiteCode256[String] = 6373083864919499284
+@FDictionaryCode257[String] = OrderState
+@FDictionaryCode258[String] = UrgentDegree
+@FDictionaryCode259[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	select a.*,a.FullCode as ProjectId,b.CompanyFullName as ParentCompanyName from TbCompany a
+left join TbCompany b on a.ParentCompanyCode=b.CompanyCode 
+where 1=1  order by a.id asc	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=2;	
+
+
+-----------------------------------------------------------------------------
+2020-07-31 19:15:07
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=1 order by CompanyCode asc;	
+
+
+-----------------------------------------------------------------------------

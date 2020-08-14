@@ -48,11 +48,11 @@
     }
 
     .td3 {
-        width: 25%;
+        width: 65%;
     }
 
     .td4 {
-        width: 12.5%;
+        width: 10%;
         text-align: center;
     }
 </style>
@@ -60,7 +60,6 @@
     var OrderCode = $.request("OrderCode");
     $(function () {
         $.LodeMenuBtn("/Production/WorkOrder/OrderPackIndex", "#toolbar_OrderPack");
-        $("#NF-Details").parent().hide();//隐藏查看按钮
         var param1 = $(".search").GetSearchCondition();
         if (OrderCode) {
             $("#OrderCode").removeClass("hidSearchContent");
@@ -104,7 +103,7 @@
 
     function GetList(param) {
         $("#pager").zPager({
-            @*url: "@Url.Action("GetNowSiteWorkOrderDetailList", "WorkOrder")",*@
+            url: "@Url.Action("GetPackageQRCodeJson", "WorkOrder")",
             searchData: param,
             pageData: 15, //每页数据条数
             btnShow: true,
@@ -124,40 +123,27 @@
                             .replace("{IDHH}", value.ID)
                             .replace("{SiteName}", value.SiteName)
                             .replace("{OrderCode}", value.OrderCode)
-                            .replace("{TypeName}", value.TypeName)
-                            .replace("{TypeCode}", value.TypeCode)
+                            .replace("{PackCode}", value.PackCode)
+                            .replace("{Major}", value.Major)
                             .replace("{ComponentName}", value.ComponentName)
-                            .replace("{PageTime}", fdate(value.PageTime))
-                            .replace("{DistributionTime}", fdate(value.DistributionTime))
-                            .replace("{lldyNum}", value.lldyNum)
-                            .replace("{ComponentNameH}", value.ComponentName)
-                            .replace("{SpecificationModel}", value.SpecificationModel)
-                            .replace("{ItemUseNum}", value.ItemUseNum)
-                            .replace("{Number}", value.Number)
-                            .replace("{PackNumber}", value.PackNumber)
-                            .replace("{WeightSmallPlan}", value.WeightSmallPlan)
-                            .replace("{FinishProcessingDateTime}", fdate(value.FinishProcessingDateTime))
-                            .replace("{OrgName}", value.OrgName)
-                            .replace("{OrderCodeH}", value.OrderCode)
-                            .replace("{TypeCodeH}", value.TypeCode)
-                            .replace("{UsePart}", value.UsePart)
-                            .replace("{TypeNameH}", value.TypeName)
-                            .replace("{DistributionTimeH}", fdate(value.DistributionTime))
-                            .replace("{printbox2}", value.ID)
-                            .replace("{qrcodeH2}", value.ID)
-                            .replace("{ComponentNameH2}", value.ComponentName)
-                            .replace("{SpecificationModel2}", value.SpecificationModel)
-                            .replace("{ItemUseNum2}", value.ItemUseNum)
-                            .replace("{Number2}", value.Number)
-                            .replace("{PackNumber2}", value.PackNumber)
-                            .replace("{WeightSmallPlan2}", value.WeightSmallPlan)
-                            .replace("{FinishProcessingDateTime2}", fdate(value.FinishProcessingDateTime))
-                            .replace("{OrgName2}", value.OrgName)
-                            .replace("{OrderCodeH2}", value.OrderCode)
-                            .replace("{DistributionTimeH2}", fdate(value.DistributionTime))
-                            .replace("{UsePart2}", value.UsePart)
-                            .replace("{TypeCodeH2}", value.TypeCode)
-                            .replace("{TypeNameH2}", value.TypeName);
+                            .replace("{SystemType}",value.SystemType)
+                            .replace("{SumNumber}", value.SumNumber)
+                            .replace("{ThisPackNumber}", value.ThisPackNumber)
+                            .replace("{DistributionTime}", value.DistributionTime)
+                            .replace("{PackDate}",value.PackDate)
+                            .replace("{MaterialType}", value.MaterialType)
+                            .replace("{SiteNameL}", value.SiteName)
+                            .replace("{OrderCodeL}", value.OrderCode)
+                            .replace("{PackCodeL}", value.PackCode)
+                            .replace("{MajorL}", value.Major)
+                            .replace("{ComponentNameL}", value.ComponentName)
+                            .replace("{SystemTypeL}", value.SystemType)
+                            .replace("{SumNumberL}", value.SumNumber)
+                            .replace("{ThisPackNumberL}", value.ThisPackNumber)
+                            .replace("{DistributionTimeL}", value.DistributionTime)
+                            .replace("{PackDateL}", value.PackDate)
+                            .replace("{MaterialTypeL}", value.MaterialType)
+                            .replace("{SignForStateL}", value.SignForState);
                     $("#tabQrCode").append(itemRow);
                 });
                 LodeQRCode();//加载二维码
@@ -167,6 +153,7 @@
             }
         });
     }
+
     function LodeQRCode() {
         $('[qrcode]').each(function (trindex, tritem) {
             var value = $(this).attr("qrcode");
@@ -175,6 +162,7 @@
             CreateQRCode(this, "id:" + value, isPrint, isdetail);
         });
     }
+
     function CreateQRCode(id, value, isPrint, isdetail) {
         var size = 80;
         if (isPrint == "true" && isdetail == "true") {
@@ -202,25 +190,6 @@
             window.open('/Production/WorkOrder/PrintPackQRCodeInfo');
         });
     }
-    //选择订单
-    function selectWorkOrder() {
-        var url = "/Production/WorkOrder/GetWorkOrderList";
-        var str = "";
-        var ret = selectClick('win_OrderWIN', url, 'Grid', '', '', str, '550px', '450px', function (row) { });
-    }
-    //选择站点
-    function selectCompanyWorkAreaOrSite(type) {
-        var url = "/RawMaterial/RawMonthDemandPlan/GetCompanyList&keyValue=type/" + type;
-        var str = "SiteCode=CompanyCode,SiteName=CompanyFullName";
-        var ret = selectClick('win_TbCompany', url, 'Grid', '', '', str, '550px', '450px', function (row) { });
-    }
-    //清空
-    function btn_Clore() {
-        $("#OrderCode").val("");
-        $("#SiteCode").val("");
-        $("#SiteName").val("");
-        $("#DistributionTime").val("");
-    }
     function QrcodeDetail(obj) {
         var id = $(obj).attr("hid");
         var printHtml = $('[detailbox=' + id + ']').html();
@@ -243,7 +212,7 @@
     </tr>
 </script>
 <script type="text/html" id="new-tr">
-    <tr class="tr1">
+    <tr class="tr1" style="height:90px;">
         <td class="td1">{Index}</td>
         <td class="td2">
             <input type="checkbox" id="chk_1_{ID}" />
@@ -251,7 +220,7 @@
                 <div style="width:350px;margin:0 auto;">
                     <div class="ecodeBox" printbox="{printbox}">
                         <div class="ecodeBoxTitle" style="line-height: 25px; padding-left: 5px; padding-right: 5px;text-align:left">
-                            <span style="font-weight: 600; ">成品料牌</span><span style="padding-left: 5px; font-size: 11px;color: #000000">{OrgName}</span>
+                            <span style="font-weight: 600; ">成品料牌</span><span style="padding-left: 5px; font-size: 11px;color: #000000">{SiteName}</span>
                         </div>
                         <div class="ecodeBoxBody">
                             <div class="ecodeBox ecodeBoxBody-Left" qrcode="{qrcodeH}" isprint="true" isdetail="false" style="margin-top:0px;margin-bottom:0px;"></div>
@@ -259,19 +228,22 @@
                                 <table class="tableText" style="height: 100%;">
                                     <tr>
                                         <td rowspan="5" style="width: 10px; padding-right: 5px; font-weight: 600; border-right: 1px solid #000000; ">订单信息</td>
-                                        <td style="padding-left:5px;"><label>订单编号：</label>{OrderCodeH}</td>
+                                        <td style="padding-left:5px;"><label>包件号：</label>{PackCode}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="padding-left:5px;"><label>计划配送时间：</label>{DistributionTimeH}</td>
+                                        <td colspan="2" style="padding-left:5px;"><label>订单编号：</label>{OrderCode}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="padding-left:5px;"><label>使用部位：</label>{UsePart}</td>
+                                        <td colspan="2" style="padding-left:5px;"><label>专业：</label>{Major}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="padding-left:5px;"><label>类型编号：</label>{TypeCodeH}</td>
+                                        <td colspan="2" style="padding-left:5px;"><label>系统类型：</label>{SystemType}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="padding-left:5px;"><label>类型名称：</label>{TypeNameH}</td>
+                                        <td colspan="2" style="padding-left:5px;"><label>材料类型：</label>{MaterialType}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="padding-left:5px;"><label>要求送达日期：</label>{DistributionTime}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -280,98 +252,44 @@
                             <table class="tableText" style="height: 100%; width: 100%;">
                                 <tr>
                                     <td rowspan="5" style="width: 10px; padding-right: 5px; font-weight: 600; border-right: 1px solid #000000; ">包件信息</td>
-                                    <td colspan="2"><label>构件名称：</label>{ComponentNameH}</td>
-                                    <td><label>生产日期：</label>{FinishProcessingDateTime}</td>
+                                    <td colspan="3"><label>构件名称：</label>{ComponentName}</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2"><label>总数量/当前包数量：</label>{Number}/{PackNumber}</td>
-                                    <td><label>重量小计：</label>{WeightSmallPlan}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"><label>规格/尺寸：</label>{SpecificationModel}/{ItemUseNum}</td>
+                                    <td colspan="2"><label>总件数/当前包数：</label>{SumNumber}/{ThisPackNumber}</td>
+                                    <td><label>打包日期：</label>{PackDate}</td>
                                 </tr>
                             </table>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div style="display:none">
-                <div class="ecodeBox2" detailbox="{printbox2}">
-                    <div class="ecodeBoxTitle2" style="width:100%;line-height:25px;">
-                        <span style="font-weight: 700;font-size:14px;float:left;padding-left:5px;">成品料牌</span>
-                        <span style="padding-left: 5px; font-size: 12px;color: #000000;float:left;">{OrgName2}</span>
-                    </div>
-                    <div class="ecodeBoxBody2">
-                        <div class="ecodeBox2 ecodeBoxBody-Left2" qrcode="{qrcodeH2}" isprint="true" isdetail="true" style="margin-top:0px;margin-bottom:0px;"></div>
-                        <div class="ecodeBox2 ecodeBoxBody-Right2" style="margin-left:0px;margin-top:0px;margin-bottom:0px;margin-right:0px;">
-                            <table class="tableText2" style="height:100%">
-                                <tr>
-                                    <td rowspan="5" style="width: 10px; padding-right: 5px; font-weight: 600; border-right: 1px solid #000000; ">订单信息</td>
-                                    <td style="padding-left:5px;"><label>订单编号：</label>{OrderCodeH2}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="padding-left:5px;"><label>计划配送时间：</label>{DistributionTimeH2}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="padding-left:5px;"><label>使用部位：</label>{UsePart2}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="padding-left:5px;"><label>类型编号：</label>{TypeCodeH2}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="padding-left:5px;"><label>类型名称：</label>{TypeNameH2}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="ecodeBox2 ecodeBoxFoot2" style="margin-top:5px;margin-bottom:3px;">
-                        <table class="tableText2" style="height:100%;width:100%">
-                            <tr>
-                                <td rowspan="5" style="width: 10px; padding-right: 5px; font-weight: 600; border-right: 1px solid #000000; ">包件信息</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><label>构件名称：</label>{ComponentNameH2}</td>
-                                <td><label>生产日期：</label>{FinishProcessingDateTime2}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><label>总数量/当前包数量：</label>{Number2}/{PackNumber2}</td>
-                                <td><label>重量小计：</label>{WeightSmallPlan2}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3"><label>规格/尺寸：</label>{SpecificationModel2}/{ItemUseNum2}</td>
-                            </tr>
-                        </table>
                     </div>
                 </div>
             </div>
         </td>
-
 
         <td class="td3">
             <div class="tr2" qrcode="{qrcode}"></div>
             <div class="tr3">
-                站点名称：{SiteName}<br />
-                订单编号：{OrderCode}<br />
-                类型名称：{TypeName}<br />
-                打包时间：{PageTime}
+                包件号：{PackCodeL}<br />
+                专业：{MajorL}<br />
+                构件名称：{ComponentNameL}
             </div>
             <div class="tr3">
                 <br />
-                类型编号：{TypeCode}<br />
-                构件名称：{ComponentName}<br />
-                计划配送日期：{DistributionTime}
+                订单编号：{OrderCodeL}<br />
+                系统类型：{SystemTypeL}<br />
+                总件数/当前打包数:{SumNumberL}/{ThisPackNumberL}
+            </div>
+            <div class="tr3">
+                <br />
+                要求送达时间：{DistributionTimeL}<br />
+                材料类型：{MaterialTypeL}<br />
+                打包日期：{PackDateL}
             </div>
         </td>
-        <td class="td4"><a onclick="QrcodeDetail(this)" hid="{IDHH}">包件详情</a><br />应打印张数:{lldyNum}</td>
+        <td class="td4"><a onclick="QrcodeDetail(this)" hid="{IDHH}">二维码贴纸</a><br/>{SignForStateL}</td>
     </tr>
 </script>
 
 <div class="topPanel">
-    <div class="topPanel-btn" id="toolbar_OrderPack">
-        <div class="btn-group">
-            <a class="btn btn-primary" onclick="reload_OrderPack()"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
-        </div>
-    </div>
     <div class="search">
         <table>
             <tr>
@@ -380,32 +298,27 @@
                         <select id="SearchType" name="SearchType" class="form-control" style="width: 120px;">
                             <option value="">全部</option>
                             <option value="OrderCode">订单编号</option>
-                            <option value="DistributionTime">计划配送时间</option>
-                            <option value="DistributionStart">配送状态</option>
-                            <option value="TypeCode">类型编号</option>
+                            <option value="ComponentName">构件名称</option>
+                            <option value="DistributionTime">要求送达时间</option>
                         </select>
-                        <input id="OrderCode" name="OrderCode" type="text" class="form-control SearchContent hidSearchContent" placeholder="订单编号" style="width: 140px; margin-left: 5px;" readonly="readonly">
-                        <span class="input-group-btn SearchContent hidSearchContent" name="OrderCode">
-                            <button id="btn_search4" type="button" class="btn  btn-primary" onclick="selectWorkOrder()"><i class="fa fa-search"></i></button>
-                        </span>
-                        <input id="DistributionTime" name="DistributionTime" type="text" placeholder="配送时间" class="form-control required input-wdatepicker SearchContent hidSearchContent" onfocus="WdatePicker()" />
-                        <select id="DistributionStart" name="DistributionStart" class="form-control SearchContent hidSearchContent" style="width: 120px;">
-                            <option value="">全部</option>
-                            <option value="未配送">未配送</option>
-                            <option value="部分配送">部分配送</option>
-                            <option value="配送完成">配送完成</option>
-                        </select>
-                        <input id="TypeCode" name="TypeCode" type="text" class="form-control SearchContent hidSearchContent" placeholder="类型编码" style="width: 140px; margin-left: 5px;">
+                        <input id="OrderCode" name="OrderCode" type="text" class="form-control SearchContent hidSearchContent">
+                        <input id="ComponentName" name="ComponentName" type="text" class="form-control SearchContent hidSearchContent">
+                        <input id="DistributionTime" name="DistributionTime" type="text" class="form-control SearchContent hidSearchContent">
                     </div>
                 </td>
                 <td>
                     <div class="btn-search">
-                        <a class="btn btn-primary" id="btn_searchOth">查询</a>
-                        <a class="btn btn-primary" id="btn_search">结果中搜索</a>
+                        <a class="btn btn-primary btn_searchOne" id="btn_searchOne">查询</a>
+                        <a class="btn btn-primary btn_search" id="btn_search">结果中搜索</a>
                     </div>
                 </td>
             </tr>
         </table>
+    </div>
+    <div class="topPanel-btn" id="toolbar_PackageQRCode">
+        <div class="btn-group">
+            <a class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
+        </div>
     </div>
 </div>
 <div class="gridPanel">

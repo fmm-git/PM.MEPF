@@ -202,7 +202,7 @@ namespace PM.Web.Areas.WorkFlow.Controllers
         /// <returns></returns>
         public string GetEarlyWarningCount()
         {
-            return JsonConvert.SerializeObject(new TbFlowEarlyWarningConditionLogic().GetEarlyWarningCount(Convert.ToString(Session["userid"])));
+            return JsonConvert.SerializeObject(new TbFlowEarlyWarningConditionLogic().GetEarlyWarningCount(Convert.ToString(PM.Common.OperatorProvider.Provider.CurrentUser.UserId)));
         }
         #endregion
 

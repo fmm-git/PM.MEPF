@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Article\ArticleLogic.cs" />
     <Compile Include="BIM\BIMLogic.cs" />
+    <Compile Include="BIM\ModelPropertyLogIc.cs" />
     <Compile Include="DataManage\FileTypeBuessic.cs" />
     <Compile Include="EarlyWarning\EarlyWarningTimer.cs" />
     <Compile Include="EarlyWarning\TbFormEarlyWarningBegTimeLogic.cs" />

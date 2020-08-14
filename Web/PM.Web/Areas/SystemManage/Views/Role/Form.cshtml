@@ -7,6 +7,8 @@
     var keyValue = $.request("keyValue");
     var type = $.request("type");
     var DepartmentId = $.request("DepartmentId");
+    var DepartmentCode = $.request("DepartmentCode");
+    var OrgTyp = $.request("OrgTyp");
     $(function () {
         if (!!keyValue) {
             $.ajax({
@@ -46,7 +48,7 @@
                     <th class="formTitle">角色编码<span class="required1">*</span></th>
                     <td class="formValue">
                         <input id="RoleId" name="RoleId" value="@ViewBag.RoleId" type="hidden" />
-                        <input id="RoleCode"  name="RoleCode" type="text" class="form-control required" placeholder="请输入角色编码">
+                        <input id="RoleCode"  name="RoleCode" value="@ViewBag.RoleCode" type="text" class="form-control required" placeholder="请输入角色编码" disabled="disabled">
                     </td>
                 </tr>
                 <tr>

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,6 +105,11 @@ namespace PM.Business.BIM
                 whereSql += " and Material=@Material";
                 parameters.Add(new SQLiteParameter("@Material", request.Material));
             }
+            if (!string.IsNullOrEmpty(request.ComponentCode))
+            {
+                whereSql += " and ComponentCode like @ComponentCode";
+                parameters.Add(new SQLiteParameter("@ComponentCode", request.ComponentCode + "_%"));
+            }
             #endregion
 
             string sql = @"SELECT Major,System,Subsystem,MaterialType,Material,Size,count(*) as Total, MAX(ComponentCode) as ComponentCode
@@ -127,27 +133,8 @@ namespace PM.Business.BIM
             {
                 var ret = _sqlite.SelectPaging<ProjectListAllModel>(sql, request.rows, request.page, parameters.ToArray());
                 List<ProjectListAllModel> dataList = ret.rows as List<ProjectListAllModel>;
-                var codeList = dataList.Select(p => p.ComponentCodeShow).ToList();
-                //加工订单信息
-                //var orderCodeList = Repository<TbWorkOrder>.Query(p => p.SiteCode == request.SiteCode).Select(p => p.OrderCode).ToList();
-                var orderDetailList = Repository<TbWorkOrderDetail>.Query(p => p.MxGjBm.In(codeList)).ToList();
-                //模型附件信息
-                var modelOtherInfoList = Repository<TbModelOtherInfo>.Query(p => p.ComponentCode.In(codeList)).ToList();
-                dataList.ForEach(x =>
-                {
-                    var orderData = orderDetailList.Where(p => p.MxGjBm == x.ComponentCodeShow).ToList();
-                    x.Processing = orderData.Where(p => p.ComponentStrat == "加工中").Count();
-                    x.ProcessComplete = orderData.Where(p => p.ComponentStrat == "加工完成").Count();
-                    x.InstallComplete = orderData.Where(p => p.ComponentStrat == "安装完成").Count();
-                    var modelOther = modelOtherInfoList.Where(p => p.ComponentCode == x.ComponentCodeShow).FirstOrDefault();
-                    if (modelOther != null)
-                    {
-                        x.PlanTime = modelOther.PlanTime;
-                        x.ActualTime = modelOther.ActualTime;
-                        x.Remark = modelOther.Remark;
-                    }
-                });
-
+                request.Type = 1;
+                CreatProjectOtherInfo(dataList, request);
                 return ret;
             }
             catch (Exception ex)
@@ -159,7 +146,7 @@ namespace PM.Business.BIM
         /// <summary>
         /// 获取数据列表(项目清单明细_分页)
         /// </summary>
-        public PageModel GetDataItemListForPage(BIMRequest request)
+        public List<ProjectListAllModel> GetDataItemListForPage(BIMRequest request)
         {
             #region 查询语句
 
@@ -182,11 +169,13 @@ namespace PM.Business.BIM
             }
             #endregion
 
-            string sql = @"SELECT id,ComponentCode,Name,Length,1 as Total from (
+            string sql = @"SELECT id,ComponentCode,Name,Length,Size,Area,Material,1 as Total from (
                                   SELECT id,
                                                           MAX(CASE name WHEN '族与类型' THEN value ELSE '' END) Name,
                                                           MAX(CASE name WHEN '尺寸' THEN value ELSE '' END) Size,
                                                           MAX(CASE name WHEN '长度' THEN value ELSE '' END) Length,
+                                                          MAX(CASE name WHEN '面积' THEN value ELSE '' END) Area,
+                                                          MAX(CASE name WHEN '材质' THEN value ELSE '' END) Material,
                                                           MAX(CASE name WHEN '模型构件编码' THEN value ELSE '' END) ComponentCode
                                    from model_property 
                                    GROUP BY id
@@ -195,31 +184,19 @@ namespace PM.Business.BIM
             sql = string.Format(sql, whereSql);
             try
             {
-                var ret = _sqlite.SelectPaging<ProjectListItemModel>(sql, request.rows, request.page, parameters.ToArray());
-                List<ProjectListItemModel> dataList = ret.rows as List<ProjectListItemModel>;
-                var idList = dataList.Select(p => p.id).ToList();
-                var codeList = dataList.Select(p => p.ComponentCode).ToList();
-                //加工订单信息
-                //var orderCodeList = Repository<TbWorkOrder>.Query(p => p.SiteCode == request.SiteCode).Select(p => p.OrderCode).ToList();
-                var orderDetailList = Repository<TbWorkOrderDetail>.Query(p => p.MxGjId.In(idList)).ToList();
-                //模型附件信息
-                var modelOtherInfoList = Repository<TbModelOtherInfo>.Query(p => p.ComponentCode.In(codeList)).ToList();
-                dataList.ForEach(x =>
+                var dataList = _sqlite.ExecuteList<ProjectListAllModel>(sql, CommandType.Text, parameters.ToArray());
+                if (dataList.Count < request.TotalCount)
                 {
-                    var orderData = orderDetailList.Where(p => p.MxGjId == x.id).ToList();
-                    x.Processing = orderData.Where(p => p.ComponentStrat == "加工中").Count();
-                    x.ProcessComplete = orderData.Where(p => p.ComponentStrat == "加工完成").Count();
-                    x.InstallComplete = orderData.Where(p => p.ComponentStrat == "安装完成").Count();
-                    var modelOther = modelOtherInfoList.Where(p => p.ComponentCode == x.ComponentCode).FirstOrDefault();
-                    if (modelOther != null)
-                    {
-                        x.PlanTime = modelOther.PlanTime;
-                        x.ActualTime = modelOther.ActualTime;
-                        x.Remark = modelOther.Remark;
-                    }
-                });
-
-                return ret;
+                    int lastIndex = request.ComponentCode.LastIndexOf('_');
+                    request.ComponentCode = request.ComponentCode.Substring(0, lastIndex);
+                    return GetDataItemListForPage(request);
+                }
+                if (!request.IsWrite)
+                {
+                    request.Type = 2;
+                    CreatProjectOtherInfo(dataList, request);
+                }
+                return dataList;
             }
             catch (Exception ex)
             {
@@ -236,26 +213,61 @@ namespace PM.Business.BIM
             {
                 //获取所有模型信息数据
                 var list = new List<model_tree>();
-                string modelpropertyListStr = @"SELECT id,value as name,name as pid from model_property where name in('模型构件编码','_专业','_系统','_子系统','_设备材料类型','_设备材料名称') ";
-                var modelpropertyList = _sqlite.ExecuteList<model_tree>(modelpropertyListStr, CommandType.Text);
-                var cList = modelpropertyList.Where(p => p.pid == "模型构件编码").Distinct().ToList();
-                if (cList.Any())
+                string modelpropertyListStr = @"SELECT Major,System,Subsystem,MaterialType,Material,MAX(ComponentCode) ComponentCode from ( 
+                                                    SELECT id,
+                                                          MAX(CASE name WHEN '_专业' THEN value ELSE '' END) Major,
+                                                          MAX(CASE name WHEN '_系统' THEN value ELSE '' END) System,
+                                                          MAX(CASE name WHEN '_子系统' THEN value ELSE '' END) Subsystem,
+                                                          MAX(CASE name WHEN '_设备材料类型' THEN value ELSE '' END) MaterialType,
+                                                          MAX(CASE name WHEN '_设备材料名称' THEN value ELSE '' END) Material,
+                                                          MAX(CASE name WHEN '模型构件编码' THEN value ELSE '' END) ComponentCode
+                                   from model_property 
+                                   GROUP BY id) GROUP BY Major,System,Subsystem,MaterialType,Material";
+                var modelpropertyList = _sqlite.ExecuteList<modelData_tree>(modelpropertyListStr, CommandType.Text);
+                for (int i = 2; i < 7; i++)
                 {
-                    cList.ForEach(x =>
+                    var cList = modelpropertyList;
+                    var dataList = new List<model_tree>();
+                    IEnumerable<IGrouping<string, modelData_tree>> _groupBy = null;
+                    switch (i)
                     {
-                        var codeArry = x.name.Split('_');
-                        var dataList = modelpropertyList.Where(p => p.id == x.id).ToList();
-                        //专业
-                        GetTreeData(codeArry, 2, dataList, list);
-                        //系统      
-                        GetTreeData(codeArry, 3, dataList, list);
-                        //子系统    
-                        GetTreeData(codeArry, 4, dataList, list);
-                        //材料类型  
-                        GetTreeData(codeArry, 5, dataList, list);
-                        //材料名称  
-                        GetTreeData(codeArry, 6, dataList, list);
-                    });
+                        case 2://专业
+                            _groupBy = cList.GroupBy(a => a.Major);
+                            break;
+                        case 3://系统
+                            _groupBy = cList.GroupBy(a => a.System);
+                            break;
+                        case 4://子系统
+                            _groupBy = cList.GroupBy(a => a.Subsystem);
+                            break;
+                        case 5://材料类型
+                            _groupBy = cList.GroupBy(a => a.MaterialType);
+                            break;
+                        case 6://材料名称
+                            _groupBy = cList.GroupBy(a => a.Material);
+                            break;
+                        default:
+                            break;
+                    }
+                    dataList = _groupBy.Select(g => (new model_tree { name = g.Key, id = g.Max(item => item.ComponentCode) })).ToList();
+                    if (dataList.Any())
+                    {
+                        dataList.ForEach(x =>
+                        {
+                            if (!string.IsNullOrEmpty(x.id))
+                            {
+                                var codeArry = x.id.Split('_');
+                                var levelData = CreatLevelId(codeArry, i);
+                                var model = list.FirstOrDefault(p => p.id == levelData.Item2);
+                                if (model == null)
+                                {
+                                    x.id = levelData.Item2;
+                                    x.pid = levelData.Item1;
+                                    list.Add(x);
+                                }
+                            }
+                        });
+                    }
                 }
                 return list;
             }
@@ -265,53 +277,71 @@ namespace PM.Business.BIM
             }
         }
 
+        /// <summary>
+        /// 获取显示的模型id
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public List<string> GetModelIdList(BIMRequest request)
+        {
+            List<string> ret = new List<string>();
+            SQLiteParameter[] parameters = { new SQLiteParameter("@Code", request.ComponentCode + "%") };
+            try
+            {
+                //获取所有模型信息数据
+                string modelpropertyListStr = @"SELECT DISTINCT id from model_property where name='模型构件编码' and value like @Code";
+                var modelpropertyList = _sqlite.ExecuteList<model_tree>(modelpropertyListStr, CommandType.Text, parameters);
+                if (modelpropertyList.Any())
+                    ret = modelpropertyList.Select(p => p.id).ToList();
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                return new List<string>();
+            }
+        }
+
+        
+        public List<ProjectListInsertModel> GetModelInfoList(string siteCode,string projectId,string fileName)
+        {
+            string sql = @"SELECT  id,'{0}' as SiteCode,'{1}' as ProjectId,'{2}' as fileName,
+                        MAX(CASE name WHEN '_专业' THEN value ELSE '' END) Major,
+                        MAX(CASE name WHEN '尺寸' THEN value ELSE '' END) Size,
+                        MAX(CASE name WHEN '_系统' THEN value ELSE '' END) System,
+                        MAX(CASE name WHEN '_子系统' THEN value ELSE '' END) Subsystem,
+                        MAX(CASE name WHEN '_设备材料类型' THEN value ELSE '' END) MaterialType,
+                        MAX(CASE name WHEN '_设备材料名称' THEN value ELSE '' END) Material,
+                        MAX(CASE name WHEN '模型构件编码' THEN value ELSE '' END) ComponentCode,
+                        MAX(CASE name WHEN '族与类型' THEN value ELSE '' END) ComponentName,
+                        MAX(CASE name WHEN '尺寸' THEN value ELSE '' END) Size,
+                        MAX(CASE name WHEN '面积' THEN value ELSE '' END) Area,
+                        MAX(CASE name WHEN '材质' THEN value ELSE '' END) Texture,
+                        MAX(CASE name WHEN '车站编号' THEN value ELSE '' END) StationName,
+                        MAX(case when name='长度' and propertygroup='尺寸标注' THEN value else '' END) Length,
+                        MAX(case when name='风管长度' and propertygroup='尺寸标注' THEN value else '' END) FGLength,
+                        MAX(CASE name WHEN '系统类型' THEN value ELSE '' END) SystemType,
+                        MAX(CASE name WHEN '安装位置' THEN value ELSE '' END) Position,
+                        MAX(CASE name WHEN '支架图纸编号' THEN value ELSE '' END) DrawingNo
+                    FROM model_property
+                    where name in('_专业','尺寸','_系统','_子系统','_设备材料类型','_设备材料名称','模型构件编码','族与类型','尺寸','面积','材质','车站编号','长度','风管长度','系统类型','安装位置','支架图纸编号')
+                    GROUP BY id";
+            sql = string.Format(sql, siteCode, projectId, fileName);
+            try
+            {
+                var dataList = _sqlite.ExecuteList<ProjectListInsertModel>(sql, CommandType.Text);
+                
+                return dataList;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         #endregion
 
         #region Private
 
-        /// <summary>
-        /// 模型项目结构树
-        /// </summary>
-        /// <param name="codeArry"></param>
-        /// <param name="type"></param>
-        /// <param name="listData"></param>
-        /// <param name="list"></param>
-        private void GetTreeData(string[] codeArry, int type, List<model_tree> listData, List<model_tree> list)
-        {
-            string str = "";
-            switch (type)
-            {
-                case 2:
-                    str = "_专业";
-                    break;
-                case 3:
-                    str = "_系统";
-                    break;
-                case 4:
-                    str = "_子系统";
-                    break;
-                case 5:
-                    str = "_设备材料类型";
-                    break;
-                case 6:
-                    str = "_设备材料名称";
-                    break;
-                default:
-                    break;
-            }
-            var data = listData.FirstOrDefault(p => p.pid == str);
-            if (data != null)
-            {
-                var levelData = CreatLevelId(codeArry, type);
-                var model = list.FirstOrDefault(p => p.id == levelData.Item2);
-                if (model == null)
-                {
-                    data.id = levelData.Item2;
-                    data.pid = levelData.Item1;
-                    list.Add(data);
-                }
-            }
-        }
         /// <summary>
         /// 构建结构树Id
         /// </summary>
@@ -329,9 +359,9 @@ namespace PM.Business.BIM
                 type = 6;
                 flag = true;
             }
-            for (int i = 2; i < type + 1; i++)
+            for (int i = 0; i <= type; i++)
             {
-                if (i > 2)
+                if (type > 2 && i > 0)
                     pId += codeArry[i - 1] + "_";
                 id += codeArry[i] + "_";
             }
@@ -345,15 +375,80 @@ namespace PM.Business.BIM
             return new Tuple<string, string>(pId, id);
         }
 
+        /// <summary>
+        /// 获取清单附加信息
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <param name="type"></param>
+        private void CreatProjectOtherInfo(List<ProjectListAllModel> dataList, BIMRequest request)
+        {
+            List<string> idList = new List<string>();
+            if (request.Type == 1)
+                idList = dataList.Select(p => p.ComponentCodeShow).ToList();
+            else
+                idList = dataList.Select(p => p.id).ToList();
+            var codeList = dataList.Select(p => p.ComponentCode).ToList();
+            //加工订单信息
+            List<TbWorkOrderDetail> orderDetailList = new List<TbWorkOrderDetail>();
+            //var orderCodeList = Repository<TbWorkOrder>.Query(p => p.SiteCode == request.SiteCode).Select(p => p.OrderCode).ToList();
+            if (request.Type == 1)
+                orderDetailList = Repository<TbWorkOrderDetail>.Query(p => p.MxGjBm.In(idList)).ToList();
+            else
+                orderDetailList = Repository<TbWorkOrderDetail>.Query(p => p.MxGjId.In(idList)).ToList();
+            //模型附件信息
+            var modelOtherInfoList = Repository<TbModelOtherInfo>.Query(p => p.ComponentCode.In(codeList) && p.Type == request.Type).ToList();
+            dataList.ForEach(x =>
+            {
+                List<TbWorkOrderDetail> orderData = new List<TbWorkOrderDetail>();
+                if (request.Type == 1)
+                    orderData = orderDetailList.Where(p => p.MxGjBm == x.ComponentCodeShow).ToList();
+                else
+                    orderData = orderDetailList.Where(p => p.MxGjId == x.id).ToList();
+                x.Processing = orderData.Where(p => p.ComponentStrat == "加工中").Count();
+                x.ProcessComplete = orderData.Where(p => p.ComponentStrat == "加工完成").Count();
+                x.InstallComplete = orderData.Where(p => p.ComponentStrat == "安装完成").Count();
+                var modelOther = modelOtherInfoList.Where(p => p.ComponentCode == x.ComponentCode).FirstOrDefault();
+                if (modelOther != null)
+                {
+                    x.PlanTime = modelOther.PlanTime;
+                    x.ActualTime = modelOther.ActualTime;
+                    x.Remark = modelOther.Remark;
+                    x.IsAny = true;
+                }
+                else
+                {
+                    if (request.PlanTime.HasValue)
+                        x.PlanTime = request.PlanTime.Value;
+                    if (!string.IsNullOrEmpty(request.Remark))
+                        x.Remark = request.Remark;
+                }
+            });
+
+
+        }
+
         #endregion
 
         #region 加工订单获取模型清单数据
         public PageModel GetProjectList(ProjectListRequest request)
         {
             string where = " where 1=1 ";
-            if (!string.IsNullOrWhiteSpace(request.id)) 
+            if (!string.IsNullOrWhiteSpace(request.id))
             {
-                where += " and Tb.id in('"+request.id+"')";
+                StringBuilder sbmxid = new StringBuilder();
+                string[] mxjgid = request.id.Split(',');
+                for (int i = 0; i < mxjgid.Length; i++)
+                {
+                    if (i == mxjgid.Length - 1)
+                    {
+                        sbmxid.Append("'" + mxjgid[i] + "'");
+                    }
+                    else
+                    {
+                        sbmxid.Append("'" + mxjgid[i] + "',");
+                    }
+                }
+                where += " and Tb.id in(" + sbmxid.ToString() + ")";
             }
             if (!string.IsNullOrWhiteSpace(request.mxgjbm))
             {
@@ -393,13 +488,14 @@ namespace PM.Business.BIM
                         MAX(CASE name WHEN '系统类型' THEN value ELSE '' END) xtlx,
                         MAX(CASE name WHEN '材质' THEN value ELSE '' END) cz,
                         MAX(CASE name WHEN '_设备材料类型' THEN value ELSE '' END) sbcllx,
-                        MAX(CASE name WHEN '_设备材料名称' THEN value ELSE '' END) sbclmc,
+                        MAX(CASE name WHEN '族与类型' THEN value ELSE '' END) sbclmc,
                         MAX(CASE name WHEN '模型构件编码' THEN value ELSE '' END) mxgjbm,
-                        MAX(CASE name WHEN '模型构件编码' THEN reverse(substr(reverse(value),1,charindex('_',reverse(value)) - 1)) ELSE '' END) gjbm,
+						'' as gjbm,
                         MAX(CASE name WHEN '尺寸' THEN value ELSE '' END) ggcc,
-                        FLOOR(MAX(CASE name WHEN '长度' THEN value ELSE '' END)) cd
+                        FLOOR(MAX(case when name='长度' and propertygroup='尺寸标注' THEN value when name='风管长度' and propertygroup='尺寸标注' THEN value else '' END )) cd,
+                        MAX(CASE name WHEN '面积' THEN value ELSE '' END) mj
                     FROM model_property
-                    where name in('车站编号','_专业','_系统','_子系统','系统类型','材质','_设备材料类型','_设备材料名称','模型构件编码','模型构件编码','尺寸','长度') 
+                    where name in('车站编号','_专业','_系统','_子系统','系统类型','材质','_设备材料类型','族与类型','模型构件编码','尺寸','长度','面积') 
                     GROUP BY id) Tb";
             //参数化
             SQLiteParameter[] cmdParms ={

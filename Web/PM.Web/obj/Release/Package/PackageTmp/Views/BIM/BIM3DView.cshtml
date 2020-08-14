@@ -63,7 +63,7 @@
         display: none;
     }
 
-    .page-main-card {
+    .model-main-card {
         margin: 0 auto;
         position: relative;
         background-color: #f2f2f2;
@@ -71,7 +71,7 @@
         height: 92%;
     }
 
-    .page-body-card {
+    .model-body-card {
         -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .3);
         -moz-box-shadow: 0 0 4px rgba(0, 0, 0, .3);
         box-shadow: 0 0 4px rgba(0, 0, 0, .3);
@@ -103,7 +103,7 @@
 
     .model-info-box {
         position: absolute;
-        top: 10px;
+        top: 30px;
         width: 120px;
         height: 180px;
         left: 10px;
@@ -158,6 +158,20 @@
         float: left;
         width: 50%;
         font-size: 9px;
+    }
+
+    .select-part-model {
+        position: absolute;
+        top: 5px;
+        width: 200px;
+        height: 40px;
+        left: 10px;
+        z-index: 3;
+    }
+
+    .select-part-main {
+        width: 100%;
+        height: 100%;
     }
 
     .switch-map {
@@ -249,8 +263,9 @@
         margin: 0px;
         padding: 0px;
     }
+
     .legend-list-li {
-         line-height:14px;
+        line-height: 14px;
     }
 
     .bonyong-badge {
@@ -289,8 +304,8 @@
     }
 </style>
 
-<div class="page-main-card">
-    <div class="page-body-card">
+<div class="model-main-card">
+    <div class="model-body-card">
         <div id="menu" class="model-menu">
             <ul>
                 <li class="navmenu">
@@ -402,6 +417,7 @@
                     </ul>
                 </li>
             </ul>
+            <!--<button type="button" onclick="setModelStateColour();"> 测试</button>-->
         </div>
         <div id="myContainer" class="model-main">
         </div>
@@ -410,48 +426,13 @@
                 <div class="model-info-box" id="modelInfoBox" style="display:none">
                     <div class="model-info-main">
                         <div class="model-info-content">
-                            <ul>
-                                <li class="nav-item">
-                                    <a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>机械</span><i class="my-icon nav-more"></i></a>
-                                    <ul>
-                                        <li><div class="model-info-item-text">系统分类</div><div class="model-info-item-text">送风</div></li>
-                                        <li><div class="model-info-item-text">系统类型</div><div class="model-info-item-text">SF空调送风</div></li>
-                                        <li><div class="model-info-item-text">系统名称</div><div class="model-info-item-text">SF 1</div></li>
-                                        <li><div class="model-info-item-text">当量直径</div><div class="model-info-item-text">1717</div></li>
-                                        <li><div class="model-info-item-text">面积</div><div class="model-info-item-text">2 m²</div></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>尺寸标注</span><i class="my-icon nav-more"></i></a>
-                                    <ul>
-                                        <li><div class="model-info-item-text">尺寸</div><div class="model-info-item-text">1600*400</div></li>
-                                        <li><div class="model-info-item-text">宽度</div><div class="model-info-item-text">1600</div></li>
-                                        <li><div class="model-info-item-text">高度</div><div class="model-info-item-text">400</div></li>
-                                        <li><div class="model-info-item-text">长度</div><div class="model-info-item-text">1250</div></li>
-                                    </ul>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>其他</span><i class="my-icon nav-more"></i></a>
-                                    <ul>
-                                        <li><div class="model-info-item-text">模型构件编码</div><div class="model-info-item-text">L21_Z17...</div></li>
-                                        <li><div class="model-info-item-text">_线路</div><div class="model-info-item-text">二十一号线</div></li>
-                                        <li><div class="model-info-item-text">_位置</div><div class="model-info-item-text">凤岗站</div></li>
-                                        <li><div class="model-info-item-text">_专业</div><div class="model-info-item-text">通风与空调</div></li>
-                                        <li><div class="model-info-item-text">_系统</div><div class="model-info-item-text">大系统</div></li>
-                                        <li><div class="model-info-item-text">_子系统</div><div class="model-info-item-text">大系统</div></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>尺寸标注</span><i class="my-icon nav-more"></i></a>
-                                    <ul>
-                                        <li><div class="model-info-item-text">宽度</div><div class="model-info-item-text">100</div></li>
-                                        <li><div class="model-info-item-text">长度</div><div class="model-info-item-text">100</div></li>
-                                        <li><div class="model-info-item-text">高度</div><div class="model-info-item-text">100</div></li>
-                                    </ul>
-                                </li>
-                            </ul>
+                            <ul id="propertyGroupList"></ul>
                         </div>
+                    </div>
+                </div>
+                <div class="select-part-model">
+                    <div class="select-part-main" id="selectPartMain">
+                        <!--<p>已选择零件:0个</p>-->
                     </div>
                 </div>
                 <div class="switch-map">
@@ -472,14 +453,14 @@
                 </div>
                 <div class="side-button sign-for-model">
                     <div class="side-button-main">
-                        <a href="javascript:switch3DMap();" class="side-button-a">
+                        <a href="javascript:componentSignFor();" class="side-button-a">
                             签收
                         </a>
                     </div>
                 </div>
                 <div class="side-button install-model">
                     <div class="side-button-main">
-                        <a href="javascript:switch3DMap();" class="side-button-a">
+                        <a href="javascript:componentInstall();" class="side-button-a">
                             安装
                         </a>
                     </div>
@@ -519,16 +500,15 @@
     </div>
 </div>
 <script type="text/javascript">
-    function getModelInfo(id) {
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("getModelInfo", "BIM")',
-            data: { id: id},
-            async: false,
-            success: function (data) {
-
-            }
-        });
+    function getBim3DJsonfile(jsonStr) {
+        var pathName = "http://" + window.location.host + "/" + '@ViewBag.BIMFolder' + "/";
+        var jsonurl = pathName + jsonStr;
+        var folder = jsonStr.split("/");
+        var url = "";
+        $.getJSON(jsonurl, function (data) {
+            url = pathName + folder[0] + "/" + data.files[0];
+            initBim3D(url);
+        })
     }
 </script>
 <!--模型内置接口-->
@@ -539,13 +519,15 @@
     var bim3dViewer = new BIM3DInterface(domObj);
     var myAxis = false;
     var currentSelectObj;
+    var sysBaseUrl = "/";
     $(function () {
         //initBim3D();
+
     });
-    function initBim3D() {
+
+    function initBim3D(pathName) {
         bim3dViewer.resize();
-        var pathName = "http://" + window.location.host;
-        bim3dViewer.appendFile(["http://192.168.3.222:8085/Content/static/file/b8d0d8ea0a824ccfb9da1342b1f7e2a7_0.b3dz"]);
+        bim3dViewer.appendFile([pathName]);
         bim3dViewer.addAppendFileCallBack(function (url, status) {
             //由于appendFile接口传入长度为2的数组，则该回调会调用两次。
             // 返回appendFile接口传入的url1,、url2模型文件的加载状态。
@@ -554,6 +536,14 @@
             bim3dViewer.setOutlineVisible(true);
             //设置轮廓线颜色
             bim3dViewer.setOutlineColor(0xff000000);
+            //设置轮廓线的宽度
+            bim3dViewer.setOutlineWidth(2);
+            // 设置模型隐藏
+            bim3dViewer.setModelVisible("", false, 1);
+            //设置模型所有颜色
+            bim3dViewer.setModelColorByHex("", 0xA9A9A9, 1);
+            //设置模型状态颜色
+            setModelStateColour();
         });
 
         //注册ESC事件
@@ -577,42 +567,311 @@
             // object对象或者object.name可直接用来调用相应的模型操作接口，例如颜色、透明度、可见性。
             currentSelectObj = object;
             if (object != undefined) {
-                getModelPropertyInfo(object.name);
+                //选择零件数
+                selectThePart(object);
+                getModelPropertyInfo(object);
             } else {
                 $('#modelInfoBox').css('display', 'none');
+                $("#selectPartMain").empty();
             }
         });
+        //设置选中高光颜色和强度
+        bim3dViewer.setSelectColorIntensity(0x00FF00, 10);
+        
     }
-
-    //设置场景裁剪 系统默认为0
-    //bim3dViewer.setOptionCullingThreshold(10);
+    //重置模型窗口大小
+    function resize3DModelWindow() {
+        bim3dViewer.resize();
+    }
+    //选择零件数
+    function selectThePart(selectObj) {
+        if (selectObj != null) {
+            var bool = $.isArray(selectObj)
+            if (bool) {
+                var len = selectObj.length;
+                if (len > 0) {
+                    $("#selectPartMain").empty();
+                    //<p> 选择零件</p>
+                    var selectPartStr = '<p>已选择零件:' + len + '个</p>';
+                    $("#selectPartMain").append(selectPartStr);
+                } else {
+                    $("#selectPartMain").empty();
+                }
+            }
+        }
+    }
+    //设置模型状态颜色
+    function setModelStateColour() {
+        var modelStateArray = [];
+        var siteCodeObj = getSelectOrg_Index();
+        if (siteCodeObj!=undefined) {
+            var siteCode = siteCodeObj.CompanyCode;
+            $.ajax({
+                type: "GET",
+                url: sysBaseUrl+"api/WorkOrder/GetSiteCodeDetailsState?SiteCode=" + siteCode,
+                dataType: "json",
+                async: false,//同步
+                success: function (resultdata) {
+                    if (resultdata.data != null) {
+                        modelStateArray = resultdata.data;
+                    }
+                },
+                error: function (data, errorMsg) {
+                    console.log(errorMsg)
+                }
+            });
+        }
+        
+        if (modelStateArray.length > 0) {
+            var processingArray = [];
+            var completed = [];
+            var installation = [];
+            for (var i = 0, n = modelStateArray.length; i < n; i++) {
+                var obj = modelStateArray[i];
+                if (obj.Orderstate == '加工中') {
+                    processingArray.push(obj.MxGjId);
+                }
+                if (obj.Orderstate == '加工完成') {
+                    completed.push(obj.MxGjId);
+                }
+                if (obj.Orderstate == '安装完成') {
+                    installation.push(obj.MxGjId);
+                }
+            }
+            //加工中
+            if (processingArray.length > 0) {
+                placeOrderComplete(processingArray);
+            }
+            //加工完成
+            if (completed.length > 0) {
+                componentSignForComplete(completed);
+            }
+            //安装完成
+            if (installation.length > 0) {
+                componentInstallComplete(installation);
+            }
+        }
+    }
 
     //获取暂时模型具体信息
-    function getModelPropertyInfo(id) {
-        $('#modelInfoBox').css('display','block');//style="display: none"
-        var dataArray = [];
-        /*$.ajax({
-            type: "GET",
-            url: "http://192.168.3.201:8083/api/WorkOrder/GetComponentDetails?id="+id,
-            dataType: "json",
-            async: false,//同步
-            success: function (resultdata) {
-                dataArray=resultdata.data.rows;
-            },
-            error: function (data, errorMsg) {
-                console.log(errorMsg)
+    function getModelPropertyInfo(selectObj) {
+        $('#modelInfoBox').css('display', 'none');
+        if (selectObj != null) {
+            var bool = $.isArray(selectObj)
+            if (bool) {
+                if (selectObj.length == 1) {
+                    var siteCodeObj = getSelectOrg_Index();
+                    if (siteCodeObj != undefined) {
+                        var siteCode = siteCodeObj.CompanyCode;
+                        var modelId = selectObj[0].name;
+                        $("#propertyGroupList").empty();
+                        var dataArray = [];
+                        $.ajax({
+                            type: "GET",
+                            url: sysBaseUrl + "api/WorkOrder/GetComponentDetails?id=" + modelId + "&SiteCode=" + siteCode,
+                            dataType: "json",
+                            async: false, //同步
+                            success: function (resultdata) {
+                                if (resultdata.data != null && resultdata.data.rows!=null) {
+                                    dataArray = resultdata.data.rows;
+                                }
+                            },
+                            error: function (data, errorMsg) {
+                                console.log(errorMsg)
+                            }
+                        });
+                        console.log('dataArray')
+                        console.log(dataArray)
+                        if (dataArray != null && dataArray.length > 0) {
+                            //获取分组数据
+                            var groupList = getPropertyGroupList(dataArray);
+                            for (var i = 0; i < groupList.length; i++) {
+                                var group = groupList[i];
+                                var property = group.propertygroup;
+                                var groupDatas = group.data;
+                                var listStr = [];
+                                for (var j = 0; j < groupDatas.length; j++) {
+                                    var groupData = groupDatas[j];
+                                    listStr.push('<li><div class="model-info-item-text">' +
+                                        groupData.name +
+                                        '</div><div class="model-info-item-text">' +
+                                        groupData.value +
+                                        '</div></li>');
+                                }
+                                var groupStr = '<li class="nav-item">' +
+                                    '<a href="javascript:;"><i class="my-icon nav-icon icon_1"></i><span>' +
+                                    property +
+                                    '</span><i class="my-icon nav-more"></i></a>' +
+                                    '<ul>' +
+                                    listStr.join('') +
+                                    '</ul>' +
+                                    '</li>';
+                                $("#propertyGroupList").append(groupStr);
+                            }
+                            $('#modelInfoBox').css('display', 'block');
+                        }
+                    }
+                  
+                }
             }
-        });
-        console.log(dataArray)*/
+        }
+        
     }
+
+    //模型信息分组
+    function getPropertyGroupList(dataArray) {
+        var map = {},
+            dest = [];
+        for (var i = 0; i < dataArray.length; i++) {
+            var ai = dataArray[i];
+            if (!map[ai.propertygroup]) {
+                dest.push({
+                    propertygroup: ai.propertygroup,
+                    data: [ai]
+                });
+                map[ai.propertygroup] = ai;
+            } else {
+                for (var j = 0; j < dest.length; j++) {
+                    var dj = dest[j];
+                    if (dj.propertygroup == ai.propertygroup) {
+                        dj.data.push(ai);
+                        break;
+                    }
+                }
+            }
+        }
+        return dest;
+    }
+
+    //#region 选中模型下单、签收、安装
+
     //下单
     function placeOrder() {
+        modelInfoOperation(1);
+    }
+
+    //签收
+    function componentSignFor() {
+        modelInfoOperation(2);
+    }
+
+    //安装
+    function componentInstall() {
+        modelInfoOperation(3);
+    }
+    //下单完成（加工中）
+    function placeOrderComplete(ids) {
+        bim3dViewer.setModelColorByHex(ids, 0xFF8C00, 0);
+    }
+    //签收完成（加工完成）
+    function componentSignForComplete(ids) {
+        bim3dViewer.setModelColorByHex(ids, 0x1E90FF, 0);
+    }
+    //安装完成
+    function componentInstallComplete(ids) {
+        bim3dViewer.setModelColorByHex(ids, 0x40E0D0, 0);
+    }
+    //获取选中模型id数组
+    function getModelIdArray() {
+        var modelIdArray = [];
         if (currentSelectObj != undefined) {
-            var selectObj = new Object();
-            selectObj.organizationId = "6373083897509963358";
-            selectObj.modelId = currentSelectObj.name;
-            modelPlaceOrder(selectObj.organizationId, selectObj.modelId);
+            for (var i = 0, n = currentSelectObj.length; i < n; i++) {
+                var obj = currentSelectObj[i];
+                modelIdArray.push(obj.name);
+            }
         }
+        return modelIdArray;
+    }
+    //模型信息操作
+    function modelInfoOperation(type) {
+        var modelIdList = getModelIdArray();
+        //判断选中的模型构建是否已经下单
+        if (modelIdList.length > 0) {
+            //下单
+            if (type == 1) {
+                IsModelIdPlaceOrder(modelIdList);
+            }
+            //签收
+            if (type == 2) {
+                IsModelPlaceOrderAndSignFor(modelIdList);
+            }
+            //安装
+            if (type == 3) {
+                IsModelPlaceOrderAndInstall(modelIdList);
+            }
+        } else {
+            $.modalMsg("请选择模型中的构件信息！！", "warning");
+            return false;
+        }
+    }
+    //判断模型id是否已经下单
+    function IsModelIdPlaceOrder(modelIdList) {
+        $.ajax({
+            url: "@Url.Action("IsModelIdPlaceOrder", "WorkOrder")",
+            data: { modelIdList: modelIdList },
+            dataType: "json",
+            traditional: true, //默认false
+            async: false,
+            success: function (data) {
+                if (data.state == "error") {
+                    $.modalMsg(data.message, "warning");
+                    return false;
+                } else {
+                    modelPlaceOrder(modelIdList);
+                }
+            }
+        });
+    }
+    //判断模型id是否已经下单，同时是否已经签收
+    function IsModelPlaceOrderAndSignFor(modelIdList) {
+        $.ajax({
+            url: "@Url.Action("IsPlaceOrderAndSignFor", "WorkOrder")",
+            data: { modelIdList: modelIdList },
+            dataType: "json",
+            traditional: true, //默认false
+            async: false,
+            success: function (data) {
+                if (data.state == "error") {
+                    $.modalMsg(data.message, "warning");
+                    return false;
+                } else {
+                    modelSignForOrder(modelIdList);
+                }
+            }
+        });
+    }
+
+    //判断模型id是否已经下单，同时是否已经安装
+    function IsModelPlaceOrderAndInstall(modelIdList) {
+        $.ajax({
+            url: "@Url.Action("IsPlaceOrderAndInstall", "WorkOrder")",
+            data: { modelIdList: modelIdList },
+            dataType: "json",
+            traditional: true, //默认false
+            async: false,
+            success: function (data) {
+                if (data.state == "error") {
+                    $.modalMsg(data.message, "warning");
+                    return false;
+                } else {
+                    modelInstallOrder(modelIdList);
+                }
+            }
+        });
+    }
+    //#endregion
+
+    //展示勾选模型 ids=["123","345"]
+    function showCheckModelViews(ids) {
+        var visible = true;
+        var setOption = 0;
+        bim3dViewer.setModelVisible(ids, visible, setOption);
+    }
+    //隐藏勾选模型 ids=["123","345"]
+    function hideCheckModelViews(ids) {
+        var visible = false;
+        var setOption = 0;
+        bim3dViewer.setModelVisible(ids, visible, setOption);
     }
 
     //隐藏选中模块

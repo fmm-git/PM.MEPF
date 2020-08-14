@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using PM.Business;
+﻿using PM.Business;
 using PM.DataEntity;
 using PM.Domain.WebBase;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace PM.Web.Areas.SystemManage.Controllers
 {
@@ -38,11 +36,12 @@ namespace PM.Web.Areas.SystemManage.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Form(string type, string companyCode)
+        public ActionResult Form(string type, string ProjectId, string OrgType)
         {
             if (type == "add")
             {
                 ViewBag.DepartmentId = CreateCode.GetOrgId();
+                ViewBag.DepartmentCode = dit.NextDeptCode(ProjectId, OrgType);
             }
             return View();
         }

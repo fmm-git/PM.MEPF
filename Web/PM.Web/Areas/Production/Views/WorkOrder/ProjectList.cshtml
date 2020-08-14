@@ -5,10 +5,13 @@
 
 <script src="~/Content/js/uploadFile.js"></script>
 <script>
-    var OnlySiteCode = $.request("OnlySiteCode");
+    var SiteCode = $.request("SiteCode");
+    var ProjectId = $.request("ProjectId");
+    var dbNameStr = "";
     $(function () {
         $('#layout').layout();
         ui_layout_toggler_click();
+        getModelInfoByOrg();
         leftList();
         gridList();
     });
@@ -18,10 +21,11 @@
         var leftgridList = 'leftgridList';
         $leftgridList.dataGrid({
             url: "@Url.Action("Getmodel_tree", "BIM", new { area = "" })",
+            postData: { dbName: dbNameStr },
             height: $(window).height() - 58,
             colModel: [
                 { label: "id", name: "id", hidden: true, key: true },
-                {label: '项目结构树', name: 'name', width: 220, align: 'left', sortable: false,},
+                { label: '项目结构树', name: 'name', width: 220, align: 'left', sortable: false, },
                 { label: 'flag', name: 'flag', hidden: true },
                 { label: 'tid', name: 'tid', hidden: true },
                 { label: 'modelfile', name: 'modelfile', hidden: true },
@@ -38,19 +42,35 @@
             },
             onCellSelect: function (id) {//单击
                 $("#gridList").jqGrid('setGridParam', {
-                    postData: { mxgjbm: id},
+                    postData: { mxgjbm: id },
                     page: 1
                 }).trigger('reloadGrid');
             }
         });
     }
-
+    //获取站点下模型对应的数据库文件
+    function getModelInfoByOrg() {
+        $.ajax({
+            url: "@Url.Action("GetGridJson", "OrganizationMap",new { area= "SystemManage" })",
+            data: { ProjectId: ProjectId, SiteCode: SiteCode },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                if (data.length > 0) {
+                    dbNameStr = $.grep(data, function (value) {
+                        return value.Type == 2;
+                    })[0].Path;
+                }
+            }
+        });
+    }
 
     function gridList() {
         var $gridList = $("#gridList");
         $gridList.dataGrid({
             url: "@Url.Action("GetProjectList", "WorkOrder")",
-            height: $(window).height()-128,
+            postData: { dbName: dbNameStr },
+            height: $(window).height() - 128,
             colModel: [
             { label: "主键", name: "id", key: true, hidden: true, frozen: true },
             { label: '车站编号', name: 'czbh', width: 80, align: 'left', sortable: false },
@@ -64,7 +84,8 @@
             { label: '模型构件编码', name: 'mxgjbm', width: 260, align: 'left' },
             { label: '构件编码', name: 'gjbm', hidden: true },
             { label: '规格尺寸', name: 'ggcc', width: 140, align: 'left' },
-            { label: '长度', name: 'cd', width: 140, align: 'left' }
+            { label: '长度', name: 'cd', width: 140, align: 'left' },
+            { label: '面积', name: 'mj', width: 140, align: 'left' }
             ],
             gridComplete: function (id) {
                 $gridList.find("tbody").find("input:checkbox").each(function () {
@@ -91,7 +112,7 @@
         var ids = $("#gridList").jqGrid('getGridParam', 'selarrrow');
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
-                var rowData= $("#gridList").jqGrid('getRowData', ids[i]);
+                var rowData = $("#gridList").jqGrid('getRowData', ids[i]);
                 var mydata = {
                     ID: 0,
                     StationCode: rowData.zzbh,
@@ -106,10 +127,11 @@
                     ComponentName: rowData.sbclmc,
                     SpecificationModel: rowData.ggcc,
                     Length: rowData.cd,
+                    Area: rowData.mj,
                     LargePatternShow: "<span id=\"uplaodFileTitle-" + index + "\" class=\"Isfile\">未上传</span>&nbsp;&nbsp;<a class=\"layui-layer-btn0 btn btn-primary\" id=\"uplaodFile-" + index + "\" onclick=\"UplaodDetail('" + index + "');\">上传</a>&nbsp;&nbsp;<a class=\"layui-layer-btn0 btn btn-primary\" id=\"uplaodFilelook-" + index + "\" onclick=\"uplaodFilelookDetail('" + index + "');\" style=\"display:none;\">查看</a>",
                     LargePattern: '',
                     ComponentStrat: '未加工',
-                    MxGjId:rowData.id
+                    MxGjId: rowData.id
                 };
                 tableData.push(mydata);
                 index++;

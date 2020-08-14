@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,30 @@ namespace PM.DataEntity.BIM
         public string id { get; set; }
         public string pid { get; set; }
         public string name { get; set; }
+    }
+    public class modelData_tree
+    {
+        /// <summary>
+        /// 专业
+        /// </summary>
+        public string Major { get; set; }
+        /// <summary>
+        /// 系统
+        /// </summary>
+        public string System { get; set; }
+        /// <summary>
+        /// 子系统
+        /// </summary>
+        public string Subsystem { get; set; }
+        /// <summary>
+        /// 材料类型
+        /// </summary>
+        public string MaterialType { get; set; }
+        /// <summary>
+        /// 材料名称
+        /// </summary>
+        public string Material { get; set; }
+        public string ComponentCode { get; set; }
     }
     /// <summary>
     /// 项目总清单列表
@@ -53,8 +78,19 @@ namespace PM.DataEntity.BIM
         /// 规格尺寸
         /// </summary>
         public string Size { get; set; }
-    }
+        public string id { get; set; }
+        public string Name { get; set; }
+        public string Length { get; set; }
+        public string Area { get; set; }
+        public string PidTag
+        {
+            get
+            {
+                return this.ComponentCodeShow + "---" + this.Size;
+            }
 
+        }
+    }
     public class ProjectListInfoModel
     {
         /// <summary>
@@ -144,7 +180,7 @@ namespace PM.DataEntity.BIM
         /// 备注
         /// </summary>
         public string Remark { get; set; }
-
+        public bool IsAny { get; set; }
         /// <summary>
         /// 获取时间间隔天数
         /// </summary>
@@ -154,9 +190,9 @@ namespace PM.DataEntity.BIM
         private int GetDay(DateTime start, DateTime end)
         {
             int dayNum = 0;
-            if (PlanTime.Value < ActualTime.Value)
+            if (start < end)
             {
-                TimeSpan sp = PlanTime.Value.Subtract(ActualTime.Value);
+                TimeSpan sp = start.Subtract(end);
                 dayNum = sp.Days;
                 this.ProgressStatus = 2;
             }
@@ -178,11 +214,12 @@ namespace PM.DataEntity.BIM
         }
     }
 
-    public class ProjectListItemModel: ProjectListInfoModel
+    public class ProjectListItemModel : ProjectListInfoModel
     {
         public string id { get; set; }
         public string Name { get; set; }
         public string Length { get; set; }
+        public string Area { get; set; }
     }
 
     public class BIMRequest : PageSearchRequest
@@ -203,5 +240,86 @@ namespace PM.DataEntity.BIM
         /// 尺寸
         /// </summary>
         public string Size { get; set; }
+        public int TotalCount { get; set; }
+        public string DBName { get; set; }
+        public DateTime? PlanTime { get; set; }
+        public string Remark { get; set; }
+        public int Type { get; set; }
+        public bool IsWrite { get; set; }
+        public int ID { get; set; }
+    }
+
+    public class ProjectListInsertModel
+    {
+        public string SiteCode { get; set; }
+        public string ProjectId { get; set; }
+        public string FileName { get; set; }
+
+
+        public string id { get; set; }
+        /// <summary>
+        /// 专业
+        /// </summary>
+        public string Major { get; set; }
+        /// <summary>
+        /// 系统
+        /// </summary>
+        public string System { get; set; }
+        /// <summary>
+        /// 子系统
+        /// </summary>
+        public string Subsystem { get; set; }
+        /// <summary>
+        /// 材料类型
+        /// </summary>
+        public string MaterialType { get; set; }
+        /// <summary>
+        /// 材料名称
+        /// </summary>
+        public string Material { get; set; }
+        /// <summary>
+        /// 模型构件编码
+        /// </summary>
+        public string ComponentCode { get; set; }
+        /// <summary>
+        /// 族与类型
+        /// </summary>
+        public string ComponentName { get; set; }
+        /// <summary>
+        /// 尺寸
+        /// </summary>
+        public string Size { get; set; }
+        /// <summary>
+        /// 面积
+        /// </summary>
+        public string Area { get; set; }
+        /// <summary>
+        /// 材质
+        /// </summary>
+        public string Texture { get; set; }
+        /// <summary>
+        /// 车站编号
+        /// </summary>
+        public string StationName { get; set; }
+        /// <summary>
+        /// 长度
+        /// </summary>
+        public string Length { get; set; }
+        /// <summary>
+        /// 风管长度
+        /// </summary>
+        public string FGLength { get; set; }
+        /// <summary>
+        /// 系统类型
+        /// </summary>
+        public string SystemType { get; set; }
+        /// <summary>
+        /// 安装位置
+        /// </summary>
+        public string Position { get; set; }
+        /// <summary>
+        /// 支架图纸编号
+        /// </summary>
+        public string DrawingNo { get; set; }
     }
 }

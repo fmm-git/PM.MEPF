@@ -90,6 +90,7 @@
             colModel: [
                 { label: "标识ID", name: "id", hidden: true, key: true },
                 { label: '部门编号', name: 'DepartmentId', hidden: true },
+                { label: '部门类型', name: 'DepartmentType', hidden: true },
                 { label: '部门名称', name: 'DepartmentName', sortable: false, width: 180, align: 'left' },
                 { label: '部门编号', name: 'DepartmentCode', width: 150, align: 'left' },
                 {
@@ -201,8 +202,8 @@
                 id: "Form",
                 title: "修改部门信息",
                 url: "/SystemManage/Department/Form?keyValue=" + DepartmentId + "&type=edit",
-                width: "51%",
-                height: "77%",
+                width: "40%",
+                height: "40%",
                 callBack: function (iframeId) {
                     top.frames[iframeId].submitForm();
                 }
@@ -253,12 +254,12 @@
 
 
     function AddRole() {
-        var DepartmentId = $("#gridDeptList").jqGridRowValue().DepartmentId;
-        if (DepartmentId) {
+        var DepartmentData = $("#gridDeptList").jqGridRowValue();
+        if (DepartmentData.DepartmentId) {
             $.modalOpen({
                 id: "Form",
                 title: "新增角色信息",
-                url: "/SystemManage/Role/Form?type=add&DepartmentId=" + DepartmentId,
+                url: "/SystemManage/Role/Form?type=add&DepartmentId=" + DepartmentData.DepartmentId + "&OrgTyp=" + DepartmentData.DepartmentType + "&DepartmentCode=" + DepartmentData.DepartmentCode,
                 width: "40%",
                 height: "40%",
                 callBack: function (iframeId) {
@@ -276,8 +277,8 @@
                 id: "Form",
                 title: "修改角色信息",
                 url: "/SystemManage/Role/Form?keyValue=" + RoleId + "&type=edit",
-                width: "51%",
-                height: "77%",
+                width: "40%",
+                height: "40%",
                 callBack: function (iframeId) {
                     top.frames[iframeId].submitForm();
                 }
@@ -422,7 +423,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading" style="height:32px;">
                     <label style="font-size:18px;float:left">部门列表</label>
-                    <a class="btn btn-primary" onclick="SynchronizationDept()" style="float:right;">同步部门</a>
+                    @*<a class="btn btn-primary" onclick="SynchronizationDept()" style="float:right;">同步部门</a>*@
                     <a class="btn btn-primary" onclick="AddDept()" style="float: right; margin-right: 5px">新增</a>
                 </div>
                 <div class="panel-body">
@@ -435,8 +436,8 @@
             <div class="panel panel-default">
                 <div class="panel-heading" style="height:32px;">
                     <label style="font-size: 18px; float:left">角色列表</label>
-                    <a class="btn btn-primary" onclick="SynchronizationRoleUser()" style="float: right;margin-left:5px;">同步角色人员</a>
-                    <a class="btn btn-primary" onclick="SynchronizationRole()" style="float: right;margin-left:5px;">同步角色</a>
+                    @*<a class="btn btn-primary" onclick="SynchronizationRoleUser()" style="float: right;margin-left:5px;">同步角色人员</a>
+                    <a class="btn btn-primary" onclick="SynchronizationRole()" style="float: right;margin-left:5px;">同步角色</a>*@
                     <a class="btn btn-primary" onclick="RoleMenu()" style="float:right">角色权限</a>
                     <a class="btn btn-primary" onclick="RoleUser()" style="float: right;margin-left:5px;margin-right: 5px;">角色人员</a>
                     <a class="btn btn-primary" onclick="AddRole()" style="float: right;">新增</a>

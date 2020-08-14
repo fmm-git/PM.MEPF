@@ -1,15 +1,11 @@
-﻿using Dos.Common;
-using Dos.ORM;
+﻿using Dos.ORM;
 using PM.Common;
-using PM.Common.Helper;
 using PM.DataAccess.DbContext;
 using PM.DataEntity;
-using PM.Domain.WebBase;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PM.Business
 {
@@ -52,7 +48,7 @@ namespace PM.Business
 
             try
             {
-                List<TbRole> data = Db.Context.From<TbRole>().Select(TbRole._.All).Where(a=>a.RoleDetail=="0").ToList();
+                List<TbRole> data = Db.Context.From<TbRole>().Select(TbRole._.All).Where(a => a.RoleDetail == "0").ToList();
                 using (DbTrans trans = Db.Context.BeginTransaction())
                 {
                     //先删除原来的表
@@ -110,7 +106,7 @@ namespace PM.Business
                 using (DbTrans trans = Db.Context.BeginTransaction())
                 {
                     Repository<TbRole>.Delete(trans, t => t.RoleId == RoleId);
-                    if (isUData)  Repository<TbUserRole>.Delete(trans, t => t.RoleCode == RoleId);
+                    if (isUData) Repository<TbUserRole>.Delete(trans, t => t.RoleCode == RoleId);
                     if (isMData) Repository<TbRoleMenu>.Delete(trans, t => t.RoleCode == RoleId);
                     trans.Commit();//提交事务
                     return AjaxResult.Success();
@@ -172,5 +168,46 @@ namespace PM.Business
             return Repository<TbRole>.Query(where, d => d.RoleCode, "asc").ToList();
         }
         #endregion
+
+        public string NextRoleCode(string DepartmentId, string orgType)
+        {
+            string RoleCode = "";
+            string sql = @"select MAX(RoleCode) from TbRole where DepartmentId=@DepartmentId";
+            var dt = Db.Context.FromSql(sql)
+                .AddInParameter("@DepartmentId", DbType.String, DepartmentId).ToDataTable();
+            if (dt != null && dt.Rows.Count > 0)
+                if (!string.IsNullOrWhiteSpace(dt.Rows[0][0].ToString()))
+                {
+                    var length = dt.Rows[0][0].ToString().Length;
+                    string Code1 = dt.Rows[0][0].ToString().Substring(0, 1);
+                    string Code2 = dt.Rows[0][0].ToString().Substring(1, length - 1);
+                    int intNum = Int32.Parse(Code2) + 10;
+                    RoleCode = Code1 + intNum;
+                }
+                else
+                {
+                    if (orgType == "2")
+                    {
+                        RoleCode = "B10010010";
+                    }
+                    else if (orgType == "3")
+                    {
+                        RoleCode = "B20010010";
+                    }
+                    else if (orgType == "4")
+                    {
+                        RoleCode = "B30010010";
+                    }
+                    else if (orgType == "5")
+                    {
+                        RoleCode = "B40010010";
+                    }
+                    else
+                    {
+                        RoleCode = "B50010010";
+                    }
+                }
+            return RoleCode;
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Dos.Common;
 using PM.Business.BIM;
 using PM.Business.Production;
+using PM.Business.System;
 using PM.Common.Extension;
 using PM.Common.Helper;
+using PM.DataEntity;
 using PM.DataEntity.BIM;
 using PM.DataEntity.Production.ViewModel;
 using PM.Web.Models.ExcelModel;
@@ -21,6 +23,8 @@ namespace PM.Web.Controllers
     public class BIMController : BaseController
     {
         private readonly TbWorkOrderLogic _workOrderLogic = new TbWorkOrderLogic();
+        private readonly OrganizationMapLogic _organizationMap = new OrganizationMapLogic();
+        private readonly string _fileConfig = System.Configuration.ConfigurationManager.AppSettings["uploadBIMFile"];
 
         #region GIS
         public ActionResult BIMGISView()
@@ -68,11 +72,56 @@ namespace PM.Web.Controllers
         #region 3D
         public ActionResult BIM3DView()
         {
+            ViewBag.BIMFolder = _fileConfig;
             return View();
         }
         public ActionResult BIM3DGridList()
         {
             return View();
+        }
+        public ActionResult EditRow(TbModelOtherInfo model)
+        {
+            if (model == null || string.IsNullOrEmpty(model.SiteCode)) return Content("");
+            model.Type = 1;
+            model.ProjectId = base.CurrentUser.ProjectId;
+            var data = _organizationMap.EditModelOtherInfo(model);
+            if (model.AllWrite)
+            {
+                if (string.IsNullOrEmpty(model.DBName)) return Content("");
+                string dbName = Server.MapPath("/" + _fileConfig + "/" + model.DBName);
+                BIMLogic _BIMLogic = new BIMLogic(dbName);
+                BIMRequest request = new BIMRequest()
+                {
+                    ComponentCode = model.ComponentCodeShow,
+                    Size = model.Size,
+                    TotalCount = model.TotalCount,
+                    IsWrite=true
+                };
+                List<TbModelOtherInfo> iList = new List<TbModelOtherInfo>();
+                var dataItem = _BIMLogic.GetDataItemListForPage(request);
+                dataItem.ForEach(x =>
+                {
+                    TbModelOtherInfo item = new TbModelOtherInfo()
+                    {
+                        ComponentCode = x.ComponentCode,
+                        SiteCode = model.SiteCode,
+                        ProjectId = model.ProjectId,
+                        PlanTime=model.PlanTime,
+                        Type = 2
+                    };
+                    iList.Add(item);
+                });
+                _organizationMap.EditModelOtherInfo(iList);
+            }
+            return Content(data.ToJson());
+        }
+        public ActionResult EditRowSub(TbModelOtherInfo model)
+        {
+            if (model == null || string.IsNullOrEmpty(model.SiteCode)) return Content("");
+            model.Type = 2;
+            model.ProjectId = base.CurrentUser.ProjectId;
+            var data = _organizationMap.EditModelOtherInfo(model);
+            return Content(data.ToJson());
         }
         /// <summary>
         ///工点进度概况
@@ -89,7 +138,8 @@ namespace PM.Web.Controllers
         /// <returns></returns>
         public ActionResult Get3DGridJson(BIMRequest request)
         {
-            string dbName = Server.MapPath("~/DB_Data/tmp60CB.tmp.db");
+            if (string.IsNullOrEmpty(request.DBName) || string.IsNullOrEmpty(request.ComponentCode)) return Content("");
+            string dbName = Server.MapPath("/" + _fileConfig + "/" + request.DBName);
             BIMLogic _BIMLogic = new BIMLogic(dbName);
             var data = _BIMLogic.GetDataListForPage(request);
             return Content(data.ToJson());
@@ -102,7 +152,8 @@ namespace PM.Web.Controllers
         /// <returns></returns>
         public ActionResult Get3DItemGridJson(BIMRequest request)
         {
-            string dbName = Server.MapPath("~/DB_Data/tmp60CB.tmp.db");
+            if (string.IsNullOrEmpty(request.DBName)) return Content("");
+            string dbName = Server.MapPath("/" + _fileConfig + "/" + request.DBName);
             BIMLogic _BIMLogic = new BIMLogic(dbName);
             var data = _BIMLogic.GetDataItemListForPage(request);
             return Content(data.ToJson());
@@ -113,9 +164,10 @@ namespace PM.Web.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public ActionResult Getmodel_tree()
+        public ActionResult Getmodel_tree(string dbName)
         {
-            string dbName = Server.MapPath("~/DB_Data/tmp60CB.tmp.db");
+            if (string.IsNullOrEmpty(dbName)) return Content("");
+            dbName = Server.MapPath("/" + _fileConfig + "/" + dbName);
             BIMLogic _BIMLogic = new BIMLogic(dbName);
             var data = _BIMLogic.Getmodel_tree();
             var treeList = new List<TreeGridModel>();
@@ -131,11 +183,25 @@ namespace PM.Web.Controllers
                 }
                 treeModel.isLeaf = hasChildren;
                 treeModel.parentId = item.pid;
-                treeModel.expanded = hasChildren;
+                treeModel.expanded = false;
                 treeModel.entityJson = item.ToJson();
                 treeList.Add(treeModel);
             }
             return Content(treeList.TreeGridJson());
+        }
+
+        /// <summary>
+        /// 获取显示的模型id
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetModelIdList(BIMRequest request)
+        {
+            if (string.IsNullOrEmpty(request.DBName)) return Content("");
+            string dbName = Server.MapPath("/" + _fileConfig + "/" + request.DBName);
+            BIMLogic _BIMLogic = new BIMLogic(dbName);
+            var data = _BIMLogic.GetModelIdList(request);
+            return Content(data.ToJson());
         }
 
         /// <summary>

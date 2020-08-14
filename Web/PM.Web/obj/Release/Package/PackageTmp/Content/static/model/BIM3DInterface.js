@@ -52,8 +52,8 @@ BIM3DInterface.prototype = {
     this.viewer.onWindowResize(height, width);
   },
   /**
-   * 加载模型文件。支持glb和gltf格式。
-   * @param {*} filenames 文件的url地址。支持数组对象，例如["url1","url2"]。
+   * 加载模型文件。
+   * @param {*} filenames 文件的url地址。支持数组对象，例如["url1","url2"]。url需要是b3dz格式的文件路径
    * @param {*} isHide 是否隐藏，true隐藏加载的模型，false不隐藏。
    * @param {*} requestHeader {name:"",value:token};
    */
@@ -83,8 +83,8 @@ BIM3DInterface.prototype = {
   },
   /**
    * 添加选中模型回调方法。
-   * @param {*} callback 选中模型调用的方法。该方法需要定义一个函数参数。返回为object对象，
-   * 可用该对象调用接口来控制颜色，透明度等模型操作。可以使用该对象的name属性，该属性为字符串。为模型的名字id。
+   * @param {*} callback 选中模型调用的方法。该方法需要定义一个函数参数。返回为数组对象，
+   * 可用该数组对象调用接口来控制颜色，透明度等模型操作。可以使用该数组对象单个元素的name属性，该属性为字符串。为模型的名字id。
    */
   addSelectObjectCallBack: function (callback) {
     this.viewer.AddSelectObjectCallBack(callback);
@@ -255,6 +255,13 @@ BIM3DInterface.prototype = {
    */
   setOutlineColor: function (hexColor) {
     this.viewer.setOutlineColor(hexColor);
+  },
+  /**
+   * 设置轮廓线的宽度。
+   * @param {number}} width 轮廓线的宽度。默认为1
+   */
+  setOutlineWidth:function(width){
+    this.viewer.setOutlineWidth(width);
   },
   /**
    * 开始拾取顶点，传入回调，且回调带一个参数，该参数返回json对象，格式为{x:拾取点x的坐标,y:拾取点y的坐标,z:拾取点z的坐标}。

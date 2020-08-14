@@ -517,7 +517,7 @@
             index++;
             item.id = index;
             rkzl += item.PassCount;
-            item.SearchSupplierName = "<a id=\"a_"+index+"\" href=\"javascript:void(0);\" style=\"color:blue\" onclick=\"selectSupplier("+index+")\">选择</a>"
+            item.SearchSupplierName = "<a id=\"a_" + index + "\" href=\"javascript:void(0);\" style=\"color:blue\" onclick=\"selectSupplier(" + index + ")\">选择</a>"
             $("#gridList").jqGrid('addRowData', index, item);
             $("#gridList").jqGrid('editRow', index, true);
         });
@@ -640,9 +640,9 @@
     function valid(rowid) {
         validMoneyNew(rowid);
         $("#" + rowid + "_PassCount")
-               .keyup(function () { regTextBox(this, true); })
-               .bind("paste", function () { regTextBox(this, true); })
-               .blur(function () { validMoney(this, rowid); }).css("ime-mode", "disabled");
+            .keyup(function () { regTextBox(this, true); })
+            .bind("paste", function () { regTextBox(this, true); })
+            .blur(function () { validMoney(this, rowid); }).css("ime-mode", "disabled");
 
         //$("#" + rowid + "_SupplierName").focus(function () {
         //    $(this).removeAttr("readonly");

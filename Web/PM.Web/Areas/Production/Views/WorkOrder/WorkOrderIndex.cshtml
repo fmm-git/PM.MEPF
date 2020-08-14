@@ -66,9 +66,9 @@
                 { label: '系统类型', name: 'SystemType', width: 120, align: 'left', sortable: false },
                 { label: '总件数', name: 'SumNumber', width: 70, align: 'left', sortable: false },
                 { label: '要求送达时间', name: 'DistributionTime', width: 120, align: 'left', sortable: false, formatter: formatDatebox },
-                { label: '打包状态', name: 'PackStart', width: 80, align: 'left', sortable: false },
-                { label: '现场签收', name: 'SignFor', width: 80, align: 'left', sortable: false },
-                { label: '现场安装', name: 'Install', width: 80, align: 'left', sortable: false },
+                { label: '打包状态', name: 'PackStateOrNum', width: 80, align: 'left', sortable: false, formatter: NewCellPackStateOrPackNum },
+                { label: '现场签收', name: 'SignForStateOrCz', width: 80, align: 'left', sortable: false, formatter: NewCellSignForStateOrCz },
+                { label: '现场安装', name: 'InstallStateOrCz', width: 80, align: 'left', sortable: false, formatter: NewCellInstallStateOrCz },
                 { label: '录入人', name: 'InsertUserCode', hidden: true },
                 { label: '录入人及时间', name: 'UserName', width: 120, align: 'left', sortable: false, formatter: NewCellInsertUserOrTiem },
                 { label: '项目ID', name: 'ProjectId', hidden: true },
@@ -77,8 +77,9 @@
                 { label: '订单状态', name: 'OrderState', hidden: true },
                 { label: '订单类型', name: 'OrderType', hidden: true },
                 { label: '加急程度', name: 'UrgentDegree', hidden: true },
-                { label: '订单类型', name: 'OrderTypeNew', hidden: true },
-                { label: '加急程度', name: 'UrgentDegreeNew', hidden: true },
+                { label: '打包状态', name: 'PackState', hidden: true },
+                { label: '签收状态', name: 'SignForState', hidden: true },
+                { label: '安装状态', name: 'InstallState', hidden: true }
             ],
             ondblClickRow: function (id) {//双击
                 btn_details_WorkOrder();
@@ -106,19 +107,82 @@
     }
 
     function NewCellOrderCodeOrType(cellValue, options, rowObject) {
-        var tdhtml = rowObject.OrderCode + "<br/>" + rowObject.UrgentDegreeNew + "(" + rowObject.OrderTypeNew+")";
+        var tdhtml = rowObject.OrderCode + "<br/>";
+        if (rowObject.UrgentDegreeNew == "加急") {
+            tdhtml += "<span style='color:red'>" + rowObject.UrgentDegreeNew + "</span>";
+        } else {
+            tdhtml += rowObject.UrgentDegreeNew;
+        }
+        tdhtml += "(" + rowObject.OrderTypeNew + ")";
         return tdhtml;
     }
+
     function NewCellOrderStateOrEx(cellValue, options, rowObject) {
-        var tdhtml = rowObject.OrderState + "<br/>" + rowObject.Examinestatus;
+        var tdhtml = "";
+        if (rowObject.OrderState == "加工中") {
+            tdhtml += "<span style='color:red'>"+rowObject.OrderState+"</span><br/>";
+        } else if (rowObject.OrderState == "加工完成") {
+            tdhtml += "<span style='color:green'>" + rowObject.OrderState + "</span><br/>";
+        } else {
+            tdhtml +=  rowObject.OrderState + "<br/>";
+        }
+        if (rowObject.Examinestatus == "审批中") {
+            tdhtml += "<span style='color:red'>" + rowObject.Examinestatus + "</span>";
+        } else if (rowObject.Examinestatus == "审核完成") {
+            tdhtml += "<span style='color:green'>" + rowObject.Examinestatus + "</span>";
+        } else {
+            tdhtml +=rowObject.Examinestatus;
+        }
         return tdhtml;
     }
+
+    function NewCellPackStateOrPackNum(cellValue, options, rowObject) {
+        var tdhtml = "";
+        if (rowObject.PackState == "打包完成") {
+            tdhtml += "<span style='color:green'>" + rowObject.PackState + "</span></br>";
+        } else if (rowObject.PackState == "部分打包") {
+            tdhtml += "<span style='color:red'>" + rowObject.PackState + "</span></br>";
+        } else {
+            tdhtml += rowObject.PackState + "</br>";
+        }
+        tdhtml += "包数：" + rowObject.PackNum
+        return tdhtml;
+    }
+
+    function NewCellSignForStateOrCz(cellValue, options, rowObject) {
+        var tdhtml = "";
+        if (rowObject.SignForState == "未签收") {
+            tdhtml += rowObject.SignForState + "<br/>";
+            tdhtml += "<a class=\"btn btn-primary\" onclick=\"AddSignFor('" + rowObject.OrderCode + "','" + rowObject.Examinestatus + "');\">签收</a>";
+        } else if (rowObject.SignForState == "部分签收") {
+            tdhtml += "<span style='color:red'>" + rowObject.SignForState + "</span><br/>";
+            tdhtml += "<a class=\"btn btn-primary\" onclick=\"AddSignFor('" + rowObject.OrderCode + "','" + rowObject.Examinestatus + "');\">签收</a>";
+        } else {
+            tdhtml += "<span style='color:green'>" + rowObject.SignForState + "</span><br/>";
+        }
+        return tdhtml;
+    }
+
+    function NewCellInstallStateOrCz(cellValue, options, rowObject) {
+        var tdhtml = "";
+        if (rowObject.InstallState == "未安装") {
+            tdhtml += rowObject.InstallState + "<br/>";
+            tdhtml += "<a class=\"btn btn-primary\" onclick=\"AddInstall('" + rowObject.OrderCode + "','" + rowObject.Examinestatus + "');\">安装</a>";
+        } else if (rowObject.InstallState == "部分安装") {
+            tdhtml += "<span style='color:red'>" + rowObject.InstallState + "</span><br/>";
+            tdhtml += "<a class=\"btn btn-primary\" onclick=\"AddInstall('" + rowObject.OrderCode + "','" + rowObject.Examinestatus + "');\">安装</a>";
+        } else {
+            tdhtml += "<span style='color:green'>" + rowObject.InstallState + "</span><br/>";
+        }
+        return tdhtml;
+    }
+
     function NewCellInsertUserOrTiem(cellValue, options, rowObject) {
         var tdhtml = rowObject.UserName + "<br/>" + formatDatebox(rowObject.InsertTime);
         return tdhtml;
     }
     //----------------加载列表数据结束--------------
-
+    //添加订单
     function btn_add_WorkOrder() {
         var where = "?type=add";
         var id = $('#ZZJG_tab_Info').jqGrid('getGridParam', 'selrow');
@@ -137,25 +201,8 @@
             }
         });
     }
-    //通过模型下单
-    function modelPlaceOrder(orgcode, mxgjid) {
-        var where = "?type=add&mxgjid="+mxgjid;
-        var CompanyData = $("#ZZJG_tab_Info").jqGrid('getRowData', orgcode);
-        if (CompanyData.OrgType == "5") {
-            where += "&CompanyCode=" + CompanyData.CompanyCode + "&CompanyFullName=" + CompanyData.CompanyFullName;
-        }
-        $.modalOpen({
-            id: "Form",
-            title: "新增加工订单",
-            url: "/Production/WorkOrder/Form" + where,
-            width: "85%",
-            height: "85%",
-            callBack: function (iframeId) {
-                top.frames[iframeId].submitForm();
-            }
-        });
-    }
-    
+
+    //修改订单
     function btn_edit_WorkOrder() {
         var keyValue = $("#gridList_WorkOrder").jqGridRowValue().ID;
         if (keyValue != "" && keyValue != null && keyValue != undefined) {
@@ -174,7 +221,7 @@
             return false;
         }
     }
-
+    //删除订单
     function btn_delete_WorkOrder() {
         var keyValue = $("#gridList_WorkOrder").jqGridRowValue().ID;
         if (keyValue != "" && keyValue != null && keyValue != undefined) {
@@ -182,8 +229,7 @@
                 url: "/Production/WorkOrder/DeleteForm",
                 param: { keyValue: keyValue },
                 success: function () {
-                    $.currentWindow().$("#gridList_WorkOrder").resetSelection();
-                    $.currentWindow().$("#gridList_WorkOrder").trigger("reloadGrid");
+                    $("#gridList_WorkOrder").trigger("reloadGrid");
                 }
             });
         } else {
@@ -191,7 +237,7 @@
             return false;
         }
     }
-
+    //查看订单
     function btn_details_WorkOrder() {
         var keyValue = $("#gridList_WorkOrder").jqGridRowValue().ID;
         if (keyValue != "" && keyValue != null && keyValue != undefined) {
@@ -210,8 +256,8 @@
     }
 
     //审批流程
-    function btn_examination() {
-        var rowData = $("#gridList").jqGridRowValue();
+    function btn_examination_WorkOrder() {
+        var rowData = $("#gridList_WorkOrder").jqGridRowValue();
         if (rowData.length > 1) {
             $.modalMsg("只能选择一条数据发起流程", "warning");
             return false;
@@ -223,7 +269,13 @@
             }
             else {
                 var LoginUserCode = '@ViewBag.LoginUserCode';
-                examination(DataId, 'WorkOrder', rowData.Examinestatus, rowData.OrderCode, rowData.ProjectId, LoginUserCode, "");
+                var flag = examination(DataId, 'WorkOrder', rowData.Examinestatus, rowData.OrderCode, rowData.ProjectId, LoginUserCode, "");
+                if (flag) {
+                    //刷新单条数据
+                    $("#gridList_WorkOrder").trigger("reloadGrid");
+                    //调用父页面方法刷新预警数量
+                    window.parent.getcount();
+                }
             }
         }
         else {
@@ -247,67 +299,72 @@
         location.href = url + "?jsonData=" + escape(JSON.stringify(param));
     }
 
-    //打包
+    //订单打包
     function btn_other1_WorkOrder() {
-        var OrderCode = $("#gridList_WorkOrder").jqGridRowValue().OrderCode;
-        //if (OrderCode) {
-        $.modalOpen({
-            id: "WorkOrderPackIndex",
-            title: "修改",
-            url: "/Production/WorkOrder/WorkOrderPackIndex?OrderCode=" + OrderCode,
-            width: "90%",
-            height: "90%",
-            callBack: function (iframeId) {
-                top.frames[iframeId].submitOrderPack();
+        var rowData = $("#gridList_WorkOrder").jqGridRowValue();
+        var OrderCode = rowData.OrderCode;
+        if (rowData.OrderCode) {
+            if (rowData.Examinestatus == "审核完成") {
+                $.modalOpen({
+                    id: "WorkOrderPackIndex",
+                    title: "订单打包",
+                    url: "/Production/WorkOrder/WorkOrderPackIndex?OrderCode=" + OrderCode,
+                    width: "90%",
+                    height: "90%",
+                    callBack: function (iframeId) {
+                        top.frames[iframeId].SubmitOrderPackForm();
+                    }
+                });
+            } else {
+                $.modalMsg("此订单还未审核完成不能打包！", "warning");
+                return false;
             }
-        });
-        //} else {
-        //    $.modalMsg("请选择要打包的订单信息", "warning");
-        //    return false;
-        //}
+        } else {
+            $.modalMsg("请选择要打包的订单信息！", "warning");
+            return false;
+        }
     }
 
     //签收
-    function btn_other2_WorkOrder() {
-        var OrderCode = $("#gridList_WorkOrder").jqGridRowValue().OrderCode;
-        //if (OrderCode) {
-        $.modalOpen({
-            id: "WorkOrderSignForIndex",
-            title: "修改",
-            url: "/Production/WorkOrder/WorkOrderSignForIndex?OrderCode=" + OrderCode,
-            width: "90%",
-            height: "90%",
-            callBack: function (iframeId) {
-                top.frames[iframeId].submitOrderSignFor();
-            }
-        });
-        //} else {
-        //    $.modalMsg("请选择要签收的订单信息", "warning");
-        //    return false;
-        //}
+    function AddSignFor(OrderCode, Examinestatus) {
+        if (OrderCode && Examinestatus == "审核完成") {
+            $.modalOpen({
+                id: "WorkOrderSignForIndex",
+                title: "构件签收",
+                url: "/Production/WorkOrder/WorkOrderSignForIndex?SignForType=OrderSignFor&OrderCode=" + OrderCode,
+                width: "90%",
+                height: "90%",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].SubmitOrderSignForForm();
+                }
+            });
+        } else {
+            $.modalMsg("此订单还未审核完成不能签收！", "warning");
+            return false;
+        }
     }
+
     //安装
-    function btn_other3_WorkOrder() {
-        var OrderCode = $("#gridList_WorkOrder").jqGridRowValue().OrderCode;
-        //if (OrderCode) {
-        $.modalOpen({
-            id: "WorkOrderSignForIndex",
-            title: "修改",
-            url: "/Production/WorkOrder/WorkOrderSignForIndex?OrderCode=" + OrderCode,
-            width: "90%",
-            height: "90%",
-            callBack: function (iframeId) {
-                top.frames[iframeId].submitOrderSignFor();
-            }
-        });
-        //} else {
-        //    $.modalMsg("请选择要签收的订单信息", "warning");
-        //    return false;
-        //}
+    function AddInstall(OrderCode, Examinestatus) {
+        if (OrderCode && Examinestatus == "审核完成") {
+            $.modalOpen({
+                id: "WorkOrderInstallIndex",
+                title: "构件安装",
+                url: "/Production/WorkOrder/WorkOrderInstallIndex?InstallType=OrderInstall&OrderCode=" + OrderCode,
+                width: "90%",
+                height: "90%",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].SubmitOrderInstallForm();
+                }
+            });
+        } else {
+            $.modalMsg("此订单还未审核完成不能安装！", "warning");
+            return false;
+        }
     }
 </script>
 <div class="ui-layout-center">
-    <div name="WorkOrder_tab_Info">
+    <div class="WorkOrder_tab_Info" id="WorkOrder_tab_Info">
         <div class="topPanel">
             <div class="search">
                 <table>
@@ -341,10 +398,10 @@
             <div id="gridPager_WorkOrder" class="pager-fixed"></div>
         </div>
     </div>
-    <div name="ProblemOrder_tab_Info" id="ProblemOrder_tab_Info" style="display:none">
+    <div class="ProblemOrder_tab_Info" id="ProblemOrder_tab_Info" style="display:none">
         @{Html.RenderAction("Index", "ProblemOrder", new { area = "Production" });}
     </div>
-    <div name="OrderPack_tab_Info" id="OrderPack_tab_Info" style="display:none">
+    <div class="OrderPack_tab_Info" id="OrderPack_tab_Info" style="display:none">
         @{Html.RenderAction("OrderPackIndex", "WorkOrder", new { area = "Production" });}
     </div>
     <ul class="nav nav-tabs" style="position:fixed;bottom:0px;background-color:white">
