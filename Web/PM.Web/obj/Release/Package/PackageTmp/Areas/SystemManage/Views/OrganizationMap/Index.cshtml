@@ -51,11 +51,13 @@
             url: "@Url.Action("GetGridJson", "OrganizationMap")",
             height: $(window).height()*0.85,
             colModel: [
-                { label: "主键", name: "ID", key: true, hidden: true, frozen: true },
+                { label: "主键", name: "ID", key: true, hidden: true},
                 { label: "SiteCode", name: "SiteCode", hidden: true},
-                { label: '站点', name: 'CompanyFullName', width: 200, align: 'left ' },
-                { label: '文件地址', name: 'Path', width: 250, align: 'left', sortable: false },
-                { label: '文件类型', name: 'TypeShow', width: 100, align: 'left ' },
+                { label: '分部', name: 'Branch', width: 80, align: 'left ' },
+                { label: '工区', name: 'WorkArea', width: 80, align: 'left ' },
+                { label: '站点', name: 'SiteName', width: 200, align: 'left ' },
+                { label: '文件', name: 'Remark', width: 350, align: 'left', sortable: false },
+                { label: '文件地址', name: 'Path', hidden: true},
             ]
         });
         $("#btn_search").click(function () {
@@ -82,7 +84,7 @@
         });
     }
     function btn_delete() {
-        var keyValue = $("#gridList").jqGridRowValue().SiteCode;
+        var keyValue = $("#gridList").jqGridRowValue().ID;
         if (keyValue != "" && keyValue != null && keyValue != undefined) {
             $.deleteForm({
                 url: "@Url.Action("DeleteForm", "OrganizationMap")",

@@ -23,7 +23,7 @@ namespace PM.DataEntity
         #region Model
 		private int _id;
 		private string _Name;
-		private int _Type;
+		private int? _Type;
 		private string _CentrePoint;
 		private string _LineArray;
 		private string _Deviation;
@@ -31,6 +31,8 @@ namespace PM.DataEntity
 		private string _CompanyCode_F;
 		private string _CompanyCode;
 		private string _ParentCompanyCode;
+		private bool? _Marker;
+		private bool? _Circle;
 
 		/// <summary>
 		/// 
@@ -62,7 +64,7 @@ namespace PM.DataEntity
 		/// 
 		/// </summary>
 		[Field("Type")]
-		public int Type
+		public int? Type
 		{
 			get{ return _Type; }
 			set
@@ -162,6 +164,32 @@ namespace PM.DataEntity
 				this._ParentCompanyCode = value;
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		[Field("Marker")]
+		public bool? Marker
+		{
+			get{ return _Marker; }
+			set
+			{
+				this.OnPropertyValueChange("Marker");
+				this._Marker = value;
+			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		[Field("Circle")]
+		public bool? Circle
+		{
+			get{ return _Circle; }
+			set
+			{
+				this.OnPropertyValueChange("Circle");
+				this._Circle = value;
+			}
+		}
 		#endregion
 
 		#region Method
@@ -197,6 +225,8 @@ namespace PM.DataEntity
 				_.CompanyCode_F,
 				_.CompanyCode,
 				_.ParentCompanyCode,
+				_.Marker,
+				_.Circle,
 			};
         }
         /// <summary>
@@ -215,6 +245,8 @@ namespace PM.DataEntity
 				this._CompanyCode_F,
 				this._CompanyCode,
 				this._ParentCompanyCode,
+				this._Marker,
+				this._Circle,
 			};
         }
         /// <summary>
@@ -277,6 +309,14 @@ namespace PM.DataEntity
 			/// 
 			/// </summary>
 			public readonly static Field ParentCompanyCode = new Field("ParentCompanyCode", "TbOrganizationMap", "");
+            /// <summary>
+			/// 
+			/// </summary>
+			public readonly static Field Marker = new Field("Marker", "TbOrganizationMap", "");
+            /// <summary>
+			/// 
+			/// </summary>
+			public readonly static Field Circle = new Field("Circle", "TbOrganizationMap", "");
         }
         #endregion
 	}

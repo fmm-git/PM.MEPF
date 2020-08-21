@@ -7,6 +7,10 @@
 <script type="text/javascript"
         src="https://webapi.amap.com/maps?v=2.0&key=c62283ba318ab35ee7226e7d7b327b5b"></script>
 <style type="text/css">
+    .body {
+        font-size: 8px;
+    }
+
     li {
         list-style: none;
     }
@@ -60,15 +64,15 @@
         border-radius: 4px;
     }
 
-        .switch-map-main a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 6px;
-        }
+    .switch-map-main-a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 6px;
+    }
 
-        .switch-map-main i {
-            font-size: 15px;
-        }
+    .switch-map-main i {
+        font-size: 15px;
+    }
 
     .legend___1S28Y {
         background-color: rgba(0, 0, 0, .4);
@@ -89,7 +93,7 @@
     }
 
     .content___1-QLM {
-        padding: 1px 10px;
+        padding: 1px 1px 5px 10px;
     }
 
     .legend-map-list {
@@ -99,7 +103,7 @@
     }
 
     .legend-map-item {
-        line-height: 14px;
+        line-height: 15px;
     }
 
     .map-main {
@@ -159,7 +163,9 @@
     }
 
     .map-badge-word {
-        font-size: 10px;
+        font-size: 12px;
+        display: -webkit-inline-box;
+        -webkit-transform: scale(0.9);
     }
 
     .track-map {
@@ -169,13 +175,14 @@
         height: 20px;
         right: 63px;
         z-index: 3;
+        cursor: pointer;
+        border-radius: 4px;
     }
 
     .work-type-main {
         background-color: rgba(0, 0, 0, .4);
         width: 100%;
         height: 100%;
-        border-radius: 4px;
     }
 
     .renovation-map {
@@ -185,6 +192,8 @@
         height: 20px;
         right: 33.5px;
         z-index: 3;
+        cursor: pointer;
+        border-radius: 4px;
     }
 
     .electromechanical-map {
@@ -194,12 +203,16 @@
         height: 20px;
         right: 5px;
         z-index: 3;
+        cursor: pointer;
+        border-radius: 4px;
     }
 
     .work-type-a {
         color: #fff;
         text-decoration: none;
         margin-left: 3px;
+        width: 100%;
+        height: 100%;
     }
 
     .work-type-icon {
@@ -212,25 +225,28 @@
 
     .site-info-window-item {
         width: 120px;
-        font-size: 10px;
-        padding-top: 1px;
+        height: 13px;
     }
 
     .site-info-window-left {
         width: 60px;
-        float: left;
         padding-left: 5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size: 12px;
+        display: -webkit-inline-box;
+        -webkit-transform: scale(0.8);
     }
 
     .site-info-window-right {
         width: 55px;
-        float: left;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size: 12px;
+        display: -webkit-inline-box;
+        -webkit-transform: scale(0.8);
     }
 
     .hr-dotted {
@@ -247,6 +263,19 @@
         margin: 12px 0;
         border-top-color: rgba(0, 0, 0, 0.11);
     }
+
+    .navdown {
+        color: #1E90FF;
+    }
+
+    .switch-map-main a:hover, a:focus {
+        color: #1E90FF;
+        text-decoration: none;
+    }
+
+    .boder-down {
+        border: 1px solid #1E90FF;
+    }
 </style>
 <div class="map-main-card">
     <div class="map-body-card">
@@ -255,13 +284,13 @@
             <div class="middle-main">
                 <div class="switch-map-box">
                     <div class="switch-map-main">
-                        <a href="javascript:switch2DMap();">
+                        <a name="switch-map-click" class="switch-map-main-a navdown" href="javascript:switch2DMap();">
                             <i class="iconfont iconerweiditu1" title="二维"></i>
                         </a>
-                        <a href="javascript:switch3DMap();">
+                        <a name="switch-map-click" class="switch-map-main-a" href="javascript:switch3DMap();">
                             <i class="iconfont iconditu1" title="三维"></i>
                         </a>
-                        <a href="javascript:switchSatelliteMap();">
+                        <a name="switch-map-click" class="switch-map-main-a" href="javascript:switchSatelliteMap();">
                             <i class="iconfont iconbf-icon-3Dmap" style="font-size:17px" title="实景"></i>
                         </a>
                     </div>
@@ -275,16 +304,16 @@
                         </div>
                         <div class="content___1-QLM">
                             <ul class="legend-map-list">
-                                <li class="item___qIsLA">
+                                <li class="legend-map-item">
                                     <img class="map-badge-graphical" src="~/Content/static/image/whiteicon.png"
                                          alt=""><span class="map-badge-word">未动工</span>
                                 </li>
-                                <li class="item___qIsLA">
+                                <li class="legend-map-item">
                                     <img class="map-badge-graphical"
                                          src="~/Content/static/image/blueicon.png"
                                          alt=""><span class="map-badge-word">施工中</span>
                                 </li>
-                                <li class="item___qIsLA">
+                                <li class="legend-map-item">
                                     <img class="map-badge-graphical"
                                          src="~/Content/static/image/greenicon.png"
                                          alt=""><span class="map-badge-word">完工</span>
@@ -302,31 +331,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="track-map">
-                    <div class="work-type-main">
-                        <a href="javascript:switch3DMap();" class="work-type-a" title="轨道">
-                            <svg class="work-type-icon" aria-hidden="true">
-                                <use xlink:href="#icondaolu-kuaizhuang"></use>
-                            </svg>
-                        </a>
+                <div>
+                    <div name="work-type-click" onclick="switchTrack();" class="track-map">
+                        <div class="work-type-main">
+                            <a class="work-type-a" title="轨道">
+                                <svg class="work-type-icon" aria-hidden="true">
+                                    <use xlink:href="#icondaolu-kuaizhuang"></use>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="renovation-map">
-                    <div class="work-type-main">
-                        <a href="javascript:switch3DMap();" class="work-type-a" title="供电">
-                            <svg class="work-type-icon" aria-hidden="true">
-                                <use xlink:href="#icongongdiansheshi"></use>
-                            </svg>
-                        </a>
+                    <div name="work-type-click" onclick="switchPowerSupply();" class="renovation-map">
+                        <div class="work-type-main">
+                            <a class="work-type-a" title="供电">
+                                <svg class="work-type-icon" aria-hidden="true">
+                                    <use xlink:href="#icongongdiansheshi"></use>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="electromechanical-map">
-                    <div class="work-type-main">
-                        <a href="javascript:switch3DMap();" class="work-type-a" title="机电">
-                            <svg class="work-type-icon" aria-hidden="true">
-                                <use xlink:href="#iconjidian1"></use>
-                            </svg>
-                        </a>
+                    <div name="work-type-click" onclick="switchElectromechanical();" class="electromechanical-map boder-down">
+                        <div class="work-type-main">
+                            <a class="work-type-a" title="机电">
+                                <svg class="work-type-icon" aria-hidden="true">
+                                    <use xlink:href="#iconjidian1"></use>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -335,6 +366,7 @@
     </div>
 </div>
 <script type="text/javascript">
+    var sysBaseUrl = "/";
     var map = null;
     //地图中心数组
     var mapCenterArr = {
@@ -403,10 +435,76 @@
     LineWeightDefine[19] = 10;
     LineWeightDefine[20] = 11;
     $(function () {
+        initBranchId();
         //初始化二维地图
         switch2DMap();
     });
-
+    //当前分部组织机构
+    var currentBranchId;
+    //轨道
+    var trackBranchId;
+    //供电
+    var powerSupplyBranchId;
+    //机电
+    var electromechanicalBranchId;
+    var switchMapText = 'switch2DMap';
+    //获取默认分部机构id
+    function initBranchId() {
+        var orgDataArray = [];
+        $.ajax({
+            url: "@Url.Action("GetDicByCode", "DataDictionary", new { area = "SystemManage", dicCode = "SystemSeting" })",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                if (data != null) {
+                    orgDataArray = data;
+                }
+            }
+        });
+        if (orgDataArray.length > 0) {
+            for (var i = 0, n = orgDataArray.length; i < n; i++) {
+                var obj = orgDataArray[i];
+                if (obj.DictionaryCode == '轨道') {
+                    trackBranchId = obj.DictionaryText
+                }
+                if (obj.DictionaryCode == '供电') {
+                    powerSupplyBranchId = obj.DictionaryText
+                }
+                if (obj.DictionaryCode == '机电') {
+                    electromechanicalBranchId = obj.DictionaryText
+                }
+            }
+            if (electromechanicalBranchId != undefined) {
+                currentBranchId = electromechanicalBranchId;
+            }
+        }
+    }
+    //轨道
+    function switchTrack() {
+        currentBranchId = trackBranchId;
+        switchCurrentMap();
+    }
+    //供电
+    function switchPowerSupply() {
+        currentBranchId = powerSupplyBranchId;
+        switchCurrentMap();
+    }
+    //机电
+    function switchElectromechanical() {
+        currentBranchId = electromechanicalBranchId;
+        switchCurrentMap();
+    }
+    function switchCurrentMap() {
+        if (switchMapText == 'switch2DMap') {
+            switch2DMap();
+        }
+        if (switchMapText == 'switch3DMap') {
+            switch3DMap();
+        }
+        if (switchMapText == 'switchSatelliteMap') {
+            switchSatelliteMap();
+        }
+    }
     //切换二维地图
     function switch2DMap() {
         //存在地图则销毁地图
@@ -431,8 +529,11 @@
         for (var i = 0; i < len; i++) {
             var dataMap = dataMapArray[i];
             //初始化站点图形
-            var circle = setCircle(dataMap.CentrePoint);
-            map.add(circle);
+            var circleVisible = dataMap.Circle == null ? false : dataMap.Circle;
+            if (circleVisible) {
+                var circle = setCircle(dataMap.CentrePoint);
+                map.add(circle);
+            }
             //初始化站点标题
             var marker = setMarker(dataMap);
             //设置查看模型窗口
@@ -444,9 +545,12 @@
         var lineLen = lineData.length;
         for (var i = 0; i < lineLen; i++) {
             var lineArray = lineData[i].LineArray;
-            var polyline = setPolyline(lineArray);
-            map.add(polyline);
+            if (lineArray != null && lineArray != "") {
+                var polyline = setPolyline(lineArray);
+                map.add(polyline);
+            }
         }
+        switchMapText = 'switch2DMap';
     }
 
     //切换三维地图
@@ -471,8 +575,11 @@
         for (var i = 0; i < len; i++) {
             var dataMap = dataMapArray[i];
             //初始化站点图形
-            var circle = setCircle(dataMap.CentrePoint);
-            map.add(circle);
+            var circleVisible = dataMap.Circle == null ? false : dataMap.Circle;
+            if (circleVisible) {
+                var circle = setCircle(dataMap.CentrePoint);
+                map.add(circle);
+            }
             //初始化站点标题
             var marker = setMarker(dataMap);
             //设置查看模型窗口
@@ -483,9 +590,12 @@
         var lineLen = lineData.length;
         for (var i = 0; i < lineLen; i++) {
             var lineArray = lineData[i].LineArray;
-            var polyline = setPolyline(lineArray);
-            map.add(polyline);
+            if (lineArray != null && lineArray != "") {
+                var polyline = setPolyline(lineArray);
+                map.add(polyline);
+            }
         }
+        switchMapText = 'switch3DMap';
     }
 
     //切换卫星地图（实景）
@@ -510,8 +620,11 @@
         for (var i = 0; i < len; i++) {
             var dataMap = dataMapArray[i];
             //初始化站点图形
-            var circle = setCircle(dataMap.CentrePoint);
-            map.add(circle);
+            var circleVisible = dataMap.Circle == null ? false : dataMap.Circle;
+            if (circleVisible) {
+                var circle = setCircle(dataMap.CentrePoint);
+                map.add(circle);
+            }
             //初始化站点标题
             var marker = setMarker(dataMap);
             //设置查看模型窗口
@@ -522,45 +635,52 @@
         var lineLen = lineData.length
         for (var i = 0; i < lineLen; i++) {
             var lineArray = lineData[i].LineArray;
-            var polyline = setPolyline(lineArray);
-            map.add(polyline);
+            if (lineArray != null && lineArray != "") {
+                var polyline = setPolyline(lineArray);
+                map.add(polyline);
+            }
         }
+        switchMapText = 'switchSatelliteMap';
     }
 
     function getData() {
         var dataMapArray = [];
-        $.ajax({
-            url: "/SystemManage/OrganizationMap/GetOrganizationMapList?Type=1&SiteCode=6372921389720849710",
-            dataType: "json",
-            async: false,//同步
-            success: function (resultdata) {
-                if (resultdata.data != null) {
-                    dataMapArray = resultdata.data;
+        if (currentBranchId != undefined) {
+            $.ajax({
+                url: sysBaseUrl + "SystemManage/OrganizationMap/GetOrganizationMapList?Type=1&SiteCode=" + currentBranchId,
+                dataType: "json",
+                async: false,//同步
+                success: function (resultdata) {
+                    if (resultdata.data != null) {
+                        dataMapArray = resultdata.data;
+                    }
+                },
+                error: function (data, errorMsg) {
+                    console.log(errorMsg)
                 }
-            },
-            error: function (data, errorMsg) {
-                console.log(errorMsg)
-            }
-        });
+            });
+        }
         return dataMapArray;
     }
 
     function getLineData() {
         var lineData = [];
-        $.ajax({
-            type: "GET",
-            url: "/SystemManage/OrganizationMap/GetOrganizationMapList?Type=2&SiteCode=6372921389720849710",
-            dataType: "json",
-            async: false,//同步
-            success: function (resultdata) {
-                if (resultdata.data != null) {
-                    lineData = resultdata.data;
+        if (currentBranchId != undefined) {
+            $.ajax({
+                type: "GET",
+                url: sysBaseUrl + "SystemManage/OrganizationMap/GetOrganizationMapList?Type=2&SiteCode=" + currentBranchId,
+                dataType: "json",
+                async: false,//同步
+                success: function (resultdata) {
+                    if (resultdata.data != null) {
+                        lineData = resultdata.data;
+                    }
+                },
+                error: function (data, errorMsg) {
+                    console.log(errorMsg)
                 }
-            },
-            error: function (data, errorMsg) {
-                console.log(errorMsg)
-            }
-        });
+            });
+        }
         return lineData;
     }
     //初始化站点标题
@@ -575,11 +695,25 @@
         if (dataMap.LineArray == '3') {
             titleBackground = titleSeriousLagBackground;
         }
+        var xOffset = 0;
+        var yOffset = 0;
+        if (dataMap.Deviation != null && dataMap.Deviation != "") {
+            var bool = $.isArray(eval(dataMap.Deviation));
+            if (bool) {
+                xOffset = eval(dataMap.Deviation)[0];
+                yOffset = eval(dataMap.Deviation)[1]
+            }
+        }
+        var markerVisible = dataMap.Marker == null ? false : dataMap.Marker;
         var marker = new AMap.Marker({
             topWhenClick: true,
+            //点标记是否可见
+            visible: markerVisible,
             position: eval(dataMap.CentrePoint), //基点位置
-            offset: new AMap.Pixel(eval(dataMap.Deviation)[0], eval(dataMap.Deviation)[1]), //相对于基点的偏移位置
-            content: '<div name="left-right-click" org_id="' + dataMap.CompanyCode_F + '" centre_point="' + dataMap.CentrePoint + '"  onclick="openSiteInfoWindow(\'' + dataMap.CentrePoint + '\',\'' + dataMap.Name + '\')" style="background:' + titleBackground + ';opacity:' + titleBackgroudOpacity + ';border:1px solid ' + titleBorderColor + ';box-shadow: 2px 2px 2px #888888;padding:2px 3px;border-radius:4px;color:' + titleTextColor + ';white-space:nowrap;text-align: center;width: 80px"><p style="font-size:12px;">' + dataMap.Name + '</p><p style="font-size: 8px;">' + dataMap.CompanyCode_F + '</p>' + '</div>',   //自定义点标记覆盖物内容
+            //相对于基点的偏移位置
+            offset: new AMap.Pixel(xOffset, yOffset),
+            content: '<div name="left-right-click" org_id="' + dataMap.CompanyCode_F + '" centre_point="' + dataMap.CentrePoint + '"  onclick="openSiteInfoWindow(\'' + dataMap.CentrePoint + '\',\'' + dataMap.Name + '\')" style="background:' + titleBackground + ';opacity:' + titleBackgroudOpacity + ';border:1px solid ' + titleBorderColor + ';box-shadow: 2px 2px 2px #888888;padding:2px 3px;border-radius:4px;color:' + titleTextColor + ';white-space:nowrap;text-align: center;width: 114px"><p style="font-size:12px;">' + dataMap.Name + '</p>' +
+                '<p style="display: -webkit-inline-box;-webkit-transform:scale(0.8);">' + dataMap.CompanyCode_F + '</p>' + '</div>',   //自定义点标记覆盖物内容
             extData: '1234',
             zIndex: 15,
         });
@@ -594,7 +728,7 @@
             content: '<div style="width: 120px;height: 100px;border-radius: 5px;background-color: rgba(175,238,238, .9);">' +
                 '<div style="width: 120px;text-align: center;font-size: 12px;font-weight:700;padding-top:5px">' + name + '</div>' +
                 '<div class="hr hr-dotted" style="margin: 2px 0;"></div>' +
-                '<div style="width: 120px;text-align: center;font-size: 10px"><类型数/名称数/件数></div>' +
+                '<div style="width: 120px;text-align: center;font-size: 12px;display: -webkit-inline-box;-webkit-transform:scale(0.9);"><类型数/名称数/件数></div>' +
                 '<div class="site-info-window-item" >' +
                 '<div class="site-info-window-left">计划总数：</div>' +
                 '<div class="site-info-window-right">10/20/200</div></div>' +
@@ -702,4 +836,15 @@
     function destroyMap() {
         map && map.destroy();
     }
+
+    $(function () {
+        //地图选择 点击变颜色
+        $("a[name='switch-map-click']").click(function () {
+            $("a[name='switch-map-click']").eq($(this).index()).addClass("navdown").siblings().removeClass("navdown");
+        })
+        //专业选择 点击变颜色
+        $("div[name='work-type-click']").click(function () {
+            $("div[name='work-type-click']").eq($(this).index()).addClass("boder-down").siblings().removeClass("boder-down");
+        })
+    })
 </script>

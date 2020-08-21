@@ -250,7 +250,7 @@ namespace PM.Business
                 parameter.Add(new Parameter("@SDT", SDT, DbType.DateTime, null));
                 parameter.Add(new Parameter("@EDT", EDT, DbType.DateTime, null));
                 parameter.Add(new Parameter("@PerformState", PerformState, DbType.Int32, null));
-                var ret = Repository<TbFormEarlyWarningNodeInfo>.FromSqlToPageTable(sql + where, parameter, pt.rows, pt.page, "FlowPerformID","desc");
+                var ret = Repository<TbFormEarlyWarningNodeInfo>.FromSqlToPageTable(sql + where, parameter, pt.rows, pt.page, "FlowPerformID", "desc");
                 return ret;
             }
             catch (Exception)
@@ -521,7 +521,7 @@ left join TbFlowPerformOpinions fpo on fpo.FlowPerformID=fp.FlowPerformID and fn
                         Db.Context.FromSql(sql1).ExecuteNonQuery();
 
                         //订单中的某种材料汇总重量≥当前库存重量的80%  系统发送预警信息给加工厂材料负责人，并以短信通知
-                       // _endingStocks.SendMsgForMaterialStockByOrder(Convert.ToInt32(dt.Rows[0]["FormDataCode"]));
+                        // _endingStocks.SendMsgForMaterialStockByOrder(Convert.ToInt32(dt.Rows[0]["FormDataCode"]));
                     }
                 }
                 if (flag)
@@ -1162,25 +1162,7 @@ where 1=1 and a.FlowType='New' and a.FormCode=@FormCode and a.ProjectId=@Project
                     if (menuTable != null)
                     {
                         string sqlTableData = "";
-                        if (FormCode == "RawMonthDemandPlan" || FormCode == "RawMonthDemandSupplyPlan" || FormCode == "FactoryBatchNeedPlan" || FormCode == "RMProductionMaterial")
-                        {
-                            sqlTableData = @"select a.BranchCode,a.WorkAreaCode,a.ProcessFactoryCode,b.ParentCompanyCode as JlbCode from " + menuTable.TableName + @" a
-left join TbCompany b on a.BranchCode=b.CompanyCode where a.ID=@ID";
-                        }
-                        else if (FormCode == "InOrder")
-                        {
-                            sqlTableData = @"select a.WorkAreaCode,b.ParentCompanyCode as BranchCode,c.ParentCompanyCode as JlbCode,d.ProcessFactoryCode from " + menuTable.TableName + @" a
-left join TbCompany b on a.WorkAreaCode=b.CompanyCode
-left join TbCompany c on b.ParentCompanyCode=c.CompanyCode
-left join TbStorage d on a.StorageCode=d.StorageCode  where a.ID=@ID";
-                        }
-                        else if (FormCode == "SampleOrder")
-                        {
-                            sqlTableData = @"select a.WorkAreaCode,b.ParentCompanyCode as BranchCode,c.ParentCompanyCode as JlbCode,a.ProcessFactoryCode from " + menuTable.TableName + @" a
-left join TbCompany b on a.WorkAreaCode=b.CompanyCode
-left join TbCompany c on b.ParentCompanyCode=c.CompanyCode  where a.ID=@ID";
-                        }
-                        else if (FormCode == "WorkOrder" || FormCode == "ProblemOrder" || FormCode == "SignforDuiZhang" || FormCode == "SettlementOrder")
+                        if (FormCode == "WorkOrder" || FormCode == "ProblemOrder")
                         {
                             sqlTableData = @"select b.ParentCompanyCode as WorkAreaCode,c.ParentCompanyCode as BranchCode,d.ParentCompanyCode as JlbCode,a.ProcessFactoryCode from " + menuTable.TableName + @" a
 left join TbCompany b on a.SiteCode=b.CompanyCode
@@ -1202,7 +1184,7 @@ where a.ID=@ID";
                                     {
                                         case "1":
                                             OrgId = dtTableData.Rows[0]["ProcessFactoryCode"].ToString();
-                                            ProjectId = "6245721945602523136";
+                                            //ProjectId = "6245721945602523136";
                                             break;
                                         case "2":
                                             OrgId = dtTableData.Rows[0]["JlbCode"].ToString();
@@ -1509,7 +1491,7 @@ where a.ID=@ID";
                                 {
                                     //查找菜单流程事件
                                     var feModel = Repository<TbFlowEvent>.Query(p => p.FormCode == FormCode);
-                                    if (feModel.Count() > 0) 
+                                    if (feModel.Count() > 0)
                                     {
                                         for (int i = 0; i < feModel.Count(); i++)
                                         {
@@ -1575,7 +1557,7 @@ where a.ID=@ID";
                     {
                         Db.Context.FromSql(sqlYwTable).SetDbTransaction(trans).ExecuteNonQuery();
                     }
-                    if (sqlFe.Count()>0)
+                    if (sqlFe.Count() > 0)
                     {
                         for (int i = 0; i < sqlFe.Count(); i++)
                         {

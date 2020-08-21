@@ -17,6 +17,7 @@ namespace PM.DataEntity
        public string DepartmentName { get; set; }
        public string CompanyFullName { get; set; }
        public string OrgType { get; set; }
+       public string OrgId { get; set; }
     }
     public class TbUserRoleUserRequset
     {

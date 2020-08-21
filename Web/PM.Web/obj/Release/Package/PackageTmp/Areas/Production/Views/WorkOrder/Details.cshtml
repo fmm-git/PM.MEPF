@@ -28,6 +28,7 @@
 <script type="text/javascript">
     var keyValue = $.request("keyValue");
     var type = $.request("type");
+    var IsSpSee = $.request("IsSpSee");
     $(function () {
         //选择框样式调整
         $(".input-group-btn").each(function () {
@@ -45,11 +46,12 @@
                 async: false,
                 success: function (data) {
                     $("#formd").formSerialize(data.Item1[0]);
+                    $("#DistributionTime").val(formatDatebox(data.Item1[0].DistributionTime));
                     if ($("#Enclosure").val()) {
                         $("#uplaodFileTitle").html("已上传");
                         $("#uplaodFilelook").show();
                     }
-                    lodeList(data.Item2,2);//加载明细信息
+                    lodeList(data.Item2, 2);//加载明细信息
                 }
             });
         }
@@ -67,6 +69,12 @@
             id: "DictionaryCode",
             text: "DictionaryText"
         });
+
+        if (IsSpSee) {
+            $("#QRImg").hide();
+        } else {
+            $("#QRImg").show();
+        }
     }
 
     //选项卡
@@ -79,14 +87,13 @@
 
     //查看打包二维码页面
     function SeePackQr() {
-        var ProcessingState = $("#ProcessingState").val();
-        if (ProcessingState != "Finishing") {
-            $.modalMsg("该订单状态还不能进行订单打包", "warning");
+        var PackState = $("#PackState").val();
+        if (PackState == "未打包") {
+            $.modalMsg("该订单中的构件信息还未打包！！", "warning");
             return null;
         } else {
             var OrderCode = $("#OrderCode").val();
-            $('.aTable').on('click', $.nfinetab.syaddtab);
-            $('.aTable').attr('href', '/Production/WorkOrder/OrderPackIndex?OrderCode=' + OrderCode);
+            $.currentWindow().selectTabNew("OrderPack_tab_", OrderCode);
         }
     }
 </script>
@@ -104,7 +111,7 @@
     var mydata = [];
     var index = 1;
     var lastsel;
-  function gridList() {
+    function gridList() {
         var $gridList = $("#gridList");
         $gridList.dataGrid({
             datatype: "json",
@@ -117,17 +124,25 @@
                     { label: '子系统', name: 'SonSystem', width: 120, height: 10, align: "left", sortable: false },
                     { label: '系统类型', name: 'SystemType', width: 120, align: "left", sortable: false },
                     { label: '材料类型', name: 'MaterialType', width: 120, align: "left", sortable: false },
-                    { label: '模型构建编码', name: 'MxGjBm', hidden: true },
+                    { label: '构件编码', name: 'MxGjBm', width: 260, align: "left", sortable: false },
+                    { label: '构件编号', name: 'ComponentCode', hidden: true },
+                    { label: '构件名称', name: 'ComponentName', width: 160, align: "left", sortable: false },
                     { label: '材质', name: 'MaterialQuality', width: 120, align: "left", sortable: false },
-                    { label: '构件编号', name: 'ComponentCode', width: 120, align: "left", sortable: false },
-                    { label: '构件名称', name: 'ComponentName', width: 120, align: "left", sortable: false },
-                    { label: '规格尺寸', name: 'SpecificationModel', width: 120, align: "left", sortable: false },
-                    { label: '长度', name: 'Length', width: 120, align: "left", sortable: false },
+                    { label: '规格尺寸', name: 'SpecificationModel', width: 160, align: "left", sortable: false },
+                    { label: '长度', name: 'Length', width: 80, align: "left", sortable: false },
+                    { label: '面积', name: 'Area', width: 80, align: "left", sortable: false },
                     { label: '备注', name: 'Remark', width: 160, align: "left", sortable: false, editable: true },
                     { label: '样图', name: 'LargePatternShow', width: 200, align: "left", sortable: false },
                     { label: '样图', name: 'LargePattern', hidden: true },
                     { label: '构建状态', name: 'ComponentStrat', hidden: true },
-                    { label: '模型构建id', name: 'MxGjId', hidden: true }
+                    { label: '模型构建id', name: 'MxGjId', hidden: true },
+                    { label: '是否打包', name: 'IsPack', hidden: true },
+                    { label: '是否签收', name: 'IsSignFor', hidden: true },
+                    { label: '是否安装', name: 'IsInstall', hidden: true },
+                    { label: '打包日期', name: 'PackInfo', width: 150, align: "left", formatter: NewCellPackInfo },
+                    { label: '签收日期', name: 'SignForInfo', width: 150, align: "left", formatter: NewCellSignForInfo },
+                    { label: '安装日期', name: 'InstallInfo', width: 160, align: "left", formatter: NewCellInstallInfo },
+
             ],
             gridComplete: function () {
                 $(".ui-jqgrid-bdiv").css("overflow-x", "hidden");
@@ -150,8 +165,29 @@
             }
         });
     }
+    function NewCellPackInfo(cellValue, options, rowObject) {
+        var tdhtml = ""
+        if (rowObject.IsPack == "是") {
+            tdhtml += rowObject.PackUserName + "/" + formatDatebox(rowObject.PackDate);
+        }
+        return tdhtml;
+    }
+    function NewCellSignForInfo(cellValue, options, rowObject) {
+        var tdhtml = ""
+        if (rowObject.IsSignFor == "是") {
+            tdhtml += rowObject.SignForUserName + "/" + formatDatebox(rowObject.SignForDate);
+        }
+        return tdhtml;
+    }
+    function NewCellInstallInfo(cellValue, options, rowObject) {
+        var tdhtml = ""
+        if (rowObject.IsInstall == "是") {
+            tdhtml += rowObject.InstallUserName + "/" + formatDatebox(rowObject.InstallDate);
+        }
+        return tdhtml;
+    }
     //加载列表数据
-    function lodeList(data,type) {
+    function lodeList(data, type) {
         if (data != null && data != "") {
             mydata = data;
         }
@@ -173,7 +209,7 @@
     //查看附件
     function uplaodFilelookDetail(index) {
         var data = $("#gridList #" + index + ">td");
-        var fj = data[16].innerHTML;
+        var fj = data[17].innerHTML;
         if (!fj || fj == "&nbps;") {
             fj = "";
         }
@@ -186,7 +222,7 @@
     <ul class="nav nav-tabs">
         <li id="JBXX" onclick="selectTab($(this))" class="active"><a href="javascript:void(0);">基本信息</a></li>
         <li id="MXXX" onclick="selectTab($(this))"><a href="javascript:void(0);">明细信息</a></li>
-        <li id="QRImg" onclick="SeePackQr()">
+        <li id="QRImg" onclick="SeePackQr()" style="display:none">
             <a class='aTable' onclick="SeePackQr()" data-id='OrderPack' style="padding:0px;">
                 <img src="~/Content/img/QRImg.jpg" width="38" height="38" />
             </a>
@@ -198,6 +234,7 @@
             <input id="Examinestatus" name="Examinestatus" type="hidden" value="未发起" />
             <input id="Enclosure" name="Enclosure" type="hidden" />
             <input id="ProjectId" name="ProjectId" type="hidden" />
+            <input id="PackState" name="PackState" type="hidden" />
             <table class="form">
                 <tr>
                     <th class="formTitle">订单编号<span class="required1">*</span></th>

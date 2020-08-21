@@ -110,8 +110,8 @@ where u.UserCode=@UserCode and ProjectId=@ProjectId and OrgId=@OrgId and ur.Flag
                     cui.ProjectOrgAllName = ProjectOrgAllName;
                     //cui.ProcessFactoryCode = "";
                     //cui.ProcessFactoryName = "所有加工厂";
-                    cui.ProcessFactoryCode = "6386683729561128960";
-                    cui.ProcessFactoryName = "二号加工厂";
+                    cui.ProcessFactoryCode = "6372982160979097303";
+                    cui.ProcessFactoryName = "加工厂";
                 }
                 else
                 {
@@ -127,8 +127,8 @@ where u.UserCode=@UserCode and ProjectId=@ProjectId and OrgId=@OrgId and ur.Flag
                     {
                         //cui.ProcessFactoryCode = "";
                         //cui.ProcessFactoryName = "所有加工厂";
-                        cui.ProcessFactoryCode = "6386683729561128960";
-                        cui.ProcessFactoryName = "二号加工厂";
+                        cui.ProcessFactoryCode = "6372982160979097303";
+                        cui.ProcessFactoryName = "加工厂";
                     }
                 }
                 cui.RoleCode = strRole;

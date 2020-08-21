@@ -302,9 +302,12 @@ namespace PM.Business.BIM
         }
 
         
-        public List<ProjectListInsertModel> GetModelInfoList(string siteCode,string projectId,string fileName)
+        public List<TbModel_Property> GetModelInfoList(string siteCode,string projectId,string fileName)
         {
-            string sql = @"SELECT  id,'{0}' as SiteCode,'{1}' as ProjectId,'{2}' as fileName,
+            string sql = @"SELECT  
+                        id,
+                       '{0}' as SiteCode,
+                       '{1}' as ProjectId,
                         MAX(CASE name WHEN '_专业' THEN value ELSE '' END) Major,
                         MAX(CASE name WHEN '尺寸' THEN value ELSE '' END) Size,
                         MAX(CASE name WHEN '_系统' THEN value ELSE '' END) System,
@@ -321,15 +324,21 @@ namespace PM.Business.BIM
                         MAX(case when name='风管长度' and propertygroup='尺寸标注' THEN value else '' END) FGLength,
                         MAX(CASE name WHEN '系统类型' THEN value ELSE '' END) SystemType,
                         MAX(CASE name WHEN '安装位置' THEN value ELSE '' END) Position,
-                        MAX(CASE name WHEN '支架图纸编号' THEN value ELSE '' END) DrawingNo
+                        MAX(CASE name WHEN '支架图纸编号' THEN value ELSE '' END) DrawingNo,
+                       -- 0 as IsOrder,
+                       '{2}' as FileName,
+                        '' as Other1,
+                        '' as Other2,
+                        '' as Other3,
+                        '' as Other4,
+                        '' as Other5
                     FROM model_property
                     where name in('_专业','尺寸','_系统','_子系统','_设备材料类型','_设备材料名称','模型构件编码','族与类型','尺寸','面积','材质','车站编号','长度','风管长度','系统类型','安装位置','支架图纸编号')
                     GROUP BY id";
             sql = string.Format(sql, siteCode, projectId, fileName);
             try
             {
-                var dataList = _sqlite.ExecuteList<ProjectListInsertModel>(sql, CommandType.Text);
-                
+                var dataList = _sqlite.ExecuteList<TbModel_Property>(sql, CommandType.Text);
                 return dataList;
             }
             catch (Exception ex)

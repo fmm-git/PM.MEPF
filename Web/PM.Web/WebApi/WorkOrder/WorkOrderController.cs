@@ -25,13 +25,20 @@ namespace PM.Web.WebApi.WorkOrder
             {
                 if (!string.IsNullOrWhiteSpace(request.SiteCode))
                 {
+                    string Path = request.SiteCode+"/";
                     string ProjectId = request.ProjectId;
                     if (string.IsNullOrWhiteSpace(ProjectId))
                     {
                         ProjectId = "6372912251695766465";
                     }
-                    string path = _workOrderLogic.GetModelDBPath(request.SiteCode, ProjectId);
-                    string dbName = System.Web.Hosting.HostingEnvironment.MapPath("/" + _fileConfig + "/" + path);
+                    if (!string.IsNullOrWhiteSpace(request.modelPath))
+                    {
+                        string a = request.modelPath.Replace(@"//", @"/");
+                        string[] b = a.Split('/');
+                        Path += b[4] + "/" + b[4] + ".tmp.db";
+                    }
+                    //string path = _workOrderLogic.GetModelDBPath(request.SiteCode, ProjectId);
+                    string dbName = System.Web.Hosting.HostingEnvironment.MapPath("/" + _fileConfig + "/" + Path);
                     BIMLogic _BIMLogic = new BIMLogic(dbName);
                     var data = _BIMLogic.GetComponentDetails(request);
                     return AjaxResult.Success(data).ToJsonApi();
@@ -48,6 +55,11 @@ namespace PM.Web.WebApi.WorkOrder
             }
         }
 
+        /// <summary>
+        /// 获取站点所有订单中模型构件的状态
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpGet]
         public HttpResponseMessage GetSiteCodeDetailsState([FromUri]ProjectListRequest request)
         {
@@ -73,6 +85,25 @@ namespace PM.Web.WebApi.WorkOrder
             {
                 return AjaxResult.Error("操作失败").ToJsonApi();
             }
-        } 
+        }
+
+        /// <summary>
+        /// 通过订单编号获取打包列表信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public HttpResponseMessage GetOrderPackList([FromUri]PackageQRCodeRequest request)
+        {
+            try
+            {
+                var data = _workOrderLogic.GetAppOrderPackList(request);
+                return AjaxResult.Success(data).ToJsonApi();
+
+            }
+            catch (Exception)
+            {
+                return AjaxResult.Error("操作失败").ToJsonApi();
+            }
+        }
     }
 }

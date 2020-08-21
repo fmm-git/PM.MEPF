@@ -102,21 +102,21 @@
     }
 
     .model-info-box {
-            position: absolute;
-            top: 40px;
-            width: 140px;
-            height: 240px;
-            left: 10px;
-            z-index: 3;
-        }
+        position: absolute;
+        top: 40px;
+        width: 140px;
+        height: 240px;
+        left: 10px;
+        z-index: 3;
+    }
 
-        .model-info-main {
-            background-color: rgba(0, 0, 0, .4);
-            width: 100%;
-            height: 100%;
-            border-radius: 4px;
-            overflow: auto; /*当内容超过，出现滚动条*/
-        }
+    .model-info-main {
+        background-color: rgba(0, 0, 0, .4);
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+        overflow: auto; /*当内容超过，出现滚动条*/
+    }
 
         .model-info-main::-webkit-scrollbar { /*滚动条整体*/
             width: 4px;
@@ -132,60 +132,63 @@
             border-radius: 10px;
         }
 
-        .model-info-main::-webkit-scrollbar-thumb:hover { /*滚动条鼠标事件，鼠标放上去出现的事件*/
-            background: #333;
-        }
+            .model-info-main::-webkit-scrollbar-thumb:hover { /*滚动条鼠标事件，鼠标放上去出现的事件*/
+                background: #333;
+            }
 
         .model-info-main::-webkit-scrollbar-corner { /*滚动条边角*/
             background: #179a16;
         }
 
-        .model-info-content {
-            padding: 8px 8px;
-        }
-        .mu-item {
-            height: 20px;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            /*padding: 0 4px;*/
-            color: rgba(255,255,255,.99);
-        }
-        .mu-item-wrapper {
-            display: block;
-            color: inherit;
-            position: relative;
-            outline: none;
-            cursor: pointer;
-        }
-        /*.mu-item-wrapper :hover{
+    .model-info-content {
+        padding: 8px 8px;
+    }
+
+    .mu-item {
+        height: 20px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        /*padding: 0 4px;*/
+        color: rgba(255,255,255,.99);
+    }
+
+    .mu-item-wrapper {
+        display: block;
+        color: inherit;
+        position: relative;
+        outline: none;
+        cursor: pointer;
+    }
+    /*.mu-item-wrapper :hover{
             background-color: rgba(0,0,0,.1);
         }*/
-        .mu-item-action {
-            min-width: 20px;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            height: 100%;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            color: rgba(255,255,255,.99);
-        }
-        .mu-item-title {
-            width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            word-wrap: break-word;
-        }
+    .mu-item-action {
+        min-width: 20px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        height: 100%;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        color: rgba(255,255,255,.99);
+    }
 
-        .model-info-content ul {
-            list-style: none;
-        }
+    .mu-item-title {
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+    }
+
+    .model-info-content ul {
+        list-style: none;
+    }
 
         .model-info-content ul a {
             font-size: 11px;
@@ -193,25 +196,25 @@
             text-decoration: none;
         }
 
-        .model-nav-item {
-            width: 120px;
-            float: left;
-        }
+    .model-nav-item {
+        width: 120px;
+        float: left;
+    }
 
-        .model-info-item-li {
-            width: 120px;
-            float: left
-        }
+    .model-info-item-li {
+        width: 120px;
+        float: left;
+    }
 
-        .model-info-item-text {
-            float: left;
-            width: 60px;
-            font-size: 9px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-        }
+    .model-info-item-text {
+        float: left;
+        width: 60px;
+        font-size: 9px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+    }
 
     .select-part-model {
         position: absolute;
@@ -256,8 +259,8 @@
 
     .side-button {
         position: absolute;
-        width: 30px;
-        height: 18px;
+        width: 35px;
+        height: 22px;
         right: 10px;
         z-index: 3;
     }
@@ -285,11 +288,15 @@
         border-radius: 4px;
     }
 
+        .side-button-main a {
+            text-decoration: none;
+        }
+
     .side-button-a {
         color: #fff;
-        text-decoration: none;
-        font-size: 0.5em;
-        padding: 5px 1px 5px 2px;
+        font-size: 12px;
+        line-height: 25px;
+        padding: 6px 2px 2px 5px;
     }
 
     .legend-model {
@@ -355,11 +362,12 @@
         margin-left: 5px;
         font-size: 0.6em;
     }
+
     .progress-overview-box {
             position: absolute;
             top: 20px;
             width: 150px;
-            height: 260px;
+            height: 282px;
             right: 50px;
             z-index: 4;
             display: none;
@@ -377,12 +385,31 @@
             text-align: center;
             font-size: 12px;
             font-weight: 700;
-            padding-top: 5px
+            padding-top: 5px;
         }
 
-        .progress-item {
+        .progress-first-item {
             width: 140px;
-            padding: 5px 10px 2px 10px;
+            padding: 0px 10px 0px 10px;
+            height:85px;
+        }
+
+        .progress-next-item {
+            width: 140px;
+            padding: 0px 10px 0px 10px;
+            height: 128px
+        }
+        .progress-next-component {
+            width: 135px;
+            text-align: center;
+            height: 13px;
+            line-height: 13px;
+        }
+        .progress-next-type {
+            width: 135px;
+            text-align: center;
+            height: 13px;
+            line-height: 13px;
         }
 
         .progress-last-item {
@@ -391,16 +418,17 @@
         }
 
         .progress-overview-head {
-            width: 160px;
-            text-align: left;
-            height: 10px;
-            font-size: 11px;
+            width: 135px;
+            text-align: center;
+            height: 9px;
+            font-size: 10px;
+            display: inline-block;
+            -webkit-transform: scale(0.9);
         }
 
         .overview-info-item {
             width: 140px;
-            font-size: 10px;
-            padding-top: 5px;
+            height: 9px;
         }
 
         .overview-info-left {
@@ -409,6 +437,9 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 10px;
+            display: inline-block;
+            -webkit-transform: scale(0.8);
         }
 
         .overview-info-right {
@@ -417,6 +448,9 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 10px;
+            display: inline-block;
+            -webkit-transform: scale(0.8);
         }
 
         .hr-dotted {
@@ -548,7 +582,8 @@
                     </ul>
                 </li>
             </ul>
-            <!--<button type="button" onclick="setModelStateColour();"> 测试</button>-->
+            <!-- <button type="button" onclick="remove3DModelFile();"> 测试</button>-->
+           
         </div>
         <div id="myContainer" class="model-main">
         </div>
@@ -629,8 +664,8 @@
                 <div class="progress-overview-box">
                     <div class="progress-overview-main">
                         <div class="progress-overview-points">工点进度概况</div>
-                        <div class="hrm hr-dotted" style="margin: 2px 0;"></div>
-                        <div class="progress-item" style="height: 70px">
+                        <div class="hrm hr-dotted" style="margin: 1px 0;"></div>
+                        <div class="progress-first-item">
                             <div class="progress-overview-head">林头站</div>
                             <div class="overview-info-item">
                                 <div class="overview-info-left">计划开始</div>
@@ -649,9 +684,14 @@
                                 <div class="overview-info-right" style="color: #808080">8个月</div>
                             </div>
                         </div>
-                        <div class="hrm hr-dotted" style="margin: 2px 0;"></div>
-                        <div class="progress-item" style="height: 100px">
-                            <div class="progress-overview-head"><p style="width: 40px;float: left;font-size: 10px ">构件进度</p><p style="width: 100px;;float: left;font-size: 9px;line-height:15px">（类型数/名称数/件数）</p></div>
+                        <div class="hrm hr-dotted" style="margin: 1px 0;"></div>
+                        <div class="progress-next-item">
+                            <div class="progress-next-component">
+                                <p style="font-size:12px; display: inline-block;-webkit-transform:scale(0.9); ">构件进度</p>
+                            </div>
+                            <div class="progress-next-type">
+                                <p style="font-size:12px; display: inline-block;-webkit-transform:scale(0.75); ">（类型数/名称数/件数）</p>
+                            </div>
                             <div class="overview-info-item">
                                 <div class="overview-info-left">计划总数</div>
                                 <div class="overview-info-right">6/60/300</div>
@@ -677,7 +717,7 @@
                                 <div class="overview-info-right">0/5/50</div>
                             </div>
                         </div>
-                        <div class="hrm hr-dotted" style="margin: 2px 0;"></div>
+                        <div class="hrm hr-dotted" style="margin: 1px 0;"></div>
                         <div class="progress-last-item" style="height: 40px">
                             <div class="overview-info-item">
                                 <div class="overview-info-left">进度超前</div>
@@ -696,14 +736,15 @@
     </div>
 </div>
 <script type="text/javascript">
-    function getBim3DJsonfile(jsonStr) {
-        var pathName = "http://" + window.location.host + "/" + '@ViewBag.BIMFolder' + "/";
-        var jsonurl = pathName + jsonStr;
-        var folder = jsonStr.split("/");
-        var url = "";
+    function getBim3DJsonfile(folder,siteCode) {
+        creatModelUrl(folder, siteCode, initBim3D);
+    }
+    function creatModelUrl(folder, siteCode, callback) {
+         var pathName = "http://" + window.location.host + "/" + '@ViewBag.BIMFolder' + "/" + siteCode + "/" + folder+"/";
+        var jsonurl = pathName + folder + ".tmp.json";
         $.getJSON(jsonurl, function (data) {
-            url = pathName + folder[0] + "/" + data.files[0];
-            initBim3D(url);
+           var url = pathName + data.files[0];
+            callback(url);
         })
     }
 </script>
@@ -714,34 +755,18 @@
     var domObj = document.getElementById('myContainer');
     var bim3dViewer = new BIM3DInterface(domObj);
     var myAxis = false;
+    var fileArrays = [];
+    var firstPosition = true;
     var currentSelectObj;
     var sysBaseUrl = "/";
     $(function () {
         //initBim3D();
-
     });
 
     function initBim3D(pathName) {
         bim3dViewer.resize();
-        bim3dViewer.appendFile([pathName]);
-        bim3dViewer.addAppendFileCallBack(function (url, status) {
-            //由于appendFile接口传入长度为2的数组，则该回调会调用两次。
-            // 返回appendFile接口传入的url1,、url2模型文件的加载状态。
-            // status 值为1加载成功，为0加载失败。
-            //设置轮廓线显示隐藏
-            bim3dViewer.setOutlineVisible(true);
-            //设置轮廓线颜色
-            bim3dViewer.setOutlineColor(0xff000000);
-            //设置轮廓线的宽度
-            bim3dViewer.setOutlineWidth(2);
-            // 设置模型隐藏
-            bim3dViewer.setModelVisible("", false, 1);
-            //设置模型所有颜色
-            bim3dViewer.setModelColorByHex("", 0xA9A9A9, 1);
-            //设置模型状态颜色
-            setModelStateColour();
-        });
-
+        //加载模型文件
+        add3DModelFileToArray(pathName);
         //注册ESC事件
         $(document).keydown(function (event) {
             if (event.keyCode == 27) {
@@ -775,9 +800,57 @@
         bim3dViewer.setSelectColorIntensity(0x00FF00, 10);
 
     }
+    //销毁BIMViewer
+    function dispose3DModelViewer() {
+        bim3dViewer.dispose();
+    }
+    //移除文件
+    function remove3DModelFile() {
+        bim3dViewer.removeFile(fileArrays);
+        fileArrays = [];
+    }
     //重置模型窗口大小
     function resize3DModelWindow() {
         bim3dViewer.resize();
+    }
+    //加载模型文件fileUrl：文件地址
+    function add3DModelFileToArray(fileUrl, ids) {
+        var result = $.inArray(fileUrl, fileArrays);
+        if (result == -1) {
+            //设置模型隐藏
+            bim3dViewer.appendFile([fileUrl],true);
+            bim3dViewer.addAppendFileCallBack(function (url, status) {
+                //由于appendFile接口传入长度为2的数组，则该回调会调用两次。
+                // 返回appendFile接口传入的url1,、url2模型文件的加载状态。
+                // status 值为1加载成功，为0加载失败。
+                if (status == 1) {
+                    fileArrays.push(fileUrl)
+                    //设置轮廓线颜色
+                    bim3dViewer.setOutlineColor(0xff000000);
+                    //设置轮廓线的宽度
+                    bim3dViewer.setOutlineWidth(2);
+                    // 设置模型隐藏
+                    //bim3dViewer.setModelVisible("", false, 1);
+                    //设置模型所有颜色
+                    bim3dViewer.setModelColorByHex("", 0xA9A9A9, 1);
+                    //设置模型状态颜色
+                    setModelStateColour();
+                    if (ids != undefined) {
+                        var visible = true;
+                        var setOption = 0;
+                        bim3dViewer.setModelVisible(ids, visible, setOption);
+                    }
+                    //设置轮廓线显示隐藏
+                    bim3dViewer.setOutlineVisible(true);
+                }
+            });
+        } else {
+            if (ids != undefined) {
+                var visible = true;
+                var setOption = 0;
+                bim3dViewer.setModelVisible(ids, visible, setOption);
+            }
+        }
     }
     //选择零件数
     function selectThePart(selectObj) {
@@ -849,23 +922,39 @@
         }
     }
 
+    //初次选中快速定位
+    function fastPositioning(selectObj) {
+        if (firstPosition) {
+            var modelIdArray = [];
+            for (var i = 0, n = selectObj.length; i < n; i++) {
+                var obj = selectObj[i];
+                modelIdArray.push(obj.name);
+            }
+            if (modelIdArray.length > 0) {
+                bim3dViewer.zoomFit(modelIdArray, 10);
+                firstPosition = false;
+            }
+        }
+    }
+
     //获取暂时模型具体信息
     function getModelPropertyInfo(selectObj) {
         $('#modelInfoBox').css('display', 'none');
         if (selectObj != null) {
             var bool = $.isArray(selectObj)
             if (bool) {
+                fastPositioning(selectObj);
                 if (selectObj.length == 1) {
                     var siteCodeObj = getSelectOrg_Index();
                     if (siteCodeObj != undefined) {
                         var siteCode = siteCodeObj.CompanyCode;
                         var modelId = selectObj[0].name;
-                        console.log(modelId)
+                        var modelPath = selectObj[0].parent.filename;
                         $("#propertyGroupList").empty();
                         var dataArray = [];
                         $.ajax({
                             type: "GET",
-                            url: sysBaseUrl + "api/WorkOrder/GetComponentDetails?id=" + modelId + "&SiteCode=" + siteCode,
+                            url: sysBaseUrl + "api/WorkOrder/GetComponentDetails?id=" + modelId + "&SiteCode=" + siteCode + "&modelPath=" + modelPath,
                             dataType: "json",
                             async: false, //同步
                             success: function (resultdata) {
@@ -877,13 +966,9 @@
                                 console.log(errorMsg)
                             }
                         });
-                        console.log(dataArray)
-                        console.log(dataArray)
                         if (dataArray != null && dataArray.length > 0) {
                             //获取分组数据
                             var groupList = getPropertyGroupList(dataArray);
-                            console.log('groupList')
-                            console.log(groupList)
                             for (var i = 0; i < groupList.length; i++) {
                                 var group = groupList[i];
                                 var property = group.propertygroup;
@@ -899,8 +984,8 @@
                                 }
                                 var groupStr = '<li class="model-nav-item">' +
                                     '<a href="javascript:;" class="mu-item-wrapper"><div class="mu-item">' +
-                                    '<div class="mu-item-action  "><i class="iconfont iconcaidan1 " style="font-size: 10px;"></i></div>'+
-                                    '<div class="mu-item-title">'+
+                                    '<div class="mu-item-action  "><i class="iconfont iconcaidan1 " style="font-size: 10px;"></i></div>' +
+                                    '<div class="mu-item-title">' +
                                     property +
                                     '</div></div></a>' +
                                     '<ul>' +
@@ -1062,11 +1147,17 @@
     }
     //#endregion
 
-    //展示勾选模型 ids=["123","345"]
-    function showCheckModelViews(ids) {
-        var visible = true;
-        var setOption = 0;
-        bim3dViewer.setModelVisible(ids, visible, setOption);
+    //展示勾选模型 ids=["123","345"],文件地址modelFileUrl
+    function showCheckModelViews(ids, modelFileUrl) {
+        if (modelFileUrl != undefined && modelFileUrl != null && modelFileUrl != "") {
+            add3DModelFileToArray(modelFileUrl, ids);
+        } else {
+            if (ids != undefined) {
+                var visible = true;
+                var setOption = 0;
+                bim3dViewer.setModelVisible(ids, visible, setOption);
+            }
+        }
     }
     //隐藏勾选模型 ids=["123","345"]
     function hideCheckModelViews(ids) {
@@ -1082,23 +1173,23 @@
 
     //隐藏选中模块
     function setModelHide() {
-        if (currentSelectObj != undefined) {
-            var id = currentSelectObj.name;
+        var modelIdList = getModelIdArray();
+        if (modelIdList.length > 0) {
             //visible 是否可见，true显示，false隐藏。
             var visible = false;
             var setOption = 0;
-            bim3dViewer.setModelVisible(id, visible, setOption);
+            bim3dViewer.setModelVisible(modelIdList, visible, setOption);
         }
     }
 
     //隐藏非选中模块
     function setOtherModelHide() {
-        if (currentSelectObj != undefined) {
-            var id = currentSelectObj.name;
+        var modelIdList = getModelIdArray();
+        if (modelIdList.length > 0) {
             //visible 是否可见，true显示，false隐藏。
             var visible = false;
             var setOption = 1;
-            bim3dViewer.setModelVisible(id, visible, setOption);
+            bim3dViewer.setModelVisible(modelIdList, visible, setOption);
         }
     }
 
@@ -1118,12 +1209,12 @@
      * 隔离选中模块
      */
     function setModelQuarantine() {
-        if (currentSelectObj != undefined) {
-            var id = currentSelectObj.name;
+        var modelIdList = getModelIdArray();
+        if (modelIdList.length > 0) {
             //是否隔离对象，true隔离，false取消隔离
             var bQuarantine = true;
             var setOption = 0;
-            bim3dViewer.setModelQuarantine(id, bQuarantine, setOption);
+            bim3dViewer.setModelQuarantine(modelIdList, bQuarantine, setOption);
         }
     }
 
@@ -1131,12 +1222,12 @@
      * 隔离非选中模块
      */
     function setOtherModelQuarantine() {
-        if (currentSelectObj != undefined) {
-            var id = currentSelectObj.name;
+        var modelIdList = getModelIdArray();
+        if (modelIdList.length > 0) {
             //是否隔离对象，true隔离，false取消隔离
             var bQuarantine = true;
             var setOption = 1;
-            bim3dViewer.setModelQuarantine(id, bQuarantine, setOption);
+            bim3dViewer.setModelQuarantine(modelIdList, bQuarantine, setOption);
         }
     }
 

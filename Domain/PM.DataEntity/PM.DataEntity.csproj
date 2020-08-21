@@ -55,6 +55,7 @@
     <Compile Include="BIM\BIMModel.cs" />
     <Compile Include="BIM\TbModelOrg.cs" />
     <Compile Include="BIM\TbModelOtherInfo.cs" />
+    <Compile Include="BIM\TbModelReporte.cs" />
     <Compile Include="BIM\TbModel_Property.cs" />
     <Compile Include="Common\FPiCiXQPlan.cs" />
     <Compile Include="CostManage\EquipmentType.cs" />

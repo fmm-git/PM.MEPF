@@ -80,7 +80,7 @@
         if ("@index" != "-111") {//明细表上传
             fun = function (data, index) {
                 if (data.length) {
-                    top.frames["Form"].$("#uplaodFileTitle-" + index).html("已上传");
+                    top.frames["Form"].$("#uplaodFileTitle-" + index).html("已上传").removeClass("Isfile").addClass("IsYesfile");
                     top.frames["Form"].$("#uplaodFilelook-" + index).show();
                     if ("@menuTable" == "WorkOrder") {
                         var dataItem = top.frames["Form"].$("#gridList #" + index + ">td");
@@ -93,7 +93,7 @@
             fun = function (data, index) {
                 if (data.length) {
                     if (top.frames["Form"]) {
-                        top.frames["Form"].$("#uplaodFileTitle").html("已上传");
+                        top.frames["Form"].$("#uplaodFileTitle").html("已上传").removeClass("Isfile").addClass("IsYesfile");
                         top.frames["Form"].$("#uplaodFilelook").show();
                         top.frames["Form"].$("#Enclosure").val(data[0].keyID);
                     } else {

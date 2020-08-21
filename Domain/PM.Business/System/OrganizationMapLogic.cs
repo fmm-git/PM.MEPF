@@ -9,6 +9,7 @@ using PM.DataEntity;
 using PM.DataEntity.BIM;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +19,9 @@ namespace PM.Business.System
     public class OrganizationMapLogic
     {
         private readonly TbWorkOrderLogic _workOrderLogic = new TbWorkOrderLogic();
+        private readonly ModelPropertyLogIc _modelPropertyLogIc = new ModelPropertyLogIc();
         public AjaxResult GetOrganizationMapList(BIMRequest request)
         {
-            var retData = new List<TbOrganizationMap>();
             var where = new Where<TbOrganizationMap>();
             if (request.Type > 0)
                 where.And(p => p.Type == request.Type);
@@ -31,7 +32,7 @@ namespace PM.Business.System
                 List<string> SiteList = _workOrderLogic.GetCompanyWorkAreaOrSiteList(request.SiteCode, 5);//站点
                 where.And(p => p.CompanyCode.In(SiteList) || p.ParentCompanyCode == request.SiteCode);
             }
-            retData = Db.Context.From<TbOrganizationMap>()
+           var retData = Db.Context.From<TbOrganizationMap>()
                     .Select(
                       TbOrganizationMap._.All)
                   .Where(where).ToList();
@@ -91,13 +92,20 @@ namespace PM.Business.System
             try
             {
                 var list = _BIMLogic.GetModelInfoList(model.SiteCode, model.ProjectId, model.Path);
-                var insertSql = SqlBuilderHelper.BulkInsertSql<ProjectListInsertModel>(list, "TbModel_Property");
+                //var insertSql = SqlBuilderHelper.BulkInsertSql<ProjectListInsertModel>(list, "TbModel_Property");
+                //var entityList = MapperHelper.Map<TbModel_Property, TbRawMaterialStockRecord>(x);
+                var report = _modelPropertyLogIc.CreatReportModel(model);
                 using (DbTrans trans = Db.Context.BeginTransaction())
                 {
                     //添加模型基础信息
-                    var dataList = Db.Context.FromSql(insertSql).SetDbTransaction(trans).ExecuteNonQuery();
+                    // var dataList = Db.Context.FromSql(insertSql).SetDbTransaction(trans).ExecuteNonQuery();
+                    //Db.Context.FromProc("Model_Property_InsertProc").AddInParameter("@modeltable", DbType.Object, list).SetDbTransaction(trans);
+
+                    Repository<TbModel_Property>.Insert(trans, list);
                     //添加模型上传信息
-                    Repository<TbModelOrg>.Insert(model);
+                    Repository<TbModelOrg>.Insert(trans,model);
+                    //统计信息
+                    _modelPropertyLogIc.UpdateModelReportData(trans, report.Item1, report.Item2);
                     trans.Commit();
                     return AjaxResult.Success();
                 }

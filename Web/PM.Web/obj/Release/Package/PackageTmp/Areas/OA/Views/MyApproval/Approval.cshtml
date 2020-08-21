@@ -101,7 +101,11 @@
             success: function (data) {
                 var str_json = JSON.parse(data);
                 var url = str_json.url;
-                $("#forminfo").attr("src", url + '?keyValue=' + ID);
+                if (FormCode == "WorkOrder") {
+                    $("#forminfo").attr("src", url + '?keyValue=' + ID+"&IsSpSee=是");
+                } else {
+                    $("#forminfo").attr("src", url + '?keyValue=' + ID);
+                }
             }
         });
     }

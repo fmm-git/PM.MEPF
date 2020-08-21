@@ -210,9 +210,12 @@ GROUP BY UserCode) b on a.UserId=b.UserCode";
         {
             if (user == null)
                 return AjaxResult.Warning("参数错误！");
+            string pwd = GetLastStr(user.IDNumber, 8);
+            var password = PM.Common.Encryption.EncryptionFactory.Md5Encrypt(pwd);
+            user.UserPwd = password;
             try
             {
-                Repository<TbUser>.Update(user, isApi);
+                Repository<TbUser>.Update(user, p => p.ID == user.ID);
                 return AjaxResult.Success();
             }
             catch (Exception e)
@@ -238,6 +241,33 @@ GROUP BY UserCode) b on a.UserId=b.UserCode";
                     trans.Commit();//提交事务
                     return AjaxResult.Success();
                 }
+            }
+            catch (Exception e)
+            {
+                var err = e.ToString();
+                return AjaxResult.Error(err);
+            }
+        }
+
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        public AjaxResult UpdateUserClosed(int ID, int Type)
+        {
+            try
+            {
+                //判断该部门下是否存在用户角色
+                var model = Repository<TbUser>.First(p => p.ID == ID);
+                if (Type == 1)
+                {
+                    model.UserClosed = "在职";
+                }
+                else
+                {
+                    model.UserClosed = "离职";
+                }
+                Repository<TbUser>.Update(model, p => p.ID == model.ID);
+                return AjaxResult.Success();
             }
             catch (Exception e)
             {

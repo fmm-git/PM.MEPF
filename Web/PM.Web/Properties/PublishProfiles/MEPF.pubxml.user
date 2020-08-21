@@ -248,13 +248,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/17/2020 17:11:32</publishTime>
     </File>
     <File Include="Areas/OA/Views/MyApproval/Approval.cshtml">
-      <publishTime>08/07/2020 11:12:00</publishTime>
+      <publishTime>08/20/2020 09:22:45</publishTime>
     </File>
     <File Include="Areas/OA/Views/MyApproval/Index.cshtml">
       <publishTime>07/17/2020 17:08:07</publishTime>
     </File>
     <File Include="Areas/OA/Views/MyApproval/SeeApproval.cshtml">
-      <publishTime>07/07/2020 11:12:51</publishTime>
+      <publishTime>08/20/2020 09:22:45</publishTime>
     </File>
     <File Include="Areas/OA/Views/MyEarlyWarning/Index.cshtml">
       <publishTime>07/17/2020 17:10:56</publishTime>
@@ -335,25 +335,25 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/Details.cshtml">
-      <publishTime>08/05/2020 16:28:39</publishTime>
+      <publishTime>08/20/2020 09:22:45</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/FillInpackingQ.cshtml">
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/Form.cshtml">
-      <publishTime>08/07/2020 11:12:00</publishTime>
+      <publishTime>08/19/2020 16:17:27</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/Index.cshtml">
       <publishTime>07/22/2020 16:31:12</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/OrderPackIndex.cshtml">
-      <publishTime>08/07/2020 18:22:10</publishTime>
+      <publishTime>08/20/2020 09:22:45</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/PrintPackQRCodeInfo.cshtml">
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/ProjectList.cshtml">
-      <publishTime>08/07/2020 11:12:00</publishTime>
+      <publishTime>08/17/2020 16:33:19</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/RightReportChar.cshtml">
       <publishTime>07/31/2020 18:02:00</publishTime>
@@ -365,7 +365,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/WorkOrderIndex.cshtml">
-      <publishTime>08/12/2020 18:16:27</publishTime>
+      <publishTime>08/20/2020 09:22:45</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/WorkOrderInstallIndex.cshtml">
       <publishTime>08/12/2020 18:16:27</publishTime>
@@ -629,7 +629,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/Company/Form.cshtml">
-      <publishTime>07/07/2020 11:12:50</publishTime>
+      <publishTime>08/18/2020 14:52:54</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/Company/GetCompany.cshtml">
       <publishTime>08/13/2020 11:07:44</publishTime>
@@ -653,7 +653,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/13/2020 09:30:49</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/Department/Index.cshtml">
-      <publishTime>08/13/2020 09:30:49</publishTime>
+      <publishTime>08/17/2020 16:33:18</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/Menu/AppointMenuTableDetails.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
@@ -677,7 +677,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/05/2020 11:39:25</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/OrganizationMap/Index.cshtml">
-      <publishTime>08/05/2020 11:23:29</publishTime>
+      <publishTime>08/14/2020 18:48:31</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/PermissionsTeam/Detail.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
@@ -725,13 +725,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/RoleUser/Form.cshtml">
-      <publishTime>07/14/2020 09:21:53</publishTime>
+      <publishTime>08/18/2020 14:52:54</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/RoleUser/Index.cshtml">
-      <publishTime>07/17/2020 16:41:07</publishTime>
+      <publishTime>08/18/2020 14:52:54</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/RoleUser/UserList.cshtml">
-      <publishTime>07/14/2020 09:21:53</publishTime>
+      <publishTime>08/17/2020 16:33:18</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/ShortMessageTemplate/Details.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
@@ -764,10 +764,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/User/Form.cshtml">
-      <publishTime>07/14/2020 09:21:53</publishTime>
+      <publishTime>08/17/2020 16:33:19</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/User/Index.cshtml">
-      <publishTime>08/13/2020 11:07:44</publishTime>
+      <publishTime>08/17/2020 16:33:19</publishTime>
     </File>
     <File Include="Areas/SystemManage/Views/User/Info.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
@@ -896,34 +896,34 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:13:42</publishTime>
     </File>
     <File Include="bin/PM.Business.dll">
-      <publishTime>08/13/2020 12:17:48</publishTime>
+      <publishTime>08/20/2020 09:23:38</publishTime>
     </File>
     <File Include="bin/PM.Business.pdb">
-      <publishTime>08/13/2020 12:17:48</publishTime>
+      <publishTime>08/20/2020 09:23:38</publishTime>
     </File>
     <File Include="bin/PM.Collector.dll">
       <publishTime>07/07/2020 11:13:43</publishTime>
     </File>
     <File Include="bin/PM.Common.dll">
-      <publishTime>08/07/2020 18:23:58</publishTime>
+      <publishTime>08/17/2020 18:56:21</publishTime>
     </File>
     <File Include="bin/PM.Common.pdb">
-      <publishTime>08/07/2020 18:23:58</publishTime>
+      <publishTime>08/17/2020 18:56:21</publishTime>
     </File>
     <File Include="bin/PM.DAL.dll">
       <publishTime>07/07/2020 11:13:43</publishTime>
     </File>
     <File Include="bin/PM.DataAccess.dll">
-      <publishTime>08/13/2020 12:17:46</publishTime>
+      <publishTime>08/19/2020 12:31:09</publishTime>
     </File>
     <File Include="bin/PM.DataAccess.pdb">
-      <publishTime>08/13/2020 12:17:46</publishTime>
+      <publishTime>08/19/2020 12:31:09</publishTime>
     </File>
     <File Include="bin/PM.DataEntity.dll">
-      <publishTime>08/13/2020 12:17:46</publishTime>
+      <publishTime>08/19/2020 12:31:09</publishTime>
     </File>
     <File Include="bin/PM.DataEntity.pdb">
-      <publishTime>08/13/2020 12:17:46</publishTime>
+      <publishTime>08/19/2020 12:31:09</publishTime>
     </File>
     <File Include="bin/PM.Executor.dll">
       <publishTime>07/07/2020 11:13:43</publishTime>
@@ -932,10 +932,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:13:43</publishTime>
     </File>
     <File Include="bin/PM.Web.dll">
-      <publishTime>08/13/2020 12:17:50</publishTime>
+      <publishTime>08/20/2020 09:23:39</publishTime>
     </File>
     <File Include="bin/PM.Web.pdb">
-      <publishTime>08/13/2020 12:17:50</publishTime>
+      <publishTime>08/20/2020 09:23:39</publishTime>
     </File>
     <File Include="bin/System.Data.SQLite.dll">
       <publishTime>11/01/2019 11:05:29</publishTime>
@@ -2942,7 +2942,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:52</publishTime>
     </File>
     <File Include="Content/js/jqgrid/jqgrid.min.js">
-      <publishTime>07/07/2020 11:12:52</publishTime>
+      <publishTime>08/19/2020 17:47:50</publishTime>
     </File>
     <File Include="Content/js/jqgrid/jquery.contextmenu.r2.js">
       <publishTime>07/07/2020 11:12:52</publishTime>
@@ -3464,7 +3464,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/10/2020 14:43:15</publishTime>
     </File>
     <File Include="Content/static/model/BIM3DViewer.js">
-      <publishTime>08/10/2020 16:13:18</publishTime>
+      <publishTime>08/20/2020 09:22:45</publishTime>
     </File>
     <File Include="Content/static/model/img/circle.png">
       <publishTime>10/21/2019 09:07:44</publishTime>
@@ -14639,13 +14639,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/16/2020 17:22:29</publishTime>
     </File>
     <File Include="Views/BIM/BIM3DGridList.cshtml">
-      <publishTime>08/12/2020 18:15:21</publishTime>
+      <publishTime>08/20/2020 09:22:30</publishTime>
     </File>
     <File Include="Views/BIM/BIM3DView.cshtml">
-      <publishTime>08/13/2020 12:14:33</publishTime>
+      <publishTime>08/20/2020 09:22:44</publishTime>
     </File>
     <File Include="Views/BIM/BIMGISView.cshtml">
-      <publishTime>08/13/2020 11:28:46</publishTime>
+      <publishTime>08/19/2020 16:17:26</publishTime>
     </File>
     <File Include="Views/BIM/ComponentData.cshtml">
       <publishTime>07/27/2020 16:00:45</publishTime>
@@ -14687,13 +14687,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
     <File Include="Views/Home/Default.cshtml">
-      <publishTime>08/13/2020 11:40:26</publishTime>
+      <publishTime>08/20/2020 09:22:44</publishTime>
     </File>
     <File Include="Views/Home/GuidePage.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>07/30/2020 18:52:29</publishTime>
+      <publishTime>08/19/2020 16:17:26</publishTime>
     </File>
     <File Include="Views/Home/InterfaceTestPage.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
@@ -14738,7 +14738,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/07/2020 18:24:06</publishTime>
+      <publishTime>08/17/2020 18:56:28</publishTime>
     </File>
   </ItemGroup>
 </Project>

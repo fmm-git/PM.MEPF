@@ -33,7 +33,7 @@ namespace PM.DataEntity
 		private string _ComponentName;
 		private string _MaterialQuality;
 		private string _SpecificationModel;
-		private decimal? _Length;
+		private string _Length;
 		private string _Area;
 		private string _Remark;
 		private string _LargePattern;
@@ -211,7 +211,7 @@ namespace PM.DataEntity
 		/// 长度
 		/// </summary>
 		[Field("Length")]
-		public decimal? Length
+		public string Length
 		{
 			get{ return _Length; }
 			set

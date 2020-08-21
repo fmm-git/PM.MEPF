@@ -91,7 +91,7 @@ namespace PM.Business
             {
                 using (DbTrans trans = Db.Context.BeginTransaction())
                 {
-                    Repository<TbUser>.Update(user, isApi);
+                    Repository<TbUser>.Update(user,p=>p.ID==user.ID);
                     if (userRole.Count > 0)
                     {
                         Repository<TbUserRole>.Delete(trans, a => a.UserCode == user.UserId);
@@ -247,6 +247,11 @@ GROUP BY UserCode) b on u.UserId=b.UserCode ";
                 {
                     where += " and ur.OrgType=@OrgType";
                     parameter.Add(new Parameter("@OrgType", request.OrgType, DbType.String, null));
+                }
+                if (!string.IsNullOrWhiteSpace(request.OrgId)) 
+                {
+                    where += " and ur.OrgId=@OrgId";
+                    parameter.Add(new Parameter("@OrgId", request.OrgId, DbType.String, null));
                 }
                 string sql = @"select ur.*,u.UserName,r.RoleName,cp.CompanyFullName,dp.DepartmentName,case when ur.OrgType=1 then '' else pro.ProjectName end as ProjectName from TbUserRole ur
 left join TbUser u on ur.UserCode=u.UserId

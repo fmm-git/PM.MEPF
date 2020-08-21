@@ -8,6 +8,7 @@
         var DeptId = $.request("DeptId");
         var ProjectId = $.request("ProjectId");
         var OrgType = $.request("OrgType");
+        var OrgId = $.request("OrgId");
         $(function () {
             $("#NF-Details").parent().hide();//隐藏查看按钮
             gridList();
@@ -15,7 +16,7 @@
         function gridList() {
             var $gridList = $("#gridList");
             $gridList.dataGrid({
-                url: "/RoleUser/GetGridJson?RoleCode=" + RoleCode + "&DeptId=" + DeptId+ "&ProjectId=" + ProjectId+"&OrgType="+OrgType,
+                url: "/RoleUser/GetGridJson?RoleCode=" + RoleCode + "&DeptId=" + DeptId + "&ProjectId=" + ProjectId + "&OrgType=" + OrgType + "&OrgId="+OrgId,
                 height: $(window).height() - 128,
                 colModel: [
                     { label: "主键", name: "ID", hidden: true, key: true },

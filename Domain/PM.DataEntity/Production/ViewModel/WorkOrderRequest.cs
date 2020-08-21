@@ -209,6 +209,7 @@ namespace PM.DataEntity.Production.ViewModel
         /// 模型数据库文件
         /// </summary>
         public string dbName { get; set; }
+        public string modelPath { get; set; }
     }
 
     public class PackageQRCodeRequest:PageSearchRequest

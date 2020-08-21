@@ -1,0 +1,1727 @@
+2020-08-21 09:21:46
+Text:	 SELECT   TOP 1 * FROM [TbUser]  WHERE ([TbUser].[UserCode] = @UserCode1) AND ([TbUser].[UserPwd] = @UserPwd2) 	
+Parameters:
+@UserCode1[String] = 500000
+@UserPwd2[String] = c4ca4238a0b923820dcc509a6f75849b
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:46
+Text:	SELECT UserClosed FROM TbUser WHERE UserCode=@UserName	
+Parameters:
+@UserName[String] = 500000
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:46
+Text:	select top 1 ur.ProjectId,pro.ProjectName,ur.OrgId,cm.CompanyFullName,cm.ParentCompanyCode,ur.OrgType,ur.UserCode as UserId,u.UserCode,u.UserName from TbUserRole ur 
+left join TbCompany cm on ur.OrgId=cm.CompanyCode
+left join TbProjectInfo pro on ur.ProjectId=pro.ProjectId
+left join TbUser u on ur.UserCode=u.UserId
+where u.UserCode=@UserCode and ur.Flag=0 group by ur.ProjectId,pro.ProjectName,ur.OrgId,cm.CompanyFullName,cm.ParentCompanyCode,ur.OrgType,ur.UserCode,u.UserCode,u.UserName order by OrgId asc	
+Parameters:
+@UserCode[String] = 500000
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:46
+Text:	select distinct ur.RoleCode as RoleId,r.RoleCode,r.RoleName from TbUserRole ur
+left join TbUser u on ur.UserCode=u.UserId
+left join TbRole r on ur.RoleCode=r.RoleId
+where u.UserCode=@UserCode and ProjectId=@ProjectId and OrgId=@OrgId and ur.Flag=0	
+Parameters:
+@UserCode[String] = 500000
+@ProjectId[String] = 6372912251695766465
+@OrgId[String] = 6372921375874657752
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:46
+Text:	 SELECT   TOP 1 [TbCarInfoDetail].[ID] FROM [TbCarInfoDetail]  WHERE [TbCarInfoDetail].[UserCode] = @UserCode3 	
+Parameters:
+@UserCode3[String] = 500000
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:47
+Text:	INSERT INTO [TbSysLog] ([ActionMenu],[ActionType],[HostName],[LogDate],[UserCode],[UserIP]) VALUES (@ActionMenu4,@ActionType5,@HostName6,@LogDate7,@UserCode8,@UserIP9);select scope_identity()	
+Parameters:
+@ActionMenu4[String] = 0
+@ActionType5[String] = 登录系统
+@HostName6[String] = 
+@LogDate7[DateTime] = 2020/8/21 9:21:47
+@UserCode8[String] = 500000
+@UserIP9[String] = 192.168.3.222
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:48
+Text:	select tsm.* from TbRoleMenu tum
+                           left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                           where tsm.IsShow=0 and tsm.MenuType='PC' and tum.RoleCode in('6372919444627396738','6372919451594895243') order by tsm.Sort asc	
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:48
+Text:	select 
+                        	tsm.*
+                        from TbUserMenu tum
+                        left join TbSysMenu tsm on tum.MenuCode=tsm.MenuCode
+                        where tsm.IsShow=0 and tsm.MenuType='PC' and tum.UserCode=@userCode order by tsm.Sort asc	
+Parameters:
+@userCode[String] = 6372930471544160074
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	select * from TbSysDictionaryData where 1=1 and FDictionaryCode=@name order by DictionaryOrder asc	
+Parameters:
+@name[String] = SystemSeting
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921389720849710
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ((([TbOrganizationMap].[Type] = @Type10) AND ([TbOrganizationMap].[ProjectId] = @ProjectId11)) AND (([TbOrganizationMap].[CompanyCode] IN (@CompanyCode12,@CompanyCode13,@CompanyCode14,@CompanyCode15,@CompanyCode16,@CompanyCode17,@CompanyCode18,@CompanyCode19)) OR ([TbOrganizationMap].[ParentCompanyCode] = @ParentCompanyCode20))) 	
+Parameters:
+@Type10[Int32] = 1
+@ProjectId11[String] = 6372912251695766465
+@CompanyCode12[String] = 6373083923489249281
+@CompanyCode13[String] = 6373083925531366080
+@CompanyCode14[String] = 6373083927883400612
+@CompanyCode15[String] = 6373083918575368225
+@CompanyCode16[String] = 6373083920445075162
+@CompanyCode17[String] = 6373083908618598731
+@CompanyCode18[String] = 6373083911842783146
+@CompanyCode19[String] = 6373083913928202424
+@ParentCompanyCode20[String] = 6372921389720849710
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921389720849710
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	 SELECT   [TbOrganizationMap].* FROM [TbOrganizationMap]  WHERE ((([TbOrganizationMap].[Type] = @Type21) AND ([TbOrganizationMap].[ProjectId] = @ProjectId22)) AND (([TbOrganizationMap].[CompanyCode] IN (@CompanyCode23,@CompanyCode24,@CompanyCode25,@CompanyCode26,@CompanyCode27,@CompanyCode28,@CompanyCode29,@CompanyCode30)) OR ([TbOrganizationMap].[ParentCompanyCode] = @ParentCompanyCode31))) 	
+Parameters:
+@Type21[Int32] = 2
+@ProjectId22[String] = 6372912251695766465
+@CompanyCode23[String] = 6373083923489249281
+@CompanyCode24[String] = 6373083925531366080
+@CompanyCode25[String] = 6373083927883400612
+@CompanyCode26[String] = 6373083918575368225
+@CompanyCode27[String] = 6373083920445075162
+@CompanyCode28[String] = 6373083908618598731
+@CompanyCode29[String] = 6373083911842783146
+@CompanyCode30[String] = 6373083913928202424
+@ParentCompanyCode31[String] = 6372921389720849710
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	SELECT mm.MenuUrl, pp.UserCode, pp.menuCode, pp.OperationView, pp.OperationAdd
+	                        , pp.OperationEdit, pp.OperationDel, pp.OperationExamination, pp.OperationOutput, pp.OperationOther1
+	                        , mm.OperationOther1Fun, mm.OperationOther1IconCls, pp.OperationOther2, mm.OperationOther2Fun, mm.OperationOther2IconCls
+	                        , pp.OperationOther3, mm.OperationOther3Fun, mm.OperationOther3IconCls, pp.OperationOther4, mm.OperationOther4Fun
+	                        , mm.OperationOther4IconCls, pp.OperationOther5, mm.OperationOther5Fun, mm.OperationOther5IconCls
+                        FROM (
+	                        SELECT UserCode, menuCode, MAX(OperationView) AS OperationView
+		                        , MAX(OperationAdd) AS OperationAdd, MAX(OperationEdit) AS OperationEdit
+		                        , MAX(OperationDel) AS OperationDel, MAX(OperationExamination) AS OperationExamination
+		                        , MAX(OperationOutput) AS OperationOutput, MAX(OperationOther1) AS OperationOther1
+		                        , MAX(OperationOther2) AS OperationOther2, MAX(OperationOther3) AS OperationOther3
+		                        , MAX(OperationOther4) AS OperationOther4, MAX(OperationOther5) AS OperationOther5
+	                        FROM (
+		                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+			                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+			                        , OperationOther3, OperationOther4, OperationOther5
+		                        FROM (
+			                        SELECT a.UserCode, b.menuCode, MAX(b.OperationView) AS OperationView
+				                        , MAX(b.OperationAdd) AS OperationAdd, MAX(b.OperationEdit) AS OperationEdit
+				                        , MAX(b.OperationDel) AS OperationDel, MAX(b.OperationExamination) AS OperationExamination
+				                        , MAX(b.OperationOutput) AS OperationOutput, MAX(b.OperationOther1) AS OperationOther1
+				                        , MAX(b.OperationOther2) AS OperationOther2, MAX(b.OperationOther3) AS OperationOther3
+				                        , MAX(b.OperationOther4) AS OperationOther4, MAX(b.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbUserRole a
+				                        INNER JOIN dbo.TbRoleMenu b ON a.RoleCode = b.RoleCode
+                                        where b.RoleCode in('6372919444627396738','6372919451594895243')
+			                        GROUP BY a.UserCode, b.menuCode
+			                        UNION ALL
+			                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+				                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+				                        , OperationOther3, OperationOther4, OperationOther5
+			                        FROM dbo.TbUserMenu
+			                        union all
+			                        SELECT p.UserCode, d.menuCode, MAX(d.OperationView) AS OperationView
+				                        , MAX(d.OperationAdd) AS OperationAdd, MAX(d.OperationEdit) AS OperationEdit
+				                        , MAX(d.OperationDel) AS OperationDel, MAX(d.OperationExamination) AS OperationExamination
+				                        , MAX(d.OperationOutput) AS OperationOutput, MAX(d.OperationOther1) AS OperationOther1
+				                        , MAX(d.OperationOther2) AS OperationOther2, MAX(d.OperationOther3) AS OperationOther3
+				                        , MAX(d.OperationOther4) AS OperationOther4, MAX(d.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbPositionUser p
+				                        INNER JOIN dbo.TbPositionMenu d ON p.PositionCode = d.PositionCode
+			                        GROUP BY p.UserCode, d.menuCode
+			
+		                        ) c
+	                        ) aa
+	                        GROUP BY UserCode, menuCode
+                        ) pp
+                        INNER JOIN dbo.TbSysMenu mm ON pp.menuCode = mm.menuCode 
+                        left join dbo.TbUser u on pp.UserCode=u.UserId
+                        where u.UserCode=@UserCode And mm.MenuUrl=@menuURI	
+Parameters:
+@UserCode[String] = 500000
+@menuURI[String] = /BIM/GISGridList
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6372921375874657752
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	 SELECT count(*) as r_cnt FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode60)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode]) WHERE (([TbWorkOrder].[ProjectId] = @ProjectId32) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode33,@SiteCode34,@SiteCode35,@SiteCode36,@SiteCode37,@SiteCode38,@SiteCode39,@SiteCode40,@SiteCode41,@SiteCode42,@SiteCode43,@SiteCode44,@SiteCode45,@SiteCode46,@SiteCode47,@SiteCode48,@SiteCode49,@SiteCode50,@SiteCode51,@SiteCode52,@SiteCode53,@SiteCode54,@SiteCode55,@SiteCode56,@SiteCode57,@SiteCode58,@SiteCode59)))	
+Parameters:
+@ProjectId32[String] = 6372912251695766465
+@SiteCode33[String] = 6373083923489249281
+@SiteCode34[String] = 6373083925531366080
+@SiteCode35[String] = 6373083927883400612
+@SiteCode36[String] = 6373083918575368225
+@SiteCode37[String] = 6373083920445075162
+@SiteCode38[String] = 6373083908618598731
+@SiteCode39[String] = 6373083911842783146
+@SiteCode40[String] = 6373083913928202424
+@SiteCode41[String] = 6373083877551621804
+@SiteCode42[String] = 6373083879921857377
+@SiteCode43[String] = 6373083881542550067
+@SiteCode44[String] = 6373083883689772886
+@SiteCode45[String] = 6373083887136270013
+@SiteCode46[String] = 6373083889697116488
+@SiteCode47[String] = 6373083891969846476
+@SiteCode48[String] = 6373083894422586761
+@SiteCode49[String] = 6373083897509963358
+@SiteCode50[String] = 6373083900444931227
+@SiteCode51[String] = 6373083829464571372
+@SiteCode52[String] = 6373083833327492328
+@SiteCode53[String] = 6373083841964286321
+@SiteCode54[String] = 6373083844982558950
+@SiteCode55[String] = 6373083847585007801
+@SiteCode56[String] = 6373083856887939900
+@SiteCode57[String] = 6373083859102666584
+@SiteCode58[String] = 6373083864919499284
+@SiteCode59[String] = 6373334974514214221
+@FDictionaryCode60[String] = OrderState
+@FDictionaryCode61[String] = UrgentDegree
+@FDictionaryCode62[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	 SELECT   TOP 50 [TbWorkOrder].*,[TbCompany].[CompanyFullName] AS [SiteName],[TbSysDictionaryData].[DictionaryText] AS [OrderStateNew],[TbUser].[UserName],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[UrgentDegree]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode61) ) AS [UrgentDegreeNew],( SELECT   [TbSysDictionaryData].[DictionaryText] FROM [TbSysDictionaryData]  WHERE ([TbSysDictionaryData].[DictionaryCode] = [TbWorkOrder].[OrderType]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode62) ) AS [OrderTypeNew],( SELECT   count([TbWorkOrderPack].[ID]) AS [ID] FROM [TbWorkOrderPack]  WHERE [TbWorkOrderPack].[OrderCode] = [TbWorkOrder].[OrderCode] ) AS [PackNum] FROM [TbWorkOrder] LEFT OUTER JOIN [TbCompany] ON ([TbWorkOrder].[SiteCode] = [TbCompany].[CompanyCode]) LEFT OUTER JOIN [TbSysDictionaryData] ON (([TbWorkOrder].[OrderState] = [TbSysDictionaryData].[DictionaryCode]) AND ([TbSysDictionaryData].[FDictionaryCode] = @FDictionaryCode60)) LEFT OUTER JOIN [TbUser] ON ([TbWorkOrder].[InsertUserCode] = [TbUser].[UserCode])  WHERE (([TbWorkOrder].[ProjectId] = @ProjectId32) AND ([TbWorkOrder].[SiteCode] IN (@SiteCode33,@SiteCode34,@SiteCode35,@SiteCode36,@SiteCode37,@SiteCode38,@SiteCode39,@SiteCode40,@SiteCode41,@SiteCode42,@SiteCode43,@SiteCode44,@SiteCode45,@SiteCode46,@SiteCode47,@SiteCode48,@SiteCode49,@SiteCode50,@SiteCode51,@SiteCode52,@SiteCode53,@SiteCode54,@SiteCode55,@SiteCode56,@SiteCode57,@SiteCode58,@SiteCode59))) ORDER BY [TbWorkOrder].[ID] DESC 	
+Parameters:
+@ProjectId32[String] = 6372912251695766465
+@SiteCode33[String] = 6373083923489249281
+@SiteCode34[String] = 6373083925531366080
+@SiteCode35[String] = 6373083927883400612
+@SiteCode36[String] = 6373083918575368225
+@SiteCode37[String] = 6373083920445075162
+@SiteCode38[String] = 6373083908618598731
+@SiteCode39[String] = 6373083911842783146
+@SiteCode40[String] = 6373083913928202424
+@SiteCode41[String] = 6373083877551621804
+@SiteCode42[String] = 6373083879921857377
+@SiteCode43[String] = 6373083881542550067
+@SiteCode44[String] = 6373083883689772886
+@SiteCode45[String] = 6373083887136270013
+@SiteCode46[String] = 6373083889697116488
+@SiteCode47[String] = 6373083891969846476
+@SiteCode48[String] = 6373083894422586761
+@SiteCode49[String] = 6373083897509963358
+@SiteCode50[String] = 6373083900444931227
+@SiteCode51[String] = 6373083829464571372
+@SiteCode52[String] = 6373083833327492328
+@SiteCode53[String] = 6373083841964286321
+@SiteCode54[String] = 6373083844982558950
+@SiteCode55[String] = 6373083847585007801
+@SiteCode56[String] = 6373083856887939900
+@SiteCode57[String] = 6373083859102666584
+@SiteCode58[String] = 6373083864919499284
+@SiteCode59[String] = 6373334974514214221
+@FDictionaryCode60[String] = OrderState
+@FDictionaryCode61[String] = UrgentDegree
+@FDictionaryCode62[String] = OrderType
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:50
+Text:	SELECT mm.MenuUrl, pp.UserCode, pp.menuCode, pp.OperationView, pp.OperationAdd
+	                        , pp.OperationEdit, pp.OperationDel, pp.OperationExamination, pp.OperationOutput, pp.OperationOther1
+	                        , mm.OperationOther1Fun, mm.OperationOther1IconCls, pp.OperationOther2, mm.OperationOther2Fun, mm.OperationOther2IconCls
+	                        , pp.OperationOther3, mm.OperationOther3Fun, mm.OperationOther3IconCls, pp.OperationOther4, mm.OperationOther4Fun
+	                        , mm.OperationOther4IconCls, pp.OperationOther5, mm.OperationOther5Fun, mm.OperationOther5IconCls
+                        FROM (
+	                        SELECT UserCode, menuCode, MAX(OperationView) AS OperationView
+		                        , MAX(OperationAdd) AS OperationAdd, MAX(OperationEdit) AS OperationEdit
+		                        , MAX(OperationDel) AS OperationDel, MAX(OperationExamination) AS OperationExamination
+		                        , MAX(OperationOutput) AS OperationOutput, MAX(OperationOther1) AS OperationOther1
+		                        , MAX(OperationOther2) AS OperationOther2, MAX(OperationOther3) AS OperationOther3
+		                        , MAX(OperationOther4) AS OperationOther4, MAX(OperationOther5) AS OperationOther5
+	                        FROM (
+		                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+			                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+			                        , OperationOther3, OperationOther4, OperationOther5
+		                        FROM (
+			                        SELECT a.UserCode, b.menuCode, MAX(b.OperationView) AS OperationView
+				                        , MAX(b.OperationAdd) AS OperationAdd, MAX(b.OperationEdit) AS OperationEdit
+				                        , MAX(b.OperationDel) AS OperationDel, MAX(b.OperationExamination) AS OperationExamination
+				                        , MAX(b.OperationOutput) AS OperationOutput, MAX(b.OperationOther1) AS OperationOther1
+				                        , MAX(b.OperationOther2) AS OperationOther2, MAX(b.OperationOther3) AS OperationOther3
+				                        , MAX(b.OperationOther4) AS OperationOther4, MAX(b.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbUserRole a
+				                        INNER JOIN dbo.TbRoleMenu b ON a.RoleCode = b.RoleCode
+                                        where b.RoleCode in('6372919444627396738','6372919451594895243')
+			                        GROUP BY a.UserCode, b.menuCode
+			                        UNION ALL
+			                        SELECT UserCode, menuCode, OperationView, OperationAdd, OperationEdit
+				                        , OperationDel, OperationExamination, OperationOutput, OperationOther1, OperationOther2
+				                        , OperationOther3, OperationOther4, OperationOther5
+			                        FROM dbo.TbUserMenu
+			                        union all
+			                        SELECT p.UserCode, d.menuCode, MAX(d.OperationView) AS OperationView
+				                        , MAX(d.OperationAdd) AS OperationAdd, MAX(d.OperationEdit) AS OperationEdit
+				                        , MAX(d.OperationDel) AS OperationDel, MAX(d.OperationExamination) AS OperationExamination
+				                        , MAX(d.OperationOutput) AS OperationOutput, MAX(d.OperationOther1) AS OperationOther1
+				                        , MAX(d.OperationOther2) AS OperationOther2, MAX(d.OperationOther3) AS OperationOther3
+				                        , MAX(d.OperationOther4) AS OperationOther4, MAX(d.OperationOther5) AS OperationOther5
+			                        FROM dbo.TbPositionUser p
+				                        INNER JOIN dbo.TbPositionMenu d ON p.PositionCode = d.PositionCode
+			                        GROUP BY p.UserCode, d.menuCode
+			
+		                        ) c
+	                        ) aa
+	                        GROUP BY UserCode, menuCode
+                        ) pp
+                        INNER JOIN dbo.TbSysMenu mm ON pp.menuCode = mm.menuCode 
+                        left join dbo.TbUser u on pp.UserCode=u.UserId
+                        where u.UserCode=@UserCode And mm.MenuUrl=@menuURI	
+Parameters:
+@UserCode[String] = 500000
+@menuURI[String] = /BIM/3DGridList
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:51
+Text:	select a.*,a.FullCode as ProjectId,b.CompanyFullName as ParentCompanyName from TbCompany a
+left join TbCompany b on a.ParentCompanyCode=b.CompanyCode 
+where 1=1  order by a.LocalCurrency asc	
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:51
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=2;	
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:51
+Text:	select FullCode,CompanyCode,CompanyFullName,Address,OrgType,PostalCode from TbCompany where OrgType=1 order by CompanyCode asc;	
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:51
+Text:	select Major,System,Subsystem,MaterialType,Material,MAX(ComponentCode) as ComponentCode,MAX(FileName) as FileName
+                               from 
+                               TbModel_Property
+                               where SiteCode=@SiteCode and FileName='tmpEBD0'
+                               group by Major,System,Subsystem,MaterialType,Material	
+Parameters:
+@SiteCode[String] = 6372921375874657752
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:57
+Text:	WITH TREE AS(SELECT * FROM TbCompany WHERE CompanyCode =@parentCode UNION ALL SELECT TbCompany.* FROM TbCompany, TREE WHERE TbCompany.ParentCompanyCode = TREE.CompanyCode) SELECT CompanyCode FROM TREE where TREE.OrgType=@type	
+Parameters:
+@parentCode[String] = 6373083925531366080
+@type[Int32] = 5
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:57
+Text:	select a.*,b.CompanyFullName as SiteName,c.CompanyFullName as WorkArea ,d.CompanyFullName as Branch 
+                            from TbModelOrg a
+                            left join TbCompany b on a.SiteCode=b.CompanyCode
+                            left join TbCompany c on b.ParentCompanyCode=c.CompanyCode
+                            left join TbCompany d on c.ParentCompanyCode=d.CompanyCode where 1=1  and a.ProjectId='6372912251695766465' and a.SiteCode in('6373083925531366080')	
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:21:57
+Text:	select Major,System,Subsystem,MaterialType,Material,MAX(ComponentCode) as ComponentCode,MAX(FileName) as FileName
+                               from 
+                               TbModel_Property
+                               where SiteCode=@SiteCode and FileName='tmpEBD0'
+                               group by Major,System,Subsystem,MaterialType,Material	
+Parameters:
+@SiteCode[String] = 6373083925531366080
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:24:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:27:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:30:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:33:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:36:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:39:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:42:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:45:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:48:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:51:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:54:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 09:57:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:00:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:03:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:06:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:09:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:12:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:15:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:18:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:21:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:24:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:27:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:30:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:33:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:36:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:39:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:42:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:45:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:48:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:51:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:54:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 10:57:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:00:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:03:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:06:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:09:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:12:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:15:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:18:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:21:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:24:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:27:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:30:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:33:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:36:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:39:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:42:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:45:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:48:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:51:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:54:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 11:57:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:00:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:03:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:06:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:09:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:12:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:15:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:18:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:21:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:24:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:27:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:30:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:33:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:36:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:39:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:42:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:45:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:48:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:51:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:54:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 12:57:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 13:00:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 13:03:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 13:06:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 13:09:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 13:12:48
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------
+2020-08-21 13:15:47
+Text:	select COUNT(1) as MsgCount from TbFlowPerformOpinions o
+                           left join TbFlowPerform p on o.FlowPerformID=p.FlowPerformID
+                           left join TbFlowDefine d on p.FlowCode=d.FlowCode
+                           where o.UserCode=@UserCode and (ISNULL(@ProjectId,'')='' or d.ProjectId=@ProjectId) and (PerformState=-1 or PerformState=7)
+                           union all
+                           select COUNT(1) as MsgCount from TbFormEarlyWarningNodeInfo m where m.MsgType=1 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select SUM(Tb.EarlyCount) as earlywarningcount from (select COUNT(1) as EarlyCount from TbFormEarlyWarningNodeInfo m where m.MsgType=2 and m.EWStart=0 and m.EWUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or m.ProjectId=@ProjectId)
+                           union all
+                           select COUNT(1) as EarlyCount from TbFlowEarlyWarningOtherInfo o where o.EarlyWarningStart=0 and o.FlowYjUserCode=@UserCode and (ISNULL(@ProjectId,'')='' or o.ProjectId=@ProjectId)) Tb	
+Parameters:
+@UserCode[String] = 6372930471544160074
+@ProjectId[String] = 6372912251695766465
+
+
+-----------------------------------------------------------------------------

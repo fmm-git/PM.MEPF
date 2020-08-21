@@ -59,50 +59,46 @@
     }
 </style>
 <script>
-    var OrderCode = $.request("OrderCode");
     $(function () {
         $.LodeMenuBtn("/Production/WorkOrder/OrderPackIndex", "#toolbar_OrderPack");
-        var param1 = $(".search").GetSearchCondition();
+        var param1 = $(".searchNew").GetSearchCondition();
+        GetList(param1);
+    });
+    //订单详情页面点击二维码图标之后加载二维码页面的数据
+    function LodePackIndex(OrderCode) {
+        var param1 = $(".searchNew").GetSearchCondition();
         if (OrderCode) {
-            $("#OrderCode").removeClass("hidSearchContent");
-            $(".input-group-btn").removeClass("hidSearchContent");
-            $("#OrderCode").val(OrderCode);
+            $("#SearchTypeNew").val("OrderCode");
+            $(".searchNew #OrderCode").removeClass("hidSearchContent");
+            $(".searchNew .input-group-btn").removeClass("hidSearchContent");
+            $(".searchNew #OrderCode").val(OrderCode);
             param1.OrderCode = OrderCode;
+            GetList(param1);
             //关闭加工订单查看页面
             var index = top.layer.getFrameIndex("Details");
             top.layer.close(index);
         }
-        GetList(param1);
-        //查询
-        $("#btn_search").click(function () {
-            var param = $(".search").GetSearchCondition();
-            GetList(param);
-        });
-        $("#btn_searchOth").click(function () {
-            var postData = $(".search").formSerialize();
-            for (x in postData) {
-                if (x != "ProjectId") {
-                    postData[x] = "";
-                }
-            }
-            var ss = $("#SearchType").children('option:selected').val();
-            if (ss != "") {
-                var cons = $("[name='" + ss + "']");
-                $.each(cons, function (i, item) {
-                    postData[$(item)[0].id] = $(item).val();
-                });
-            }
-            GetList(postData);
-        });
-        //回车查询
-        document.onkeydown = function (e) {
-            if (!e) e = window.event;
-            if ((e.keyCode || e.which) == 13) {
-                $('#btn_search').trigger("click");
+    }
+    function clicksearch() {
+        var param = $(".searchNew").GetSearchCondition();
+        GetList(param);
+    }
+    function clicksearchOth() {
+        var postData = $(".searchNew").formSerialize();
+        for (x in postData) {
+            if (x != "ProjectId") {
+                postData[x] = "";
             }
         }
-    });
-
+        var ss = $("#SearchTypeNew").children('option:selected').val();
+        if (ss != "") {
+            var cons = $("[name='" + ss + "']");
+            $.each(cons, function (i, item) {
+                postData[$(item)[0].id] = $(item).val();
+            });
+        }
+        GetList(postData);
+    }
     function GetList(param) {
         $("#pager").zPager({
             url: "@Url.Action("GetPackageQRCodeJson", "WorkOrder")",
@@ -151,6 +147,13 @@
                 LodeQRCode();//加载二维码
                 if (data.length == 0) {
                     $("#tabQrCode").css('height', '40px');
+                }
+                //回车查询
+                document.onkeydown = function (e) {
+                    if (!e) e = window.event;
+                    if ((e.keyCode || e.which) == 13) {
+                        $('#btn_search').trigger("click");
+                    }
                 }
             }
         });
@@ -297,12 +300,12 @@
 </script>
 
 <div class="topPanel">
-    <div class="search">
+    <div class="search searchNew">
         <table>
             <tr>
                 <td>
                     <div class="input-group input-group-search">
-                        <select id="SearchType" name="SearchType" class="form-control" style="width: 120px;">
+                        <select id="SearchTypeNew" name="SearchType" class="form-control" style="width: 120px;">
                             <option value="">全部</option>
                             <option value="OrderCode">订单编号</option>
                             <option value="ComponentName">构件名称</option>
@@ -315,8 +318,8 @@
                 </td>
                 <td>
                     <div class="btn-search">
-                        <a class="btn btn-primary btn_searchOne" id="btn_searchOne">查询</a>
-                        <a class="btn btn-primary btn_search" id="btn_search">结果中搜索</a>
+                        <a class="btn btn-primary" id="btn_searchOne" onclick="clicksearchOth()">查询</a>
+                        <a class="btn btn-primary" id="btn_search" onclick="clicksearch()">结果中搜索</a>
                     </div>
                 </td>
             </tr>
@@ -324,7 +327,7 @@
     </div>
     <div class="topPanel-btn" id="toolbar_PackageQRCode">
         <div class="btn-group">
-            <a class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
+            <a class="btn btn-primary" onclick="reload_OrderPack()"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
         </div>
     </div>
 </div>

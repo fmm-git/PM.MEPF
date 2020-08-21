@@ -7,11 +7,9 @@
 <script>
     var SiteCode = $.request("SiteCode");
     var ProjectId = $.request("ProjectId");
-    var dbNameStr = "";
     $(function () {
         $('#layout').layout();
         ui_layout_toggler_click();
-        getModelInfoByOrg();
         leftList();
         gridList();
     });
@@ -21,7 +19,7 @@
         var leftgridList = 'leftgridList';
         $leftgridList.dataGrid({
             url: "@Url.Action("Getmodel_tree", "BIM", new { area = "" })",
-            postData: { dbName: dbNameStr },
+            postData: { SiteCode: SiteCode, ProjectId: ProjectId },
             height: $(window).height() - 58,
             colModel: [
                 { label: "id", name: "id", hidden: true, key: true },
@@ -48,28 +46,11 @@
             }
         });
     }
-    //获取站点下模型对应的数据库文件
-    function getModelInfoByOrg() {
-        $.ajax({
-            url: "@Url.Action("GetGridJson", "OrganizationMap",new { area= "SystemManage" })",
-            data: { ProjectId: ProjectId, SiteCode: SiteCode },
-            dataType: "json",
-            async: false,
-            success: function (data) {
-                if (data.length > 0) {
-                    dbNameStr = $.grep(data, function (value) {
-                        return value.Type == 2;
-                    })[0].Path;
-                }
-            }
-        });
-    }
-
     function gridList() {
         var $gridList = $("#gridList");
         $gridList.dataGrid({
             url: "@Url.Action("GetProjectList", "WorkOrder")",
-            postData: { dbName: dbNameStr },
+            postData: { SiteCode: SiteCode, ProjectId: ProjectId },
             height: $(window).height() - 128,
             colModel: [
             { label: "主键", name: "id", key: true, hidden: true, frozen: true },

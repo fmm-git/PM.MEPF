@@ -44,6 +44,7 @@ namespace PM.Web.Areas.Production.Controllers
         /// <returns></returns>
         public ActionResult WorkOrderIndex()
         {
+            ViewBag.LoginUserCode = OperatorProvider.Provider.CurrentUser.UserCode;
             return View();
         }
         /// <summary>
@@ -91,7 +92,11 @@ namespace PM.Web.Areas.Production.Controllers
             var data = _workOrderLogic.IsModelIdPlaceOrder(modelIdList);
             return Content(data.ToJson());
         }
-
+        public ActionResult IsProListPlaceOrder(string SiteCode, List<string> rowSelectIds, List<int> rowSelectTotals, List<string> rowSonSelectIdsNew) 
+        {
+            var data = _workOrderLogic.IsProListPlaceOrder(SiteCode, rowSelectIds, rowSelectTotals, rowSonSelectIdsNew);
+            return Content(data.ToJson());
+        }
         /// <summary>
         /// 订单新增、修改页面
         /// </summary>
@@ -145,9 +150,7 @@ namespace PM.Web.Areas.Production.Controllers
         /// <returns></returns>
         public ActionResult GetProjectList(ProjectListRequest request)
         {
-            string dbName = Server.MapPath("/" + _fileConfig + "/" + request.dbName);
-            BIMLogic _BIMLogic = new BIMLogic(dbName);
-            var data = _BIMLogic.GetProjectList(request);
+            var data = _workOrderLogic.GetProjectList(request);
             return Content(data.ToJson());
         }
         /// <summary>
@@ -170,7 +173,16 @@ namespace PM.Web.Areas.Production.Controllers
             var data = _workOrderLogic.FindEntity(keyValue);
             return Content(data.ToJson());
         }
-
+        /// <summary>
+        /// 通过项目编号查询订单主表信息（确认发起时调用）
+        /// </summary>
+        /// <param name="OrderCode"></param>
+        /// <returns></returns>
+        public ActionResult GetWorkOrderData(string OrderCode)
+        {
+            var data = _workOrderLogic.GetWorkOrderData(OrderCode);
+            return Content(data.ToJson());
+        }
         /// <summary>
         /// 新增、修改数据提交
         /// </summary>
@@ -302,6 +314,7 @@ namespace PM.Web.Areas.Production.Controllers
         /// <returns></returns>
         public ActionResult GetPackageQRCodeJson(PackageQRCodeRequest request)
         {
+            request.rows = 15;
             var data = _workOrderLogic.GetPackageQRCodeJson(request);
             return Content(data.ToJson());
         }

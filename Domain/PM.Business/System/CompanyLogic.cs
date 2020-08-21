@@ -42,7 +42,7 @@ namespace PM.Business
                 }
                 string sql = @"select a.*,a.FullCode as ProjectId,b.CompanyFullName as ParentCompanyName from TbCompany a
 left join TbCompany b on a.ParentCompanyCode=b.CompanyCode 
-where 1=1 " + where + @" order by a.id asc";
+where 1=1 " + where + @" order by a.LocalCurrency asc";
                 var list1 = Db.Context.FromSql(sql).ToList<TbCompanyOrParent>();
                 var list2 = list1.Where(a => a.OrgType != 1).ToList();
                 listAll.AddRange(list2);

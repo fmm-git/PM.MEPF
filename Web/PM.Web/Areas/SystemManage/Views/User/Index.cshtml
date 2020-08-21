@@ -48,11 +48,22 @@
             height: $(window).height() - 128,
             url: newurl,
             colModel: [
-                { label: "标识ID", name: "id", hidden: true, },
-                { label: '员工编号', name: 'UserId', hidden: true },
-                { label: '员工编号', name: 'UserCode', sortable: false, width: 100, align: 'left', Key: true },
-                { label: '员工姓名', name: 'UserName', sortable: false, width: 100, align: 'left' },
-                { label: '用户状态', name: 'UserClosed', sortable: false, width: 80, align: 'left' },
+                { label: "标识ID", name: "ID", hidden: true, },
+                { label: '用户ID', name: 'UserId', hidden: true },
+                { label: '用户账号', name: 'UserCode', sortable: false, width: 100, align: 'left', Key: true },
+                { label: '用户名称', name: 'UserName', sortable: false, width: 100, align: 'left' },
+                {
+                    label: '用户状态', name: 'UserClosed', sortable: false, width: 80, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        var tdhtml = "";
+                        if (cellvalue == "在职") {
+                            tdhtml += "<i class=\"fa fa-toggle-on\" onclick=\"IsUserClosed("+rowObject.ID+",2)\"></i>";
+                        } else {
+                            tdhtml += "<i class=\"fa fa-toggle-off\" onclick=\"IsUserClosed(" + rowObject.ID + ",1)\"></i>";
+                        }
+                        return tdhtml;
+                    }
+                },
                 { label: '性别', name: 'UserSex', sortable: false, width: 80, align: 'left' },
                 {
                     label: '身份证号', name: 'IDNumber', sortable: false, width: 180, align: 'left', formatter: function (value, options, rowObject) {
@@ -86,6 +97,9 @@
                 { label: '邮箱', name: 'Email', sortable: false, width: 120, align: 'left' },
                 { label: '用户来源', name: 'RecruitmentSource', sortable: false, width: 120, align: 'left', formatter: cellUserSource },
             ],
+            ondblClickRow: function (id) {//双击
+                btn_details();
+            },
             pager: "#gridPager",
             sortname: 'UserCode',
             sortorder: 'desc',
@@ -116,7 +130,16 @@
         }
         return tdhtml;
     }
-
+    function IsUserClosed(ID,Type) {
+        $.ajax({
+            type: 'POST',
+            url: "/SystemManage/User/UpdateUserClosed?ID="+ID+"&Type="+Type,
+            dataType: "json",
+            success: function (data) {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        });
+    }
     function AddUser() {
         $.modalOpen({
             id: "Form",
@@ -160,6 +183,20 @@
             })
         } else {
             $.modalMsg("请选中用户，再执行删除操作", "warning");
+        }
+    }
+
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().UserId;
+        if (keyValue) {
+            $.modalOpen({
+                id: "Form",
+                title: "查看用户信息",
+                url: "/SystemManage/User/Form?keyValue=" + keyValue + "&type=edit",
+                width: "55%",
+                height: "60%",
+                btn: null,
+            });
         }
     }
 

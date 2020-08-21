@@ -67,19 +67,50 @@
     var OrgType = 2;
     var DepartmentId = "";
     $(function () {
-        $("#ProjectId").bindSelect({
-            url: "/SystemManage/Department/GetProjectInfo",
-            id: "ProjectId",
-            text: "ProjectName"
-        });
-        $('input:radio').click(function () {
-            OrgType = $(this).attr('value');
-            var ProjectId = $("#ProjectId").val();
-            ChangeProOrOrgType(ProjectId, OrgType);
-        });
+        //$("#ProjectId").bindSelect({
+        //    url: "/SystemManage/Department/GetProjectInfo",
+        //    id: "ProjectId",
+        //    text: "ProjectName"
+        //});
+        //$('input:radio').click(function () {
+        //    OrgType = $(this).attr('value');
+        //    var ProjectId = $("#ProjectId").val();
+        //    ChangeProOrOrgType(ProjectId, OrgType);
+        //});
+        leftList();
         gridRoleList();
         gridDeptList();
     });
+
+    //加载组织机构
+    function leftList() {
+        var $leftgridList = $("#leftgridList");
+        $leftgridList.dataGrid({
+            url: "/SystemManage/Company/GetAllCompanyOrBySearch",
+            height: $(window).height() - 128,
+            colModel: [
+               { label: "组织机构编号", name: "CompanyCode", hidden: true, key: true },
+               { label: '组织机构', name: 'CompanyFullName', align: 'left', sortable: false, },
+               { label: '组织机构类型', name: 'OrgType', hidden: true },
+               { label: '项目id', name: 'ProjectId', hidden: true },
+               { label: '组织机构id', name: 'ParentCompanyCode_F', hidden: true },
+               { label: '组织机构父级id', name: 'ParentCompanyCode', hidden: true }
+            ],
+            treeGrid: true,//启用树型Grid功能
+            treeGridModel: 'adjacency',//表示返回数据的读取类型，分为两种：和adjacency
+            ExpandColumn: 'CompanyFullName',//树型结构在哪列显示
+            rownumbers: false,
+            shrinkToFit: true,
+            sortname: 'CompanyCode',
+            gridComplete: function () {
+                $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide();
+            },
+            onCellSelect: function (id) {
+                var rowData = $("#leftgridList").jqGrid('getRowData', id);
+                ChangeOrgType(rowData.ProjectId,rowData.OrgType);
+            }
+        });
+    }
 
     function gridDeptList() {
         var $gridList = $("#gridDeptList");
@@ -91,10 +122,10 @@
                 { label: "标识ID", name: "id", hidden: true, key: true },
                 { label: '部门编号', name: 'DepartmentId', hidden: true },
                 { label: '部门类型', name: 'DepartmentType', hidden: true },
-                { label: '部门名称', name: 'DepartmentName', sortable: false, width: 180, align: 'left' },
-                { label: '部门编号', name: 'DepartmentCode', width: 150, align: 'left' },
+                { label: '部门名称', name: 'DepartmentName', sortable: false, width: 120, align: 'left' },
+                { label: '部门编号', name: 'DepartmentCode', width: 100, align: 'left' },
                 {
-                    label: '操作', name: '操作', width: 160, align: 'left',
+                    label: '操作', name: '操作', width: 140, align: 'left',
                     formatter: NewDeptOperation
                 },
             ],
@@ -130,10 +161,10 @@
             colModel: [
                 { label: "标识ID", name: "id", hidden: true, key: true },
                 { label: '角色编号', name: 'RoleId', hidden: true },
-                { label: '角色名称', name: 'RoleName', sortable: false, width: 180, align: 'left' },
-                { label: '角色编号', name: 'RoleCode', width: 150, align: 'left' },
+                { label: '角色名称', name: 'RoleName', sortable: false, width: 120, align: 'left' },
+                { label: '角色编号', name: 'RoleCode', width: 100, align: 'left' },
                 {
-                    label: '操作', name: '操作', width: 160, align: 'left',
+                    label: '操作', name: '操作', width: 140, align: 'left',
                     formatter: NewRoleOperation
                 },
             ],
@@ -159,12 +190,7 @@
         return tdhtml;
     }
 
-    function ProChange() {
-        var ProjectId = $("#ProjectId").val();
-        ChangeProOrOrgType(ProjectId, OrgType);
-    }
-
-    function ChangeProOrOrgType(ProjectId, OrgType) {
+    function ChangeOrgType(ProjectId, OrgType) {
         //重新加载部门列表数据
         $("#gridDeptList").jqGrid('setGridParam',
            {
@@ -183,17 +209,21 @@
     }
 
     function AddDept() {
-        var ProjectId = $("#ProjectId").val();
-        $.modalOpen({
-            id: "Form",
-            title: "新增部门信息",
-            url: "/SystemManage/Department/Form?type=add&OrgType=" + OrgType + "&ProjectId=" + ProjectId,
-            width: "40%",
-            height: "40%",
-            callBack: function (iframeId) {
-                top.frames[iframeId].submitForm();
-            }
-        });
+        var orgData = $("#leftgridList").jqGridRowValue();
+        if (orgData.OrgType) {
+            $.modalOpen({
+                id: "Form",
+                title: "新增部门信息",
+                url: "/SystemManage/Department/Form?type=add&OrgType=" + orgData.OrgType + "&ProjectId=" + orgData.ProjectId,
+                width: "40%",
+                height: "40%",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                }
+            });
+        } else {
+            $.modalMsg("请先选择组织机构信息！！", "warning");
+        }
     }
 
     function EditDept(DepartmentId) {
@@ -251,7 +281,6 @@
             }
         });
     }
-
 
     function AddRole() {
         var DepartmentData = $("#gridDeptList").jqGridRowValue();
@@ -320,13 +349,14 @@
 
     //设置角色用户
     function RoleUser() {
-        var ProjectId = $("#ProjectId").val();
+        var orgData = $("#leftgridList").jqGridRowValue();
+        var DepartmentData = $("#gridDeptList").jqGridRowValue();
         var RoleId = $("#gridRoleList").jqGridRowValue().RoleId;
         if (RoleId) {
             $.modalOpen({
                 id: "RoleAuthority",
                 title: "角色人员",
-                url: "/SystemManage/RoleUser/UserList?RoleId=" + RoleId + "&DeptId=" + DepartmentId + "&ProjectId=" + ProjectId + "&OrgType=" + OrgType,
+                url: "/SystemManage/RoleUser/UserList?RoleId=" + RoleId + "&DeptId=" + DepartmentData.DepartmentId + "&ProjectId=" + DepartmentData.ProjectId + "&OrgType=" + DepartmentData.OrgType + "&OrgId=" + orgData.CompanyCode,
                 width: "70%",
                 height: "550px",
                 btn: null,
@@ -387,65 +417,42 @@
     }
 </script>
 <div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
-    <div style="width:99%;height:40px;">
-        <div style="width:40%;float:left;">
-            <div class="input-group input-group-search" style="width:99%">
-                <select id="ProjectId" name="ProjectId" class="form-control" style="width:80%;height:20px;" onchange="ProChange()"></select>
+    <div class="left" style="width: 25%; float: left;">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="height:32px;">
+                <label style="font-size:18px;float:left">部门列表</label>
             </div>
-        </div>
-        <div id="time_horizon" class="btn-group" style="width:55%;float:left;height:99%">
-            <div class="label_box">
-                <label>
-                    <input type="radio" name="OrgType" value="2" checked="checked">
-                    <div>经理部</div>
-                </label>
-                <label>
-                    <input type="radio" name="OrgType" value="3">
-                    <div>分部</div>
-                </label>
-                <label>
-                    <input type="radio" name="OrgType" value="4">
-                    <div>工区</div>
-                </label>
-                <label>
-                    <input type="radio" name="OrgType" value="5">
-                    <div>站点</div>
-                </label>
-                <label>
-                    <input type="radio" name="OrgType" value="1">
-                    <div>加工厂</div>
-                </label>
+            <div class="panel-body">
+                <table id="leftgridList"></table>
             </div>
         </div>
     </div>
-    <div style="width:99%;">
-        <div style="width:48%;float:left">
-            <div class="panel panel-default">
-                <div class="panel-heading" style="height:32px;">
-                    <label style="font-size:18px;float:left">部门列表</label>
-                    @*<a class="btn btn-primary" onclick="SynchronizationDept()" style="float:right;">同步部门</a>*@
-                    <a class="btn btn-primary" onclick="AddDept()" style="float: right; margin-right: 5px">新增</a>
-                </div>
-                <div class="panel-body">
-                    <table id="gridDeptList"></table>
-                    <div id="gridDeptPager"></div>
-                </div>
+    <div class="middle" style="width: 35%; float: left;margin-left:10px;">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="height:32px;">
+                <label style="font-size:18px;float:left">部门列表</label>
+                @*<a class="btn btn-primary" onclick="SynchronizationDept()" style="float:right;">同步部门</a>*@
+                <a class="btn btn-primary" onclick="AddDept()" style="float: right; margin-right: 5px">新增</a>
+            </div>
+            <div class="panel-body">
+                <table id="gridDeptList"></table>
+                <div id="gridDeptPager"></div>
             </div>
         </div>
-        <div style="width:48%;float:right">
-            <div class="panel panel-default">
-                <div class="panel-heading" style="height:32px;">
-                    <label style="font-size: 18px; float:left">角色列表</label>
-                    @*<a class="btn btn-primary" onclick="SynchronizationRoleUser()" style="float: right;margin-left:5px;">同步角色人员</a>
+    </div>
+    <div class="right" style="width: 35%; float: left;margin-left:10px">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="height:32px;">
+                <label style="font-size: 18px; float:left">角色列表</label>
+                @*<a class="btn btn-primary" onclick="SynchronizationRoleUser()" style="float: right;margin-left:5px;">同步角色人员</a>
                     <a class="btn btn-primary" onclick="SynchronizationRole()" style="float: right;margin-left:5px;">同步角色</a>*@
-                    <a class="btn btn-primary" onclick="RoleMenu()" style="float:right">角色权限</a>
-                    <a class="btn btn-primary" onclick="RoleUser()" style="float: right;margin-left:5px;margin-right: 5px;">角色人员</a>
-                    <a class="btn btn-primary" onclick="AddRole()" style="float: right;">新增</a>
-                </div>
-                <div class="panel-body">
-                    <table id="gridRoleList"></table>
-                    <div id="gridRolePager"></div>
-                </div>
+                <a class="btn btn-primary" onclick="RoleMenu()" style="float:right">角色权限</a>
+                <a class="btn btn-primary" onclick="RoleUser()" style="float: right;margin-left:5px;margin-right: 5px;">角色人员</a>
+                <a class="btn btn-primary" onclick="AddRole()" style="float: right;">新增</a>
+            </div>
+            <div class="panel-body">
+                <table id="gridRoleList"></table>
+                <div id="gridRolePager"></div>
             </div>
         </div>
     </div>

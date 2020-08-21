@@ -377,7 +377,7 @@ namespace PM.Business
             string sql2 = "";
             if (OrgType == "1")//加工厂
             {
-                sql2 = @"select '0' as pid,dp.DepartmentId as id,dp.DepartmentName as Name,'Dep' as TypeName,dp.DepartmentType as OrgType,dp.DepartmentProjectId as ProjectId,dp.DepartmentId as DeptId,dp.DepartmentName as DeptName,'' as RoleId,'' as RoleName from TbDepartment dp where dp.DepartmentProjectId='6245721945602523136' and DepartmentType=@OrgType order by dp.DepartmentId asc";
+                sql2 = @"select '0' as pid,dp.DepartmentId as id,dp.DepartmentName as Name,'Dep' as TypeName,dp.DepartmentType as OrgType,dp.DepartmentProjectId as ProjectId,dp.DepartmentId as DeptId,dp.DepartmentName as DeptName,'' as RoleId,'' as RoleName from TbDepartment dp where dp.DepartmentProjectId=@ProjectId and DepartmentType=@OrgType order by dp.DepartmentId asc";
             }
             else
             {

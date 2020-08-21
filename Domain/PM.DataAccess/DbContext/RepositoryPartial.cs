@@ -48,7 +48,7 @@ namespace PM.DataAccess.DbContext
             var dataList = Db.Context.FromSql(sqlStr.ToString()).AddParameter(param).ToList<T>();
             return dataList;
         }
-        
+
         /// <summary>
         /// 分页查询(自定义sql查询)
         /// </summary>
@@ -75,7 +75,7 @@ namespace PM.DataAccess.DbContext
                 param2[i].ParameterName = Parameter[i].ParameterName;
                 param2[i].Value = Parameter[i].ParameterValue;
             }
-            var count =Db.Context.FromSql(sql).AddParameter(param).ToDataTable().Rows;
+            var count = Db.Context.FromSql(sql).AddParameter(param).ToDataTable().Rows;
             if (!string.IsNullOrEmpty(orderBy))
             {
                 orderByString = orderBy + " " + ascOrDesc;
@@ -167,7 +167,7 @@ namespace PM.DataAccess.DbContext
         /// <summary>
         /// 分页查询(自定义sql查询)
         /// </summary>
-        public static List<T> FromSql(string sql, List<Parameter> Parameter, string orderBy = "", string ascOrDesc = "asc", int? pageSize = null, int? pageIndex = null)
+        public static List<T> FromSql(string sql, List<Parameter> Parameter, dynamic request,out int count)
         {
             StringBuilder sqlStr = new StringBuilder();
             //组装where
@@ -184,17 +184,17 @@ namespace PM.DataAccess.DbContext
                 param[i].Value = Parameter[i].ParameterValue;
                 orderByString = param[i].ParameterName;
             }
-            if (!string.IsNullOrEmpty(orderBy))
+            if (!string.IsNullOrEmpty(request.orderBy))
             {
-                orderByString = orderBy + " " + ascOrDesc;
+                orderByString = request.orderBy + " " + request.sord;
             }
+            count = Db.Context.FromSql(sql).AddParameter(param).ToList<T>().Count;
             sqlStr.Append("with temptbl as (SELECT ROW_NUMBER() OVER (order by " + orderByString + ")AS Row, * from (" + sql + ") as a) ");
             sqlStr.Append(" SELECT * FROM temptbl");
-
-            if (pageIndex != null && pageSize != null)
+            if (request.rows>0)
             {
-                var start = ((pageIndex.Value - 1) * pageSize.Value) + 1;
-                var end = ((pageIndex.Value - 1) * pageSize.Value) + pageSize.Value;
+                var start = ((request.rows - 1) * request.rows) + 1;
+                var end = ((request.rows - 1) * request.rows) + request.rows;
                 sqlStr.Append(" where Row between " + start + " and " + end);
             }
             var dataList = Db.Context.FromSql(sqlStr.ToString()).AddParameter(param).ToList<T>();
@@ -204,20 +204,23 @@ namespace PM.DataAccess.DbContext
         /// <summary>
         /// 自定义sql查询
         /// </summary>
-        public static List<T> FromSql(string sql, List<Parameter> Parameter)
+        public static List<T> FromSql(string sql, List<Parameter> Parameter = null)
         {
             StringBuilder sqlStr = new StringBuilder();
             //组装where
             var length = 0;
             var param = new DbParameter[0];
-            length = Parameter.Count();
-            param = new DbParameter[length];
-            for (int i = 0; i < length; i++)
+            if (Parameter != null)
             {
-                param[i] = Db.Context.Db.DbProviderFactory.CreateParameter();
-                param[i].DbType = Parameter[i].ParameterDbType.Value;
-                param[i].ParameterName = Parameter[i].ParameterName;
-                param[i].Value = Parameter[i].ParameterValue;
+                length = Parameter.Count();
+                param = new DbParameter[length];
+                for (int i = 0; i < length; i++)
+                {
+                    param[i] = Db.Context.Db.DbProviderFactory.CreateParameter();
+                    param[i].DbType = Parameter[i].ParameterDbType.Value;
+                    param[i].ParameterName = Parameter[i].ParameterName;
+                    param[i].Value = Parameter[i].ParameterValue;
+                }
             }
             var dataList = Db.Context.FromSql(sql).AddParameter(param).ToList<T>();
             return dataList;

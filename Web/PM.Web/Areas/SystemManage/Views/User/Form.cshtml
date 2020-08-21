@@ -50,6 +50,9 @@
             return false;
         }
         var formData = $("#form1").formSerialize();
+        if (!formData.ID) {
+            formData.ID = 0;
+        }
         $.submitForm({
             url: "/SystemManage/User/SubmitForm",
             param: { userModel: JSON.stringify(formData), type: type },
@@ -61,19 +64,20 @@
 </script>
 <form id="form1">
     <div style="margin-top: 10px; margin-left: 10px; margin-right: 25%;">
+        <input type="hidden" id="ID" name="ID" />
         <table class="form" style="width:100%;height:100%">
             <tr>
                 <th colspan="2" style="text-align:center">初始密码为身份证的后8位</th>
             </tr>
             <tr>
-                <th class="formTitle">用户名<span class="required1">*</span></th>
+                <th class="formTitle">用户账号<span class="required1">*</span></th>
                 <td class="formValue">
-                    <input id="UserCode" name="UserCode" value="@ViewBag.UserCode" maxlength="6" type="text" class="form-control required" placeholder="用户名" />
+                    <input id="UserCode" name="UserCode" value="@ViewBag.UserCode" maxlength="6" type="text" class="form-control required" disabled="disabled" placeholder="用户名" />
                     <input id="UserId" name="UserId" value="@ViewBag.UserId" type="hidden" />
                 </td>
             </tr>
             <tr>
-                <th class="formTitle">员工姓名<span class="required1">*</span></th>
+                <th class="formTitle">用户姓名<span class="required1">*</span></th>
                 <td class="formValue">
                     <input id="UserName" name="UserName" maxlength="200" type="text" class="form-control required" placeholder="员工名称" />
                     <input id="UserPwd" name="UserPwd" type="text" style="display:none" disabled="disabled" class="form-control" />

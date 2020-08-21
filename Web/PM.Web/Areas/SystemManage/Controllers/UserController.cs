@@ -185,6 +185,18 @@ namespace PM.Web.Areas.SystemManage.Controllers
             return Content(data.ToJson());
         }
 
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult UpdateUserClosed(int ID,int Type)
+        {
+            var data = ui.UpdateUserClosed(ID,Type);
+            return Content(data.ToJson());
+        }
+
         #region 用户菜单按钮权限
 
         public ActionResult UserAuthority()

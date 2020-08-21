@@ -25,7 +25,10 @@
             </div>
             <ul class="nav nav-tabs">
                 <li id="GIS_tab_" name="ZZJG_tab_" onclick="selectTab($(this))" class="active"><a style="height:10px;" href="javascript:void(0);">GIS图</a></li>
-                <li id="3D_tab_" name="XMJG_tab_" onclick="selectTab($(this))"><a id="3DModal_lab" style="height:10px;" href="javascript:void(0);">3D模型</a></li>
+                <li id="3D_tab_" name="XMJG_tab_" class="disModel" onclick="selectTab($(this))" style="display:none;">
+                    <a id="3DModal_lab" style="height:10px;" href="javascript:void(0);">3D模型</a>
+                </li>
+                <lable class="disModel" style="float:left;margin-top:10px;display:none;" title="关闭模型"><i class="fa fa-remove" id="removeModel"></i></lable>
             </ul>
         </div>
         <div class="ui-layout-center" id="ui-layout-center" style="z-index: -1">
@@ -45,7 +48,14 @@
             <!--------3D-------->
             <div class="3D_tab_Info XMJG_tab_Info" style="display:none;">
                 @{
-                    Html.RenderAction("BIM3DGridList", "BIM");
+                    if (ViewBag.IsOrder)
+                    {
+                        Html.RenderAction("BIM3DGridList", "BIM", new { area = "", isOrder = true });
+                    }
+                    else
+                    {
+                        Html.RenderAction("BIM3DGridList", "BIM", new { area = "", isOrder = false });
+                    }
                 }
             </div>
         </div>
@@ -76,11 +86,10 @@
     </ul>
 </div>
 <script type="text/javascript">
-    var jsonStr = "";//模型json文件
-    var dbNameStr = "";//模型数据文件
+    var jsonStr = [];//模型json文件
+    var cnList = [];
     var selectOrgData = null;//选中的组织机构数据
     var selectSiteCode = "";//选中的站点编号
-    var selectModelCode = "";//勾选的模型编号
 
     //#region 页面基础设置
     $(function () {
@@ -119,6 +128,15 @@
         }, 500);
         leftOrgList();
         leftBIM3DList();
+
+        $("#removeModel").click(function () {
+            remove3DModelFile();
+            selectSiteCode = "";
+            $(".disModel").css("display", "none");
+            cnList = [];
+            LoadData_Project(cnList)
+            $("#ZZJG_tab_").click();
+        });
     });
     var flag = false;
     function selectTab(v) {
@@ -186,14 +204,14 @@
                 { label: "id", name: "id", hidden: true, key: true },
                 {
                     label: 'name', name: 'name', width: 220, sortable: false, formatter: function (value, grid, rows, state) {
-                        return "<input type='checkbox' style='margin-top:10px;' value=" + rows.id + " onclick='treeTreeGridCheck(this)'/>" + rows.name
+                        return "<input type='checkbox' style='margin-top:10px;' value=" + rows.id + " pid=" + rows.pid + " level=" + rows.level + " onclick='treeTreeGridCheck(this)'/>" + rows.name
                     }
                 },
                 //{ label: 'name', name: 'name', width: 220, align: 'left', sortable: false, },
                 { label: 'flag', name: 'flag', hidden: true },
                 { label: 'tid', name: 'tid', hidden: true },
                 { label: 'modelfile', name: 'modelfile', hidden: true },
-                { label: 'filename', name: 'filename', hidden: true },
+                { label: 'FileName', name: 'FileName', hidden: true },
                 { label: '父级id', name: 'pid', hidden: true }
             ],
             treeGrid: true,//启用树型Grid功能
@@ -206,7 +224,7 @@
                 $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide();
             },
             onCellSelect: function (id) {//单击
-                //gridList_Project(dbNameStr);
+                //gridList_Project(id);
             }
         });
     }
@@ -219,21 +237,18 @@
     //通过模型下单
     function modelPlaceOrder(mxgjid) {
         if (mxgjid) {
-            var where = "?type=add&mxgjid=" + mxgjid + "&dbNameStr=" + dbNameStr;
+            var where = "?type=add&mxgjid=" + mxgjid + "&CompanyCode=" + selectSiteCode;
             var id = $('#ZZJG_tab_Info').jqGrid('getGridParam', 'selrow');
             var CompanyData = $("#ZZJG_tab_Info").jqGrid('getRowData', id);
             if (CompanyData.OrgType == "5") {
                 where += "&CompanyCode=" + CompanyData.CompanyCode + "&CompanyFullName=" + CompanyData.CompanyFullName;
             }
-            $.modalOpen({
+            CommonOpenAdd({
                 id: "Form",
                 title: "新增加工订单",
                 url: "/Production/WorkOrder/Form" + where,
-                width: "85%",
-                height: "85%",
-                callBack: function (iframeId) {
-                    top.frames[iframeId].submitForm();
-                }
+                windowType: 2,
+                btnText: '确认并发起'
             });
         } else {
             $.modalMsg("请先选择模型中需要下单的构建！", "warning");
@@ -241,6 +256,13 @@
         }
     }
 
+    function OpenForLC() {
+        var data = {
+            width: "85%",
+            height: "85%",
+        };
+        return data;
+    }
     //通过模型签收
     function modelSignForOrder(mxgjid) {
         if (mxgjid) {
@@ -281,16 +303,13 @@
     //#region 组织机构复选框勾选
     function treeTreeGridCheck(dom) {
         var id = $(dom).val();
+        var node = $("#XMJG_tab_Info").jqGrid('getRowData', id);
         var rowChecked = $("#" + id).find("input").is(":checked");
-        getModelIdList(id, rowChecked);//展示模型
-        if (rowChecked) {
-            selectModelCode = id;
-        }
-        else {
-            selectModelCode = "";
-        }
+        getModelIdList(id, rowChecked, node.FileName);//展示模型
         RelativeTreeGridCheck(id);
-        LoadData_Project(dbNameStr, selectModelCode);//项目清单数据筛选
+        cnList = [];
+        getCheckNode("0");
+        LoadData_Project(cnList);//项目清单数据筛选
     }
     function RelativeTreeGridCheck(id) {
         var rowData = $('#XMJG_tab_Info').jqGrid('getRowData', id, true);
@@ -315,9 +334,20 @@
                 }
             });
             $("#" + parentData.id).find("input").prop('checked', flag ? rowChecked : flag);
-            if (rowChecked && flag) selectModelCode = parentData.id;
             checkP(rowChecked, parentData_p);
         }
+    }
+    //获取所有选中的构件节点
+    function getCheckNode(pid) {
+        var selectNodes = $("#XMJG_tab_Info").find("input[pid='" + pid + "']");
+        $.each(selectNodes, function (index, item) {
+            var id = $(item).val();
+            if (item.checked) {
+                cnList.push(id);
+            } else {
+                getCheckNode(id);
+            }
+        });
     }
     //#endregion
 
@@ -339,16 +369,16 @@
             dataType: "json",
             async: false,
             success: function (data) {
-                jsonStr = "";
-                dbNameStr = "";
+                jsonStr = [];
                 if (data.length > 0) {
-                    jsonStr = $.grep(data, function (value) {
-                        return value.Type == 1;
-                    })[0].Path;
-                    dbNameStr = $.grep(data, function (value) {
-                        return value.Type == 2;
-                    })[0].Path;
+                    $.each(data, function (index, value) {
+                        jsonStr.push(value.Path);
+                    });
+                    remove3DModelFile();//注销之前模型文件
+                    cnList = [];
+                    LoadData_Project(cnList)
                     $("#3DModal_lab").html(selectOrgData.CompanyFullName);
+                    $(".disModel").css("display", "block");
                     flag = true;
                 }
                 else {
@@ -358,26 +388,39 @@
             }
         });
     }
+    var IsFirstLoadModel = true;
     function loadModelData_Index() {
         if (selectOrgData.CompanyCode != selectSiteCode) {
             selectSiteCode = selectOrgData.CompanyCode;
-        $("#XMJG_tab_Info").jqGrid('clearGridData');
-        if (jsonStr != "" && dbNameStr != "") {
-            $("#XMJG_tab_Info").jqGrid('setGridParam', { postData: { dbName: dbNameStr }, }).trigger('reloadGrid');
-            getBim3DJsonfile(jsonStr);//加载模型数据
+            $("#XMJG_tab_Info").jqGrid('clearGridData');
+            if (jsonStr.length > 0) {
+                $("#XMJG_tab_Info").jqGrid('setGridParam', { postData: { SiteCode: selectSiteCode }, }).trigger('reloadGrid');
+                //加载模型数据
+                if (IsFirstLoadModel) {
+                    getBim3DJsonfile(jsonStr[0], selectSiteCode);
+                    IsFirstLoadModel = false;
+                }
+                else {
+                    creatModelUrl(jsonStr[0], selectSiteCode, function (url) {
+                        add3DModelFileToArray(url);
+                    });
+                }
             }
         }
     }
     //获取显示的模型id
-    function getModelIdList(code, rowChecked) {
+    function getModelIdList(code, rowChecked, FileName) {
         $.ajax({
             url: "@Url.Action("GetModelIdList", "BIM")",
-            data: { dbName: dbNameStr, ComponentCode: code },
+            data: { SiteCode: selectSiteCode, ComponentCode: code },
             dataType: "json",
             async: false,
             success: function (data) {
                 if (rowChecked) {
-                    showCheckModelViews(data);
+                    var ModelData = data;
+                    creatModelUrl(FileName, selectSiteCode, function (url) {
+                        showCheckModelViews(ModelData, url);
+                    });
                 } else {
                     hideCheckModelViews(data);
                 }

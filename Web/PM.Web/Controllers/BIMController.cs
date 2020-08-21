@@ -25,6 +25,7 @@ namespace PM.Web.Controllers
         private readonly TbWorkOrderLogic _workOrderLogic = new TbWorkOrderLogic();
         private readonly OrganizationMapLogic _organizationMap = new OrganizationMapLogic();
         private readonly string _fileConfig = System.Configuration.ConfigurationManager.AppSettings["uploadBIMFile"];
+        public readonly ModelPropertyLogIc _modelPropertyLogIc = new ModelPropertyLogIc();
 
         #region GIS
         public ActionResult BIMGISView()
@@ -75,8 +76,9 @@ namespace PM.Web.Controllers
             ViewBag.BIMFolder = _fileConfig;
             return View();
         }
-        public ActionResult BIM3DGridList()
+        public ActionResult BIM3DGridList(bool isOrder)
         {
+            ViewBag.IsOrder = isOrder;
             return View();
         }
         public ActionResult EditRow(TbModelOtherInfo model)
@@ -87,18 +89,16 @@ namespace PM.Web.Controllers
             var data = _organizationMap.EditModelOtherInfo(model);
             if (model.AllWrite)
             {
-                if (string.IsNullOrEmpty(model.DBName)) return Content("");
-                string dbName = Server.MapPath("/" + _fileConfig + "/" + model.DBName);
-                BIMLogic _BIMLogic = new BIMLogic(dbName);
                 BIMRequest request = new BIMRequest()
                 {
+                    SiteCode=model.SiteCode,
                     ComponentCode = model.ComponentCodeShow,
                     Size = model.Size,
                     TotalCount = model.TotalCount,
                     IsWrite=true
                 };
                 List<TbModelOtherInfo> iList = new List<TbModelOtherInfo>();
-                var dataItem = _BIMLogic.GetDataItemListForPage(request);
+                var dataItem = _modelPropertyLogIc.GetDataItemListForPage(request);
                 dataItem.ForEach(x =>
                 {
                     TbModelOtherInfo item = new TbModelOtherInfo()
@@ -138,10 +138,8 @@ namespace PM.Web.Controllers
         /// <returns></returns>
         public ActionResult Get3DGridJson(BIMRequest request)
         {
-            if (string.IsNullOrEmpty(request.DBName) || string.IsNullOrEmpty(request.ComponentCode)) return Content("");
-            string dbName = Server.MapPath("/" + _fileConfig + "/" + request.DBName);
-            BIMLogic _BIMLogic = new BIMLogic(dbName);
-            var data = _BIMLogic.GetDataListForPage(request);
+            if (string.IsNullOrEmpty(request.SiteCode) || string.IsNullOrEmpty(request.ComponentCodeList)) return Content("");
+            var data = _modelPropertyLogIc.GetDataListForPage(request);
             return Content(data.ToJson());
         }
 
@@ -152,10 +150,7 @@ namespace PM.Web.Controllers
         /// <returns></returns>
         public ActionResult Get3DItemGridJson(BIMRequest request)
         {
-            if (string.IsNullOrEmpty(request.DBName)) return Content("");
-            string dbName = Server.MapPath("/" + _fileConfig + "/" + request.DBName);
-            BIMLogic _BIMLogic = new BIMLogic(dbName);
-            var data = _BIMLogic.GetDataItemListForPage(request);
+            var data = _modelPropertyLogIc.GetDataItemListForPage(request);
             return Content(data.ToJson());
         }
 
@@ -164,12 +159,9 @@ namespace PM.Web.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public ActionResult Getmodel_tree(string dbName)
+        public ActionResult Getmodel_tree(BIMRequest request)
         {
-            if (string.IsNullOrEmpty(dbName)) return Content("");
-            dbName = Server.MapPath("/" + _fileConfig + "/" + dbName);
-            BIMLogic _BIMLogic = new BIMLogic(dbName);
-            var data = _BIMLogic.Getmodel_tree();
+            var data = _modelPropertyLogIc.Getmodel_tree(request);
             var treeList = new List<TreeGridModel>();
             foreach (model_tree item in data)
             {
@@ -197,10 +189,7 @@ namespace PM.Web.Controllers
         /// <returns></returns>
         public ActionResult GetModelIdList(BIMRequest request)
         {
-            if (string.IsNullOrEmpty(request.DBName)) return Content("");
-            string dbName = Server.MapPath("/" + _fileConfig + "/" + request.DBName);
-            BIMLogic _BIMLogic = new BIMLogic(dbName);
-            var data = _BIMLogic.GetModelIdList(request);
+            var data = _modelPropertyLogIc.GetModelIdList(request);
             return Content(data.ToJson());
         }
 

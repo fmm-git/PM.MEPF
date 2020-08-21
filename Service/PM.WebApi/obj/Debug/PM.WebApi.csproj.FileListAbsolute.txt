@@ -86,4 +86,3 @@ F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\zh-Hans\System.Spat
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.csproj.CopyComplete
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.dll
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.pdb
-F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.csprojAssemblyReference.cache

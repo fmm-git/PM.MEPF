@@ -151,21 +151,21 @@ namespace PM.Web.Areas.SystemManage.Controllers
         {
             if (type == "add")
             {
-                var OnlyVerification = cit.VerificationMethod(company, "add");
-                if (OnlyVerification > 0)
-                {
-                    return Error("公司名称重复！");
-                }
+                //var OnlyVerification = cit.VerificationMethod(company, "add");
+                //if (OnlyVerification > 0)
+                //{
+                //    return Error("公司名称重复！");
+                //}
                 var data = cit.Insert(company);
                 return Content(data.ToJson());
             }
             else
             {
-                var OnlyVerification = cit.VerificationMethod(company, "edit");
-                if (OnlyVerification > 0)
-                {
-                    return Error("公司名称重复！");
-                }
+                //var OnlyVerification = cit.VerificationMethod(company, "edit");
+                //if (OnlyVerification > 0)
+                //{
+                //    return Error("公司名称重复！");
+                //}
                 var data = cit.Update(company);
                 return Content(data.ToJson());
             }

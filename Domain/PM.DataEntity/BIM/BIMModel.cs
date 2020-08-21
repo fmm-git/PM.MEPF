@@ -15,6 +15,9 @@ namespace PM.DataEntity.BIM
         public string id { get; set; }
         public string pid { get; set; }
         public string name { get; set; }
+        public string FileName { get; set; }
+        public int Total { get; set; }
+        public int Type { get; set; }
     }
     public class modelData_tree
     {
@@ -39,12 +42,15 @@ namespace PM.DataEntity.BIM
         /// </summary>
         public string Material { get; set; }
         public string ComponentCode { get; set; }
+        public string FileName { get; set; }
+        public int Total { get; set; }
     }
     /// <summary>
     /// 项目总清单列表
     /// </summary>
     public class ProjectListAllModel : ProjectListInfoModel
     {
+        public string SiteCode { get; set; }
         /// <summary>
         /// 专业
         /// </summary>
@@ -232,6 +238,7 @@ namespace PM.DataEntity.BIM
         /// 构件编号
         /// </summary>
         public string ComponentCode { get; set; }
+        public string ComponentCodeList { get; set; }
         /// <summary>
         /// 材料名称
         /// </summary>
@@ -251,12 +258,9 @@ namespace PM.DataEntity.BIM
 
     public class ProjectListInsertModel
     {
+        public string ID { get; set; }
         public string SiteCode { get; set; }
         public string ProjectId { get; set; }
-        public string FileName { get; set; }
-
-
-        public string id { get; set; }
         /// <summary>
         /// 专业
         /// </summary>
@@ -321,5 +325,55 @@ namespace PM.DataEntity.BIM
         /// 支架图纸编号
         /// </summary>
         public string DrawingNo { get; set; }
+        public int IsOrder { get; set; }
+        public string FileName { get; set; }
+        public string Other1 { get; set; }
+        public string Other2 { get; set; }
+        public string Other3 { get; set; }
+        public string Other4 { get; set; }
+        public string Other5 { get; set; }
+    }
+
+    public class ModelReportList
+    {
+        public string SiteCode { get; set; }
+        public string PlanTime { get; set; }
+        public string ActualTime { get; set; }
+        //计划总数
+        public int PlanTotal1 { get; set; }
+        public int PlanTotal2 { get; set; }
+        public int PlanTotal3 { get; set; }
+        //加工中总数
+        public int ProcessingTotal1 { get; set; }
+        public int ProcessingTotal2 { get; set; }
+        public int ProcessingTotal3 { get; set; }
+        //加工完成总数
+        public int MachinTotal1 { get; set; }
+        public int MachinTotal2 { get; set; }
+        public int MachinTotal3 { get; set; }
+        //安装完成总数
+        public int InstallTotal1 { get; set; }
+        public int InstallTotal2 { get; set; }
+        public int InstallTotal3 { get; set; }
+        //未完成总数
+        public int NoTotal1 { get { return this.PlanTotal1 - InstallTotal1; } }
+        public int NoTotal2 { get { return this.PlanTotal2 - InstallTotal2; } }
+        public int NoTotal3 { get { return this.PlanTotal2 - InstallTotal2; } }
+        //验收完成总数
+        public int CheckTotal1 { get; set; }
+        public int CheckTotal2 { get; set; }
+        public int CheckTotal3 { get; set; }
+        //滞后总数
+        public int lag1 { get; set; }
+        public int lag2 { get; set; }
+        public int lag3 { get; set; }
+        //超前完成总数
+        public int lea1 { get; set; }
+        public int lea2 { get; set; }
+        public int lea3 { get; set; }
+        //滞后未完成总数
+        public int Nolag1 { get; set; }
+        public int Nolag2 { get; set; }
+        public int Nolag3 { get; set; }
     }
 }

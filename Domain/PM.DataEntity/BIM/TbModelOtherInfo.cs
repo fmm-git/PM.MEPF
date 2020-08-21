@@ -13,10 +13,10 @@ using Dos.ORM;
 
 namespace PM.DataEntity
 {
-	/// <summary>
-	/// 模型项目清单附加信息表
-	/// </summary>
-	[Table("TbModelOtherInfo")]
+    /// <summary>
+    ///  模型构件附加信息
+    /// </summary>
+    [Table("TbModelOtherInfo")]
     [Serializable]
     public partial class TbModelOtherInfo : Entity
     {
@@ -29,6 +29,7 @@ namespace PM.DataEntity
 		private int _Type;
 		private string _SiteCode;
 		private string _ProjectId;
+		private bool _IsOver;
 
 		/// <summary>
 		/// 
@@ -134,6 +135,19 @@ namespace PM.DataEntity
 				this._ProjectId = value;
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		[Field("IsOver")]
+		public bool IsOver
+		{
+			get{ return _IsOver; }
+			set
+			{
+				this.OnPropertyValueChange("IsOver");
+				this._IsOver = value;
+			}
+		}
 		#endregion
 
 		#region Method
@@ -167,6 +181,7 @@ namespace PM.DataEntity
 				_.Type,
 				_.SiteCode,
 				_.ProjectId,
+				_.IsOver,
 			};
         }
         /// <summary>
@@ -183,6 +198,7 @@ namespace PM.DataEntity
 				this._Type,
 				this._SiteCode,
 				this._ProjectId,
+				this._IsOver,
 			};
         }
         /// <summary>
@@ -237,15 +253,20 @@ namespace PM.DataEntity
 			/// 项目Id
 			/// </summary>
 			public readonly static Field ProjectId = new Field("ProjectId", "TbModelOtherInfo", "项目Id");
+            /// <summary>
+			/// 
+			/// </summary>
+			public readonly static Field IsOver = new Field("IsOver", "TbModelOtherInfo", "");
         }
         #endregion
 
         #region 扩展字段
-        public string DBName { get; set; }
-		public string ComponentCodeShow { get; set; }
-		public string Size { get; set; }
-		public int TotalCount { get; set; }
-		public bool AllWrite { get; set; }
-		#endregion
-	}
+
+		/// <summary>
+		/// 差额
+		/// </summary>
+        public int Difference { get; set; }
+
+        #endregion
+    }
 }

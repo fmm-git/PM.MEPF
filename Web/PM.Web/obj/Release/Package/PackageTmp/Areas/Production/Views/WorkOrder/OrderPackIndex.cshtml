@@ -11,7 +11,6 @@
 <style type="text/css">
     #tabQrCode {
         width: 100%;
-        height: 500px;
     }
 
     .tabQrCodeTh {
@@ -38,69 +37,68 @@
     }
 
     .td1 {
-        width: 5%;
+        width: 80px;
         text-align: center;
     }
 
     .td2 {
-        width: 5%;
+        width: 80px;
         text-align: center;
     }
 
     .td3 {
-        width: 65%;
+        width: 550px;
     }
-
+    .td5 {
+        text-align: center;
+        width: 180px;
+    }
     .td4 {
-        width: 10%;
+        width: 150px;
         text-align: center;
     }
 </style>
 <script>
-    var OrderCode = $.request("OrderCode");
     $(function () {
         $.LodeMenuBtn("/Production/WorkOrder/OrderPackIndex", "#toolbar_OrderPack");
-        var param1 = $(".search").GetSearchCondition();
+        var param1 = $(".searchNew").GetSearchCondition();
+        GetList(param1);
+    });
+    //订单详情页面点击二维码图标之后加载二维码页面的数据
+    function LodePackIndex(OrderCode) {
+        var param1 = $(".searchNew").GetSearchCondition();
         if (OrderCode) {
-            $("#OrderCode").removeClass("hidSearchContent");
-            $(".input-group-btn").removeClass("hidSearchContent");
-            $("#OrderCode").val(OrderCode);
+            $("#SearchTypeNew").val("OrderCode");
+            $(".searchNew #OrderCode").removeClass("hidSearchContent");
+            $(".searchNew .input-group-btn").removeClass("hidSearchContent");
+            $(".searchNew #OrderCode").val(OrderCode);
             param1.OrderCode = OrderCode;
+            GetList(param1);
             //关闭加工订单查看页面
             var index = top.layer.getFrameIndex("Details");
             top.layer.close(index);
         }
-        GetList(param1);
-        //查询
-        $("#btn_search").click(function () {
-            var param = $(".search").GetSearchCondition();
-            GetList(param);
-        });
-        $("#btn_searchOth").click(function () {
-            var postData = $(".search").formSerialize();
-            for (x in postData) {
-                if (x != "ProjectId") {
-                    postData[x] = "";
-                }
-            }
-            var ss = $("#SearchType").children('option:selected').val();
-            if (ss != "") {
-                var cons = $("[name='" + ss + "']");
-                $.each(cons, function (i, item) {
-                    postData[$(item)[0].id] = $(item).val();
-                });
-            }
-            GetList(postData);
-        });
-        //回车查询
-        document.onkeydown = function (e) {
-            if (!e) e = window.event;
-            if ((e.keyCode || e.which) == 13) {
-                $('#btn_search').trigger("click");
+    }
+    function clicksearch() {
+        var param = $(".searchNew").GetSearchCondition();
+        GetList(param);
+    }
+    function clicksearchOth() {
+        var postData = $(".searchNew").formSerialize();
+        for (x in postData) {
+            if (x != "ProjectId") {
+                postData[x] = "";
             }
         }
-    });
-
+        var ss = $("#SearchTypeNew").children('option:selected').val();
+        if (ss != "") {
+            var cons = $("[name='" + ss + "']");
+            $.each(cons, function (i, item) {
+                postData[$(item)[0].id] = $(item).val();
+            });
+        }
+        GetList(postData);
+    }
     function GetList(param) {
         $("#pager").zPager({
             url: "@Url.Action("GetPackageQRCodeJson", "WorkOrder")",
@@ -126,11 +124,11 @@
                             .replace("{PackCode}", value.PackCode)
                             .replace("{Major}", value.Major)
                             .replace("{ComponentName}", value.ComponentName)
-                            .replace("{SystemType}",value.SystemType)
+                            .replace("{SystemType}", value.SystemType)
                             .replace("{SumNumber}", value.SumNumber)
                             .replace("{ThisPackNumber}", value.ThisPackNumber)
-                            .replace("{DistributionTime}", value.DistributionTime)
-                            .replace("{PackDate}",value.PackDate)
+                            .replace("{DistributionTime}", formatDatebox(value.DistributionTime))
+                            .replace("{PackDate}", formatDatebox(value.PackDateNew))
                             .replace("{MaterialType}", value.MaterialType)
                             .replace("{SiteNameL}", value.SiteName)
                             .replace("{OrderCodeL}", value.OrderCode)
@@ -141,7 +139,7 @@
                             .replace("{SumNumberL}", value.SumNumber)
                             .replace("{ThisPackNumberL}", value.ThisPackNumber)
                             .replace("{DistributionTimeL}", value.DistributionTime)
-                            .replace("{PackDateL}", value.PackDate)
+                            .replace("{PackDateL}", value.PackDateNew)
                             .replace("{MaterialTypeL}", value.MaterialType)
                             .replace("{SignForStateL}", value.SignForState);
                     $("#tabQrCode").append(itemRow);
@@ -149,6 +147,13 @@
                 LodeQRCode();//加载二维码
                 if (data.length == 0) {
                     $("#tabQrCode").css('height', '40px');
+                }
+                //回车查询
+                document.onkeydown = function (e) {
+                    if (!e) e = window.event;
+                    if ((e.keyCode || e.which) == 13) {
+                        $('#btn_search').trigger("click");
+                    }
                 }
             }
         });
@@ -207,6 +212,7 @@
     <tr>
         <th class="tabQrCodeTh">序号</th>
         <th class="tabQrCodeTh">操作</th>
+        <th class="tabQrCodeTh">站点</th>
         <th class="tabQrCodeTh">构件二维码</th>
         <th class="tabQrCodeTh">备注</th>
     </tr>
@@ -264,38 +270,42 @@
                 </div>
             </div>
         </td>
-
+        <td class="td5">{SiteNameL}</td>
         <td class="td3">
-            <div class="tr2" qrcode="{qrcode}"></div>
-            <div class="tr3">
-                包件号：{PackCodeL}<br />
-                专业：{MajorL}<br />
-                构件名称：{ComponentNameL}
-            </div>
-            <div class="tr3">
-                <br />
-                订单编号：{OrderCodeL}<br />
-                系统类型：{SystemTypeL}<br />
-                总件数/当前打包数:{SumNumberL}/{ThisPackNumberL}
-            </div>
-            <div class="tr3">
-                <br />
-                要求送达时间：{DistributionTimeL}<br />
-                材料类型：{MaterialTypeL}<br />
-                打包日期：{PackDateL}
+            <div>
+                <div style="width:550px;">
+                    <table>
+                        <tr>
+                            <td rowspan="3" qrcode="{qrcode}"></td>
+                            <td style="padding-left:5px;">包件号:{PackCodeL}</td>
+                            <td style="padding-left:5px;">订单编号:{OrderCodeL}</td>
+                            <td style="padding-left:5px;">要求送达时间:{DistributionTimeL}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left:5px;">专业:{MajorL}</td>
+                            <td style="padding-left:5px;">系统类型:{SystemTypeL}</td>
+                            <td style="padding-left:5px;">材料类型:{MaterialTypeL}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left:5px;">构件名称:{ComponentNameL}</td>
+                            <td style="padding-left:5px;">总件数/当前打包数:{SumNumberL}/{ThisPackNumberL}</td>
+                            <td style="padding-left:5px;">打包日期:{PackDateL}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </td>
-        <td class="td4"><a onclick="QrcodeDetail(this)" hid="{IDHH}">二维码贴纸</a><br/>{SignForStateL}</td>
+        <td class="td4"><a onclick="QrcodeDetail(this)" hid="{IDHH}">二维码贴纸</a><br />{SignForStateL}</td>
     </tr>
 </script>
 
 <div class="topPanel">
-    <div class="search">
+    <div class="search searchNew">
         <table>
             <tr>
                 <td>
                     <div class="input-group input-group-search">
-                        <select id="SearchType" name="SearchType" class="form-control" style="width: 120px;">
+                        <select id="SearchTypeNew" name="SearchType" class="form-control" style="width: 120px;">
                             <option value="">全部</option>
                             <option value="OrderCode">订单编号</option>
                             <option value="ComponentName">构件名称</option>
@@ -308,8 +318,8 @@
                 </td>
                 <td>
                     <div class="btn-search">
-                        <a class="btn btn-primary btn_searchOne" id="btn_searchOne">查询</a>
-                        <a class="btn btn-primary btn_search" id="btn_search">结果中搜索</a>
+                        <a class="btn btn-primary" id="btn_searchOne" onclick="clicksearchOth()">查询</a>
+                        <a class="btn btn-primary" id="btn_search" onclick="clicksearch()">结果中搜索</a>
                     </div>
                 </td>
             </tr>
@@ -317,17 +327,19 @@
     </div>
     <div class="topPanel-btn" id="toolbar_PackageQRCode">
         <div class="btn-group">
-            <a class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
+            <a class="btn btn-primary" onclick="reload_OrderPack()"><span class="glyphicon glyphicon-refresh"></span>刷新</a>
         </div>
     </div>
 </div>
 <div class="gridPanel">
-    <div id="qrcode" style=" display:block; overflow-y:scroll;">
-        <table id="tabQrCode"></table>
+    <div style="overflow:scroll;height:500px">
+        <div id="qrcode" style="width:1000px;">
+            <table id="tabQrCode" style="width:100%"></table>
+        </div>
     </div>
-</div>
-<div class="footer" style="height:50px;">
-    <div id="pager" class="pager clearfix" style="margin-top:10px;margin-bottom:10px;"></div>
+    <div class="footer" style="height:50px;">
+        <div id="pager" class="pager clearfix" style="margin-top:10px;margin-bottom:10px;"></div>
+    </div>
 </div>
 <script>
     function reload_OrderPack() {
