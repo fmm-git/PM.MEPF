@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PM.Business.BIM
 {
@@ -103,8 +102,7 @@ namespace PM.Business.BIM
                 var dataList = Repositorys<ProjectListAllModel>.FromSql(sql, parameter);
                 if (dataList.Count < request.TotalCount)
                 {
-                    int lastIndex = request.ComponentCode.LastIndexOf('-');
-                    request.ComponentCode = request.ComponentCode.Substring(0, lastIndex);
+                    request.ComponentCode = GetCode(request.ComponentCode);
                     return GetDataItemListForPage(request);
                 }
                 if (!request.IsWrite)
@@ -289,7 +287,7 @@ namespace PM.Business.BIM
         /// <summary>
         /// 获取数据列表(模型统计信息)
         /// </summary>
-        public List<ModelReportList> GetModelReportForPage(BIMRequest request,out int count)
+        public List<ModelReportList> GetModelReportForPage(BIMRequest request, out int count)
         {
             #region 查询语句
             string whereSql = "where 1=1";
@@ -305,21 +303,21 @@ namespace PM.Business.BIM
                             SiteCode,
                             min(PlanTime)as PlanTime,
                             max(ActualTime)as ActualTime,
-                            (select sum(PlanTotal) from TbModelReporte where SiteCode=a.SiteCode and type=4) as PlanTotal1, 
-                            (select sum(PlanTotal) from TbModelReporte where SiteCode=a.SiteCode and type=5) as PlanTotal2, 
-                            (select sum(PlanTotal) from TbModelReporte where SiteCode=a.SiteCode and type=6) as PlanTotal3, 
-                            (select sum(ProcessingTotal) from TbModelReporte where SiteCode=a.SiteCode and type=4) as ProcessingTotal1, 
-                            (select sum(ProcessingTotal) from TbModelReporte where SiteCode=a.SiteCode and type=5) as ProcessingTotal2, 
-                            (select sum(ProcessingTotal) from TbModelReporte where SiteCode=a.SiteCode and type=6) as ProcessingTotal3, 
-                            (select sum(MachinTotal) from TbModelReporte where SiteCode=a.SiteCode and type=4) as MachinTotal1, 
-                            (select sum(MachinTotal) from TbModelReporte where SiteCode=a.SiteCode and type=5) as MachinTotal2, 
-                            (select sum(MachinTotal) from TbModelReporte where SiteCode=a.SiteCode and type=6) as MachinTotal3,  
-                            (select sum(InstallTotal) from TbModelReporte where SiteCode=a.SiteCode and type=4) as InstallTotal1, 
-                            (select sum(InstallTotal) from TbModelReporte where SiteCode=a.SiteCode and type=5) as InstallTotal2, 
-                            (select sum(InstallTotal) from TbModelReporte where SiteCode=a.SiteCode and type=6) as InstallTotal3,  
-                            (select sum(CheckTotal) from TbModelReporte where SiteCode=a.SiteCode and type=4) as CheckTotal1, 
-                            (select sum(CheckTotal) from TbModelReporte where SiteCode=a.SiteCode and type=5) as CheckTotal2, 
-                            (select sum(CheckTotal) from TbModelReporte where SiteCode=a.SiteCode and type=6) as CheckTotal3, 
+                            (select sum(PlanTotal) from TbModelReporte where SiteCode=a.SiteCode and type=3) as PlanTotal1, 
+                            (select sum(PlanTotal) from TbModelReporte where SiteCode=a.SiteCode and type=4) as PlanTotal2, 
+                            (select sum(PlanTotal) from TbModelReporte where SiteCode=a.SiteCode and type=5) as PlanTotal3, 
+                            (select count(*) from TbModelReporte where SiteCode=a.SiteCode and State=1 and type=4) as ProcessingTotal1, 
+                            (select count(*) from TbModelReporte where SiteCode=a.SiteCode and State=1 and type=5) as ProcessingTotal2, 
+                            (select count(*) from TbWorkOrderDetail where SiteCode=a.SiteCode and ComponentStrat='加工中') as ProcessingTotal3, 
+                            (select count(*) from TbModelReporte where SiteCode=a.SiteCode and State=2 and type=4) as MachinTotal1, 
+                            (select count(*) from TbModelReporte where SiteCode=a.SiteCode and State=2 and type=5) as MachinTotal2, 
+                            (select count(*) from TbWorkOrderDetail where SiteCode=a.SiteCode and ComponentStrat='加工完成') as MachinTotal3,  
+                            (select count(*) from TbModelReporte where SiteCode=a.SiteCode and State=3 and type=4) as InstallTotal1, 
+                            (select count(*) from TbModelReporte where SiteCode=a.SiteCode and State=3 and type=5) as InstallTotal2, 
+                            (select count(*) from TbWorkOrderDetail where SiteCode=a.SiteCode and ComponentStrat='安装完成') as InstallTotal3,  
+                            (select count(*) from TbModelReporte where SiteCode=a.SiteCode and State=4 and type=4) as CheckTotal1, 
+                            (select count(*) from TbModelReporte where SiteCode=a.SiteCode and State=4 and type=5) as CheckTotal2, 
+                            (select count(*) from TbWorkOrderDetail where SiteCode=a.SiteCode and ComponentStrat='签收完成') as CheckTotal3, 
                             (select count(*) from TbModelReporte where SiteCode=a.SiteCode and type=4 and Difference<0) as lag1, 
                             (select count(*) from TbModelReporte where SiteCode=a.SiteCode and type=5 and Difference<0) as lag2, 
                             (select count(*) from TbModelOtherInfo where SiteCode=a.SiteCode and type=2 and Difference<0) as lag3, 
@@ -344,12 +342,14 @@ namespace PM.Business.BIM
         /// <summary>
         /// 更新模型统计信息
         /// </summary>
-        public void UpdateModelReportData(DbTrans trans, List<TbModelReporte> insertList, List<TbModelReporte> updateList)
+        public void UpdateModelReportData(DbTrans trans, List<TbModelReporte> insertList, List<TbModelReporte> updateList, List<TbModelReporte> delList)
         {
             if (insertList.Any())
                 Repository<TbModelReporte>.Insert(trans, insertList);
             if (updateList.Any())
                 Repository<TbModelReporte>.Update(trans, updateList);
+            if (delList.Any())
+                Repository<TbModelReporte>.Delete(trans, delList);
         }
 
         /// <summary>
@@ -357,22 +357,10 @@ namespace PM.Business.BIM
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        public Tuple<List<TbModelReporte>, List<TbModelReporte>> CreatReportModel(TbModelOrg model)
+        public Tuple<List<TbModelReporte>, List<TbModelReporte>, List<TbModelReporte>> CreatReportModel(TbModelOrg model)
         {
             List<TbModelReporte> dataList = new List<TbModelReporte>();
-            int count = 0;
-            var list = Getmodel_tree2(model.SiteCode, out count);
-            var com = new TbModelReporte()
-            {
-                SiteCode = model.SiteCode,
-                ProjectId = model.ProjectId,
-                FileName = "",
-                PlanTotal = count,
-                ComponentCode = "",
-                ComponentCodeP = "",
-                Type = 6
-            };
-            dataList.Add(com);
+            var list = Getmodel_tree2(model.SiteCode);
             //项目结构树信息
             list.ForEach(x =>
             {
@@ -397,14 +385,16 @@ namespace PM.Business.BIM
                     if (item != null)
                     {
                         item.PlanTotal = x.PlanTotal;
-                        item.IsUpdate = true;
-                        x.IsUpdate = true;
+                        item.OpType = 2;
+                        x.OpType = 2;
                     }
+                    else { x.OpType = 1; }
                 });
             }
-            var insertList = dataList.Where(p => !p.IsUpdate).ToList();
-            var updateList = reportList.Where(p => p.IsUpdate).ToList();
-            return new Tuple<List<TbModelReporte>, List<TbModelReporte>>(insertList, updateList);
+            var insertList = dataList.Where(p => p.OpType == 1).ToList();
+            var updateList = reportList.Where(p => p.OpType == 2).ToList();
+            var delList = reportList.Where(p => p.OpType == 0).ToList();
+            return new Tuple<List<TbModelReporte>, List<TbModelReporte>, List<TbModelReporte>>(insertList, updateList, delList);
         }
         #endregion
 
@@ -413,19 +403,18 @@ namespace PM.Business.BIM
         /// <summary>
         /// 获取项目结构树
         /// </summary>
-        private List<model_tree> Getmodel_tree2(string siteCode, out int count)
+        private List<model_tree> Getmodel_tree2(string siteCode)
         {
             List<Parameter> parameter = new List<Parameter>();
             parameter.Add(new Parameter("@SiteCode", siteCode, DbType.String, null));
             try
             {
-                string sql = @"select Major,System,Subsystem,MaterialType,Material,MAX(ComponentCode) as ComponentCode,MAX(FileName) as FileName,count(*) as Total
+                string sql = @"select Major,System,Subsystem,MaterialType,Material,MAX(ComponentCode) as ComponentCode,MAX(FileName) as FileName
                                from 
                                TbModel_Property
                                where SiteCode=@SiteCode
                                group by Major,System,Subsystem,MaterialType,Material";
                 var modelpropertyList = Repositorys<modelData_tree>.FromSql(sql, parameter);
-                count = modelpropertyList.Where(p => !p.Major.IsEmpty()).Sum(p => p.Total);
                 var list = new List<model_tree>();
                 for (int i = 5; i < 7; i++)
                 {
@@ -501,8 +490,8 @@ namespace PM.Business.BIM
             for (int i = 0; i <= type; i++)
             {
                 if (type > 2 && i > 0)
-                    pId += codeArry[i - 1] + "_";
-                id += codeArry[i] + "_";
+                    pId += GetCode(codeArry[i - 1]) + "_";
+                id += GetCode(codeArry[i]) + "_";
             }
             pId = pId.TrimEnd('_');
             id = id.TrimEnd('_');
@@ -514,6 +503,14 @@ namespace PM.Business.BIM
             return new Tuple<string, string>(pId, id);
         }
 
+        private string GetCode(string code)
+        {
+            string retCode = code;
+            int lastIndex = code.LastIndexOf('-');
+            if (lastIndex > 0)
+                retCode = code.Substring(0, lastIndex);
+            return retCode;
+        }
         /// <summary>
         /// 获取清单附加信息
         /// </summary>

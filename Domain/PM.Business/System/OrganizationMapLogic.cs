@@ -105,7 +105,7 @@ namespace PM.Business.System
                     //添加模型上传信息
                     Repository<TbModelOrg>.Insert(trans,model);
                     //统计信息
-                    _modelPropertyLogIc.UpdateModelReportData(trans, report.Item1, report.Item2);
+                    _modelPropertyLogIc.UpdateModelReportData(trans, report.Item1, report.Item2, report.Item3);
                     trans.Commit();
                     return AjaxResult.Success();
                 }

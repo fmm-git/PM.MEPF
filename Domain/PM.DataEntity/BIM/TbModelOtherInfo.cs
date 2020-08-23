@@ -266,7 +266,10 @@ namespace PM.DataEntity
 		/// 差额
 		/// </summary>
         public int Difference { get; set; }
-
+        public bool AllWrite { get; set; }
+        public string ComponentCodeShow { get; set; }
+		public string Size { get; set; }
+        public int TotalCount { get; set; }
         #endregion
     }
 }

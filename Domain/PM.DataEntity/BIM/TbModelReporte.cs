@@ -20,7 +20,7 @@ namespace PM.DataEntity
     [Serializable]
     public partial class TbModelReporte : Entity
     {
-		#region Model
+        #region Model
 		private int _ID;
 		private string _SiteCode;
 		private string _ProjectId;
@@ -29,12 +29,10 @@ namespace PM.DataEntity
 		private string _FileName;
 		private int _Type;
 		private int _PlanTotal;
-		private int _ProcessingTotal;
-		private int _MachinTotal;
-		private int _InstallTotal;
-		private int _CheckTotal;
+		private int _State;
 		private DateTime? _PlanTime;
 		private DateTime? _ActualTime;
+		private int _Difference;
 
 		/// <summary>
 		/// ID
@@ -115,7 +113,7 @@ namespace PM.DataEntity
 			}
 		}
 		/// <summary>
-		/// 类型: 1专业 2大系统 3小系统 4材料类型 5材料名称 6构件数量
+		/// 类型: 1专业 2大系统 3小系统 4材料类型 5材料名称
 		/// </summary>
 		[Field("Type")]
 		public int Type
@@ -141,55 +139,16 @@ namespace PM.DataEntity
 			}
 		}
 		/// <summary>
-		/// 加工中
+		/// _1加工中 2加工完成  3安装完成 4签收完成
 		/// </summary>
-		[Field("ProcessingTotal")]
-		public int ProcessingTotal
+		[Field("State")]
+		public int State
 		{
-			get{ return _ProcessingTotal; }
+			get{ return _State; }
 			set
 			{
-				this.OnPropertyValueChange("ProcessingTotal");
-				this._ProcessingTotal = value;
-			}
-		}
-		/// <summary>
-		/// 加工完成
-		/// </summary>
-		[Field("MachinTotal")]
-		public int MachinTotal
-		{
-			get{ return _MachinTotal; }
-			set
-			{
-				this.OnPropertyValueChange("MachinTotal");
-				this._MachinTotal = value;
-			}
-		}
-		/// <summary>
-		/// 安装完成
-		/// </summary>
-		[Field("InstallTotal")]
-		public int InstallTotal
-		{
-			get{ return _InstallTotal; }
-			set
-			{
-				this.OnPropertyValueChange("InstallTotal");
-				this._InstallTotal = value;
-			}
-		}
-		/// <summary>
-		/// 验收完成
-		/// </summary>
-		[Field("CheckTotal")]
-		public int CheckTotal
-		{
-			get { return _CheckTotal; }
-			set
-			{
-				this.OnPropertyValueChange("CheckTotal");
-				this._CheckTotal = value;
+				this.OnPropertyValueChange("State");
+				this._State = value;
 			}
 		}
 		/// <summary>
@@ -216,6 +175,19 @@ namespace PM.DataEntity
 			{
 				this.OnPropertyValueChange("ActualTime");
 				this._ActualTime = value;
+			}
+		}
+		/// <summary>
+		/// 差额
+		/// </summary>
+		[Field("Difference")]
+		public int Difference
+		{
+			get{ return _Difference; }
+			set
+			{
+				this.OnPropertyValueChange("Difference");
+				this._Difference = value;
 			}
 		}
 		#endregion
@@ -251,12 +223,10 @@ namespace PM.DataEntity
 				_.FileName,
 				_.Type,
 				_.PlanTotal,
-				_.ProcessingTotal,
-				_.MachinTotal,
-				_.InstallTotal
-				_.CheckTotal,
+				_.State,
 				_.PlanTime,
 				_.ActualTime,
+				_.Difference,
 			};
         }
         /// <summary>
@@ -273,12 +243,10 @@ namespace PM.DataEntity
 				this._FileName,
 				this._Type,
 				this._PlanTotal,
-				this._ProcessingTotal,
-				this._MachinTotal,
-				this._InstallTotal,
-				this._CheckTotal,
+				this._State,
 				this._PlanTime,
 				this._ActualTime,
+				this._Difference,
 			};
         }
         /// <summary>
@@ -326,30 +294,18 @@ namespace PM.DataEntity
 			/// </summary>
 			public readonly static Field FileName = new Field("FileName", "TbModelReporte", "文件地址");
             /// <summary>
-			/// 类型: 1专业 2大系统 3材料类型 4材料名称 5构件数量
+			/// 类型: 1专业 2大系统 3小系统 4材料类型 5材料名称
 			/// </summary>
-			public readonly static Field Type = new Field("Type", "TbModelReporte", "类型: 1专业 2大系统 3材料类型 4材料名称 5构件数量");
+			public readonly static Field Type = new Field("Type", "TbModelReporte", "类型: 1专业 2大系统 3小系统 4材料类型 5材料名称");
             /// <summary>
 			/// 计划总数
 			/// </summary>
 			public readonly static Field PlanTotal = new Field("PlanTotal", "TbModelReporte", "计划总数");
             /// <summary>
-			/// 加工中
+			/// _1加工中 2加工完成  3安装完成 4签收完成
 			/// </summary>
-			public readonly static Field ProcessingTotal = new Field("ProcessingTotal", "TbModelReporte", "加工中");
+			public readonly static Field State = new Field("State", "TbModelReporte", "_1加工中 2加工完成  3安装完成 4签收完成");
             /// <summary>
-			/// 加工完成
-			/// </summary>
-			public readonly static Field MachinTotal = new Field("MachinTotal", "TbModelReporte", "加工完成");
-            /// <summary>
-			/// 安装完成
-			/// </summary>
-			public readonly static Field InstallTotal = new Field("InstallTotal", "TbModelReporte", "安装完成");
-			/// <summary>
-			/// 验收完成
-			/// </summary>
-			public readonly static Field CheckTotal = new Field("CheckTotal", "TbModelReporte", "验收完成");
-			/// <summary>
 			/// 计划时间
 			/// </summary>
 			public readonly static Field PlanTime = new Field("PlanTime", "TbModelReporte", "计划时间");
@@ -357,11 +313,18 @@ namespace PM.DataEntity
 			/// 完成时间
 			/// </summary>
 			public readonly static Field ActualTime = new Field("ActualTime", "TbModelReporte", "完成时间");
+            /// <summary>
+			/// 差额
+			/// </summary>
+			public readonly static Field Difference = new Field("Difference", "TbModelReporte", "差额");
         }
-        #endregion
+		#endregion
 
-        #region 扩展字段
-        public bool IsUpdate { get; set; }
-        #endregion
-    }
+		#region 扩展字段
+		/// <summary>
+		/// 操作类型 1添加 2修改 0删除
+		/// </summary>
+		public int OpType { get; set; }
+		#endregion
+	}
 }
