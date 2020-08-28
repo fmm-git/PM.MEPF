@@ -67,6 +67,7 @@ namespace PM.DataEntity.System.ViewModel
     {
         public string CompanyCode { get; set; }
         public string CompanyFullName { get; set; }
+        public string CompanyFullNameShow { get { return this.CompanyFullName; } }
         public string ParentCompanyCode { get; set; }
         public string ParentCompanyName { get; set; }
         public string Address { get; set; }

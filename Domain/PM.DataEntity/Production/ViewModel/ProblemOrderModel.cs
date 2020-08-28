@@ -8,17 +8,11 @@ namespace PM.DataEntity.Production.ViewModel
     public class ProblemOrderRequest: PageSearchRequest
     {
 
-        public string CompanyCode { get; set; }
 
         /// <summary>
         /// 撤销状态
         /// </summary>
-        public string RevokeStatus { get; set; }
-
-        /// <summary>
-        /// 弹框收索条件
-        /// </summary>
-        public string keyword { get; set; }
+        public string ChangeStatus { get; set; }
 
         /// <summary>
         /// 原订单编号
@@ -26,18 +20,21 @@ namespace PM.DataEntity.Production.ViewModel
         public string OrderCode { get; set; }
 
         /// <summary>
-        /// 类型编码
+        /// 变更编号
         /// </summary>
-        public string TypeCode { get; set; }
+        public string ProblemOrderCode { get; set; }
         /// <summary>
-        /// 计划配送开始时间
+        /// 变更类型
         /// </summary>
-        public DateTime? BegTime { get; set; }
+        public string ChangeType { get; set; }
         /// <summary>
-        /// 计划配送结束时间
+        /// 数据类型
         /// </summary>
-        public DateTime? EndTiem { get; set; }
-        public bool IsCost { get; set; }
+        public string DateType { get; set; }
+        /// <summary>
+        /// 弹框收索条件
+        /// </summary>
+        public string keyword { get; set; }
         public bool IsOutPut { get; set; }
     }
 }

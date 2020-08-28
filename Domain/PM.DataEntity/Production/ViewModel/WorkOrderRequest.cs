@@ -12,13 +12,9 @@ namespace PM.DataEntity.Production.ViewModel
         /// </summary>
         public string OrderCode { get; set; }
         /// <summary>
-        /// 专业
+        /// 审批状态
         /// </summary>
-        public string Major { get; set; }
-        /// <summary>
-        /// 系统类型
-        /// </summary>
-        public string SystemType { get; set; }
+        public string Examinestatus { get; set; }
         /// <summary>
         /// 订单状态
         /// </summary>
@@ -32,9 +28,14 @@ namespace PM.DataEntity.Production.ViewModel
         /// </summary>
         public string UrgentDegree { get; set; }
         /// <summary>
-        /// 历史月份
+        /// 签收状态
         /// </summary>
-        public DateTime? HistoryMonth { get; set; }
+        public string SignForState { get; set; }
+        /// <summary>
+        /// 安装状态
+        /// </summary>
+        public string InstallState { get; set; }
+
         /// <summary>
         /// 签收类型
         /// </summary>
@@ -43,6 +44,18 @@ namespace PM.DataEntity.Production.ViewModel
         /// 安装类型
         /// </summary>
         public string InstallType { get; set; }
+        /// <summary>
+        /// 变更范围
+        /// </summary>
+        public string ChangeStatus { get; set; }
+        /// <summary>
+        /// 历史月份
+        /// </summary>
+        public DateTime? HistoryMonth { get; set; }
+        /// <summary>
+        /// 是否选择了左边组织机构
+        /// </summary>
+        public string IsLeft { get; set; }
         public bool IsOutPut { get; set; }
 
     }
@@ -77,6 +90,8 @@ namespace PM.DataEntity.Production.ViewModel
         /// 长度
         /// </summary>
         public decimal Length { get; set; }
+
+        public List<string> modelIdList { get; set; }
         
     }
 
@@ -198,13 +213,14 @@ namespace PM.DataEntity.Production.ViewModel
         public string zxt { get; set; }
         public string xtlx { get; set; }
         public string cz { get; set; }
-        public string sbcllx { get; set; }
-        public string sbclmc { get; set; }
+        public string cllx { get; set; }
+        public string gjmc { get; set; }
         public string mxgjbm { get; set; }
         public string gjbm { get; set; }
         public string ggcc { get; set; }
         public string cd { get; set; }
         public string mj { get; set; }
+        public string clmc { get; set; }
         /// <summary>
         /// 模型数据库文件
         /// </summary>

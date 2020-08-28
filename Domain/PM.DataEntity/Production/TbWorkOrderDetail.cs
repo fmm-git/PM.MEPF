@@ -10,6 +10,7 @@
 
 using System;
 using Dos.ORM;
+using PM.Common.Extension;
 
 namespace PM.DataEntity
 {
@@ -35,11 +36,12 @@ namespace PM.DataEntity
 		private string _SpecificationModel;
 		private string _Length;
 		private string _Area;
+		private string _Material;
+		private string _MxGjBm;
+		private string _MxGjId;
 		private string _Remark;
 		private string _LargePattern;
 		private string _ComponentStrat;
-		private string _MxGjBm;
-		private string _MxGjId;
 		private string _IsPack;
 		private DateTime? _PackDate;
 		private string _PackUserCode;
@@ -50,6 +52,8 @@ namespace PM.DataEntity
 		private DateTime? _InstallDate;
 		private string _InstallUserCode;
 		private string _PackCode;
+		private string _RevokeStart;
+		private string _SiteCode;
 
 		/// <summary>
 		/// ID
@@ -161,12 +165,12 @@ namespace PM.DataEntity
 		[Field("ComponentCode")]
 		public string ComponentCode
 		{
-			get{ return _ComponentCode; }
+			get { return _ComponentCode; }
 			set
 			{
-				this.OnPropertyValueChange("ComponentCode");
-				this._ComponentCode = value;
-			}
+                this.OnPropertyValueChange("ComponentCode");
+                //this._ComponentCode = value;
+            }
 		}
 		/// <summary>
 		/// 构建名称
@@ -234,6 +238,49 @@ namespace PM.DataEntity
 			}
 		}
 		/// <summary>
+		/// 材料名称
+		/// </summary>
+		[Field("Material")]
+		public string Material
+		{
+			get{ return _Material; }
+			set
+			{
+				this.OnPropertyValueChange("Material");
+				this._Material = value;
+			}
+		}
+		/// <summary>
+		/// 模型构件编码
+		/// </summary>
+		[Field("MxGjBm")]
+		public string MxGjBm
+		{
+			get{ return _MxGjBm; }
+			set
+			{
+				this.OnPropertyValueChange("MxGjBm");
+				this._MxGjBm = value;
+
+				//父级编码
+				string pcode = this.MxGjBm;
+				this._ComponentCode= StringEx.GetCodeSub(pcode);
+			}
+		}
+		/// <summary>
+		/// 模型构建id
+		/// </summary>
+		[Field("MxGjId")]
+		public string MxGjId
+		{
+			get{ return _MxGjId; }
+			set
+			{
+				this.OnPropertyValueChange("MxGjId");
+				this._MxGjId = value;
+			}
+		}
+		/// <summary>
 		/// 备注
 		/// </summary>
 		[Field("Remark")]
@@ -270,32 +317,6 @@ namespace PM.DataEntity
 			{
 				this.OnPropertyValueChange("ComponentStrat");
 				this._ComponentStrat = value;
-			}
-		}
-		/// <summary>
-		/// 模型构件编码
-		/// </summary>
-		[Field("MxGjBm")]
-		public string MxGjBm
-		{
-			get{ return _MxGjBm; }
-			set
-			{
-				this.OnPropertyValueChange("MxGjBm");
-				this._MxGjBm = value;
-			}
-		}
-		/// <summary>
-		/// 模型构建id
-		/// </summary>
-		[Field("MxGjId")]
-		public string MxGjId
-		{
-			get{ return _MxGjId; }
-			set
-			{
-				this.OnPropertyValueChange("MxGjId");
-				this._MxGjId = value;
 			}
 		}
 		/// <summary>
@@ -428,13 +449,40 @@ namespace PM.DataEntity
 				this._PackCode = value;
 			}
 		}
+		/// <summary>
+		/// 撤销状态
+		/// </summary>
+		[Field("RevokeStart")]
+		public string RevokeStart
+		{
+			get{ return _RevokeStart; }
+			set
+			{
+				this.OnPropertyValueChange("RevokeStart");
+				this._RevokeStart = value;
+			}
+		}
+		/// <summary>
+		/// 站点
+		/// </summary>
+		[Field("SiteCode")]
+		public string SiteCode
+		{
+			get { return _SiteCode; }
+			set
+			{
+				this.OnPropertyValueChange("SiteCode");
+				this._SiteCode = value;
+			}
+		}
+
 		#endregion
 
 		#region Method
-        /// <summary>
-        /// 获取实体中的主键列
-        /// </summary>
-        public override Field[] GetPrimaryKeyFields()
+		/// <summary>
+		/// 获取实体中的主键列
+		/// </summary>
+		public override Field[] GetPrimaryKeyFields()
         {
             return new Field[] {
 				_.ID,
@@ -467,11 +515,12 @@ namespace PM.DataEntity
 				_.SpecificationModel,
 				_.Length,
 				_.Area,
+				_.Material,
+				_.MxGjBm,
+				_.MxGjId,
 				_.Remark,
 				_.LargePattern,
 				_.ComponentStrat,
-				_.MxGjBm,
-				_.MxGjId,
 				_.IsPack,
 				_.PackDate,
 				_.PackUserCode,
@@ -482,6 +531,8 @@ namespace PM.DataEntity
 				_.InstallDate,
 				_.InstallUserCode,
 				_.PackCode,
+				_.RevokeStart,
+				_.SiteCode,
 			};
         }
         /// <summary>
@@ -504,11 +555,12 @@ namespace PM.DataEntity
 				this._SpecificationModel,
 				this._Length,
 				this._Area,
+				this._Material,
+				this._MxGjBm,
+				this._MxGjId,
 				this._Remark,
 				this._LargePattern,
 				this._ComponentStrat,
-				this._MxGjBm,
-				this._MxGjId,
 				this._IsPack,
 				this._PackDate,
 				this._PackUserCode,
@@ -519,6 +571,8 @@ namespace PM.DataEntity
 				this._InstallDate,
 				this._InstallUserCode,
 				this._PackCode,
+				this._RevokeStart,
+				this._SiteCode,
 			};
         }
         /// <summary>
@@ -598,6 +652,18 @@ namespace PM.DataEntity
 			/// </summary>
 			public readonly static Field Area = new Field("Area", "TbWorkOrderDetail", "面积");
             /// <summary>
+			/// 材料名称
+			/// </summary>
+			public readonly static Field Material = new Field("Material", "TbWorkOrderDetail", "材料名称");
+            /// <summary>
+			/// 模型构件编码
+			/// </summary>
+			public readonly static Field MxGjBm = new Field("MxGjBm", "TbWorkOrderDetail", "模型构件编码");
+            /// <summary>
+			/// 模型构建id
+			/// </summary>
+			public readonly static Field MxGjId = new Field("MxGjId", "TbWorkOrderDetail", "模型构建id");
+            /// <summary>
 			/// 备注
 			/// </summary>
 			public readonly static Field Remark = new Field("Remark", "TbWorkOrderDetail", "备注");
@@ -609,14 +675,6 @@ namespace PM.DataEntity
 			/// 构件状态
 			/// </summary>
 			public readonly static Field ComponentStrat = new Field("ComponentStrat", "TbWorkOrderDetail", "构件状态");
-            /// <summary>
-			/// 模型构件编码
-			/// </summary>
-			public readonly static Field MxGjBm = new Field("MxGjBm", "TbWorkOrderDetail", "模型构件编码");
-            /// <summary>
-			/// 模型构建id
-			/// </summary>
-			public readonly static Field MxGjId = new Field("MxGjId", "TbWorkOrderDetail", "模型构建id");
             /// <summary>
 			/// 是否打包
 			/// </summary>
@@ -657,7 +715,15 @@ namespace PM.DataEntity
 			/// 包件号
 			/// </summary>
 			public readonly static Field PackCode = new Field("PackCode", "TbWorkOrderDetail", "包件号");
-        }
+            /// <summary>
+			/// 撤销状态
+			/// </summary>
+			public readonly static Field RevokeStart = new Field("RevokeStart", "TbWorkOrderDetail", "撤销状态");
+			/// <summary>
+			/// 站点编号
+			/// </summary>
+			public readonly static Field SiteCode = new Field("SiteCode", "TbWorkOrderDetail", "站点编号");
+		}
         #endregion
 	}
 }

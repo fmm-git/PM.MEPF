@@ -520,5 +520,19 @@ namespace PM.Web.Areas.Production.Controllers
         }
         #endregion
 
+        #region 
+
+        /// <summary>
+        /// 订单标签信息(组织机构)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetOrgLabInfoList(WorkOrderRequest request)
+        {
+            var data = _workOrderLogic.GetOrgLabInfoList(request);
+            return Content(data.ToJson());
+        }
+
+        #endregion
     }
 }

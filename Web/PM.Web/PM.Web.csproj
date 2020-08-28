@@ -230,6 +230,7 @@
     <Compile Include="Models\ExcelModel\DistributionPlanExcel.cs" />
     <Compile Include="Models\ExcelModel\FactoryBatchNeedPlanExcel.cs" />
     <Compile Include="Models\ExcelModel\InOrderExcel.cs" />
+    <Compile Include="Models\ExcelModel\ModelReportExcel.cs" />
     <Compile Include="Models\ExcelModel\RawMonthDemandPlanExcel.cs" />
     <Compile Include="Models\ExcelModel\RMProductionMaterialExcel.cs" />
     <Compile Include="Models\ExcelModel\SampleOrderExcel.cs" />
@@ -396,27 +397,19 @@
     <Content Include="Content\css\font-awesome.css" />
     <Content Include="Content\css\layout-default.css" />
     <Content Include="Content\css\Style-index.css" />
-    <Content Include="Content\img\gwc.png" />
-    <Content Include="Content\img\in.png" />
+    <Content Include="Content\img\coming.png" />
+    <Content Include="Content\img\cominstall.png" />
+    <Content Include="Content\img\comover.png" />
     <Content Include="Content\img\QRImg.jpg" />
     <Content Include="Content\img\samples\center.jpg" />
     <Content Include="Content\img\samples\head404.png" />
     <Content Include="Content\img\samples\start.png" />
     <Content Include="Content\img\samples\txtbg404.png" />
-    <Content Include="Content\img\sjt.png" />
-    <Content Include="Content\img\sybj.png" />
     <Content Include="Content\img\syjib.png" />
     <Content Include="Content\img\sylb.png" />
     <Content Include="Content\img\syzl.png" />
-    <Content Include="Content\img\t1.png" />
-    <Content Include="Content\img\t2.png" />
-    <Content Include="Content\img\t3.png" />
-    <Content Include="Content\img\t4.png" />
-    <Content Include="Content\img\t5.png" />
     <Content Include="Content\img\tel.png" />
-    <Content Include="Content\img\xjt.png" />
     <Content Include="Content\img\xqjt.png" />
-    <Content Include="Content\img\yjt.png" />
     <Content Include="Content\js\dhtmlxGantt\api.js" />
     <Content Include="Content\js\dhtmlxGantt\dhtmlxgantt.css" />
     <Content Include="Content\js\dhtmlxGantt\dhtmlxgantt.js" />
@@ -971,7 +964,6 @@
     <Content Include="Content\fonts\weathericons-regular-webfont.svg" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\alipay.jpg" />
-    <Content Include="Content\img\alipayimg.png" />
     <Content Include="Content\img\button_pm_close.png" />
     <Content Include="Content\img\cy-reward-title-bg.jpg" />
     <Content Include="Content\img\loading.gif" />
@@ -980,10 +972,6 @@
     <Content Include="Content\img\radio1.jpg" />
     <Content Include="Content\img\radio2.jpg" />
     <Content Include="Content\img\samples\car.png" />
-    <Content Include="Content\img\signet.gif" />
-    <Content Include="Content\img\wechat.jpg" />
-    <Content Include="Content\img\weipayimg.png" />
-    <Content Include="Content\img\weixin_nfine.png" />
     <Content Include="Content\img\ZHIDELOGIN_.png" />
     <Content Include="Content\img\用户头像.png" />
     <Content Include="Content\js\approval.js" />
@@ -5302,6 +5290,7 @@
     <Content Include="Views\BIM\ProgressOverView.cshtml" />
     <Content Include="Views\BIM\BIMGISView.cshtml" />
     <Content Include="Views\BIM\BIM3DView.cshtml" />
+    <Content Include="Views\Shared\_Report.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\PM.Business\PM.Business.csproj">

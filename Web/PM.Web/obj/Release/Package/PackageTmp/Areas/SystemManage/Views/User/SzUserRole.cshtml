@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "SzUserRole";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script>
+    var UserId = $.request("UserId");
+    $(function () {
+        $('#layout').layout();
+        leftList();
+    });
+    function leftList() {
+        var $leftgridList = $("#leftgridList");
+        $leftgridList.dataGrid({
+            url: "/SystemManage/Company/GetAllCompanyOrBySearch",
+            height: $(window).height() -60,
+            colModel: [
+                { label: '组织机构', name: 'CompanyFullName', width: 220, align: 'left', sortable: false, },
+                { label: "组织机构编号", name: "CompanyCode", hidden: true, key: true },
+                { label: "组织机构类型", name: "OrgType", hidden: true },
+                { label: "项目编号", name: "ProjectId", hidden: true }
+            ],
+            treeGrid: true,//启用树型Grid功能
+            treeGridModel: 'adjacency',//表示返回数据的读取类型，分为两种：和adjacency
+            ExpandColumn: 'CompanyFullName',//树型结构在哪列显示
+            rownumbers: false,
+            onCellSelect: function (ucode) {
+                bindSelect();
+            },
+            gridComplete: function () {
+                var ids = $("#leftgridList").getDataIDs();
+                $leftgridList.setSelection(ids[0], true);
+                bindSelect();
+            },
+        });
+    }
+    function bindSelect() {
+        $("#DeptId").empty();
+        //部门
+        var CompanyData = $("#leftgridList").jqGridRowValue();
+        $("#DeptId").bindSelect({
+            url: "/SystemManage/User/GetDeptInfo?OrgType=" + CompanyData.OrgType + "&ProjectId=" + CompanyData.ProjectId,
+            id: "DepartmentId",
+            text: "DepartmentName"
+        });
+        //角色
+        var DepartmentId = $("#DeptId").val();
+        $("#RoleId").bindSelect({
+            url: "/SystemManage/User/GetRoleInfo?DepartmentId=" + DepartmentId,
+            id: "RoleId",
+            text: "RoleName"
+        });
+    };
+    //选择用户
+    function selectUser() {
+        var url = "/SystemManage/User/GetGridJson";
+        var ret = selectClick('win_User', url, 'Grid', '', '', '', '550px', '450px', function (row) {
+           
+        });
+    }
+    function DeptChange() {
+        $("#RoleCode").empty();
+        var DepartmentId = $("#DeptId").val();
+        $("#RoleCode").bindSelect({
+            url: "/SystemManage/User/GetRoleInfo?DepartmentId=" + DepartmentId,
+            id: "RoleId",
+            text: "RoleName"
+        });
+    }
+    //保存
+    function Sava() {
+        var CompanyData = $("#leftgridList").jqGridRowValue();
+       
+        var formData = {};
+        formData.ID = 0;
+        formData.DeptId = $("#DeptId").val();
+        formData.RoleCode = $("#RoleCode").val();
+        formData.UserCode = $("#UserId").val();
+        formData.OrgType = CompanyData.OrgType;
+        formData.ProjectId = CompanyData.ProjectId;
+        formData.OrgId = CompanyData.CompanyCode;
+        formData.Flag = 0;
+        formData.DataSource = 1;
+        $.submitForm({
+            url: "/SystemManage/User/SavaUserRole",
+            param: { userRoleModel: JSON.stringify(formData) },
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    //关闭窗口
+    function Close() {
+        var index = top.layer.getFrameIndex(window.name);
+        top.layer.close(index);
+    }
+</script>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div id="disLeft" class="ui-layout-west">
+        <table id="leftgridList"></table>
+    </div>
+    <div class="ui-layout-center">
+        <form id="form1">
+            <div style="margin-top: 10px; margin-left: 10px; margin-right: 25%;">
+                <table class="form" style="width:100%;height:100%">
+                    <tr>
+                        <th class="formTitle">部门</th>
+                        <td class="formValue">
+                            <select id="DeptId" name="DeptId" class="form-control required" onchange="DeptChange()" style="height:25px;width:245px;"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">角色</th>
+                        <td class="formValue">
+                            <select id="RoleCode" name="RoleCode" class="form-control required" style="height:25px;width:245px;"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">用户</th>
+                        <td class="formValue">
+                            <div class="input-group input-group-with">
+                                <input id="UserId" name="UserId" type="hidden" />
+                                <input id="UserName" name="UserName" type="text" readonly="readonly" class="form-control required" />
+                                <span class="input-group-btn" onclick="selectUser()" style="padding-left: 8px;">
+                                    <a style="padding:0px;" class=" btn btn-primary">
+                                        <i class="fa fa-search" style="margin-top:8px;"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="height:42px;"></tr>
+                    <tr>
+                        <th colspan="2" style="text-align:center">
+                            <a class="btn btn-primary" onclick="Sava()" style="margin-right:40px">确认</a>
+                            <a class="btn btn-danger" onclick="Close()">取消</a>
+                        </th>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>

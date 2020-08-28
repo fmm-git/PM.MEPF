@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\AjaxResult.cs" />
+    <Compile Include="EnumModel\ColorEnum.cs" />
     <Compile Include="Helper\SqlBuilderHelper.cs" />
     <Compile Include="Helper\ZipHelper.cs" />
     <Compile Include="Operator\Configs.cs" />

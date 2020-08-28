@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 
 namespace PM.Web.Areas.SystemManage.Controllers
 {
@@ -26,6 +27,29 @@ namespace PM.Web.Areas.SystemManage.Controllers
         public ActionResult GetOrganizationMapList(BIMRequest request)
         {
             var data = _organizationMap.GetOrganizationMapList(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 滞后百分比设置
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult SetLagPoint(string point)
+        {
+            var porId = base.CurrentUser == null ? "" : base.CurrentUser.ProjectId;
+            var data = _organizationMap.SetLagPoint(point, porId);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 获取滞后百分比
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetLagPoint()
+        {
+            var porId = base.CurrentUser == null ? "" : base.CurrentUser.ProjectId;
+            if (porId.IsEmpty()) return Error("登录失效");
+            var data = _organizationMap.GetLagPoint(porId);
             return Content(data.ToJson());
         }
 

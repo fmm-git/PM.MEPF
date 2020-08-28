@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "_Report";
+}
+<style type="text/css">
+    .lab-titel {
+        font-size: 6px;
+        float: right;
+    }
+    .ibox {
+        margin-bottom: 0px;
+    }
+    .ibox-content {
+        padding: 0px;
+    }
+    .charbox {
+        height: 250px;
+    }
+</style>
+<script src="~/Content/js/Highcharts-8.0.0/highcharts.src.js"></script>
+<script type="text/javascript">
+    function chart_plot(id, titel, tdata, data) {
+        var chart = Highcharts.chart(id, {
+            chart: {
+                //backgroundColor: "rgba(0,0,0,0)",
+                borderRadius: 5,
+            },
+            title: {
+                floating: true,
+                backgroundColor: "rgba(1,0,0,0)",
+                text: '<span style="font-size:16px;">' + titel + '</span><br/><span style="font-size:16px;font-weight:700;">' + tdata + '</span>'
+            },
+            tooltip: {
+                pointFormat: '{series.name}:</br>{point.y}'
+            }, credits: {
+                enabled: false // 禁用版权信息GQSHOW
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: false,
+                    cursor: 'pointer',
+                    //showInLegend:true,
+                    dataLabels: {
+                        enabled: true,
+                        distance: "10",
+                        padding: 0,
+                        connectorPadding: 0,
+                        format: '{point.name}:{point.y}',
+                        style: {
+                            color: 'black',
+                            fontWeight: 'normal'
+                        }
+                    }
+                }
+            },
+            legend: {
+                labelFormat: '{name}:{y}',
+                //floating:true,
+                //x:-50,
+                //y:20
+            },
+            series: [{
+                type: 'pie',
+                innerSize: '60%',
+                size: '70%',
+                name: '',
+                data: data
+            }]
+        }, function (c) { // 图表初始化完毕后的回调函数
+            // 环形图圆心
+            var centerY = c.series[0].center[1],
+                titleHeight = parseInt(c.title.styles.fontSize);
+            // 动态设置标题位置
+            c.setTitle({
+                y: centerY + titleHeight / 2
+            });
+        });
+    }
+</script>
+@RenderBody()

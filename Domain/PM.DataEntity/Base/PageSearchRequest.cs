@@ -37,6 +37,7 @@ namespace PM.DataEntity
         /// 加工厂编码
         /// </summary>
         public string ProcessFactoryCode { get; set; }
+        public string orderBy { get; set; }
 
         /// <summary>
         /// 每页行数

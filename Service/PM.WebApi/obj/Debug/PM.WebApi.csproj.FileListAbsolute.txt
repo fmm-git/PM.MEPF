@@ -1,6 +1,3 @@
-F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\System.Web.Razor.xml
-F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\zh-Hant\System.Spatial.resources.dll
-F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.csproj.CoreCompileInputs.cache
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\PM.WebApi.dll.config
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\PM.WebApi.dll
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\PM.WebApi.pdb
@@ -35,6 +32,7 @@ F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\System.Web.Helpers.
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\System.Web.Http.xml
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\System.Web.Http.WebHost.xml
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\System.Web.Mvc.xml
+F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\System.Web.Razor.xml
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\System.Web.WebPages.xml
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\System.Web.WebPages.Deployment.xml
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\System.Web.WebPages.Razor.xml
@@ -83,6 +81,9 @@ F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\ja\System.Spatial.r
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\ko\System.Spatial.resources.dll
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\ru\System.Spatial.resources.dll
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\zh-Hans\System.Spatial.resources.dll
+F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\bin\zh-Hant\System.Spatial.resources.dll
+F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.csproj.CoreCompileInputs.cache
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.csproj.CopyComplete
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.dll
 F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.pdb
+F:\A_项目文件\机电构件\PM.MEPF\Service\PM.WebApi\obj\Debug\PM.WebApi.csprojAssemblyReference.cache

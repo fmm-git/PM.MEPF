@@ -60,7 +60,34 @@ namespace PM.Web.Areas.SystemManage.Controllers
             }
             return Content(treeList.TreeGridJson());
         }
-    
+
+     
+        /// <summary>
+        ///  获取当前登录人所属的组织机构跟下级组织机构
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetLoginUserAllCompany()
+        {
+            var data = cit.GetLoginUserAllCompany();
+            var treeList = new List<TreeGridModel>();
+            foreach (TbCompany item in data)
+            {
+                TreeGridModel treeModel = new TreeGridModel();
+                bool hasChildren = data.Count(t => t.ParentCompanyCode == item.CompanyCode) == 0 ? false : true;
+                treeModel.id = item.CompanyCode;
+                treeModel.text = item.CompanyFullName;
+                if (data.Count(t => t.CompanyCode == item.ParentCompanyCode) == 0)
+                {
+                    item.ParentCompanyCode = "0";
+                }
+                treeModel.isLeaf = hasChildren;
+                treeModel.parentId = item.ParentCompanyCode;
+                treeModel.expanded = hasChildren;
+                treeModel.entityJson = item.ToJson();
+                treeList.Add(treeModel);
+            }
+            return Content(treeList.TreeGridJson());
+        }
 
         /// <summary>
         /// 查询全部公司或者条件查询加分页

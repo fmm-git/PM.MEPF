@@ -1,4 +1,5 @@
 ﻿using Dos.Common;
+using Dos.ORM;
 using PM.Business.BIM;
 using PM.Business.Production;
 using PM.Business.System;
@@ -23,11 +24,11 @@ namespace PM.Web.Controllers
     public class BIMController : BaseController
     {
         private readonly TbWorkOrderLogic _workOrderLogic = new TbWorkOrderLogic();
-        private readonly OrganizationMapLogic _organizationMap = new OrganizationMapLogic();
         private readonly string _fileConfig = System.Configuration.ConfigurationManager.AppSettings["uploadBIMFile"];
         public readonly ModelPropertyLogIc _modelPropertyLogIc = new ModelPropertyLogIc();
 
         #region GIS
+
         public ActionResult BIMGISView()
         {
             return View();
@@ -36,14 +37,38 @@ namespace PM.Web.Controllers
         {
             return View();
         }
+
         /// <summary>
         /// 获取分页列表数据(构件进度)
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public ActionResult GetGISGridJson(WorkOrderRequest request)
+        public ActionResult GetGISGridJson(BIMRequest request)
         {
-            var data = _workOrderLogic.GetDataListForPage(request);
+            int count = 0;
+            var data = _modelPropertyLogIc.GetModelReportForPage(request,out count);
+            var ret = new PageModel(request.page, request.rows, count, data);
+            return Content(ret.ToJson());
+        }
+        /// <summary>
+        /// GIS站点统计信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetGISReportInfoList(BIMRequest request)
+        {
+            int count = 0;
+            var data = _modelPropertyLogIc.GetModelReportForPage(request, out count);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 构件标签信息(组织机构)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetOrgLabInfoList(BIMRequest request)
+        {
+            var data = _modelPropertyLogIc.GetOrgLabInfoList(request);
             return Content(data.ToJson());
         }
 
@@ -53,24 +78,20 @@ namespace PM.Web.Controllers
         /// <returns></returns>
         public ActionResult OutputGISExcel(string jsonData)
         {
-            var request = JsonEx.JsonToObj<WorkOrderRequest>(jsonData);
-            request.IsOutPut = true;
-            var ret = _workOrderLogic.GetDataListForPage(request);
-            decimal hj = 0;
-            var data = (List<WorkOrderListModel>)ret.rows;
-            if (data.Count > 0)
-            {
-                hj = data.Sum(p => p.WeightTotal);
-            }
-            string hzzfc = "合计(KG):" + hj;
-            var dataList = MapperHelper.Map<WorkOrderListModel, WorkOrderExcel>(data);
-            var fileStream = ExcelHelper.EntityListToExcelStream<WorkOrderExcel>(dataList, "构件进度", hzzfc);
+            int count = 0;
+            var request = JsonEx.JsonToObj<BIMRequest>(jsonData);
+            var data = _modelPropertyLogIc.GetModelReportForPage(request, out count);
+            var dataList = MapperHelper.Map<ModelReportList, ModelReportExcel>(data);
+            var fileStream = ExcelHelper.EntityListToExcelStream<ModelReportExcel>(dataList, "构件进度");
             return File(fileStream, "application/vnd.ms-excel", "构件进度.xls");
         }
 
         #endregion
 
         #region 3D
+
+        #region 项目清单
+
         public ActionResult BIM3DView()
         {
             ViewBag.BIMFolder = _fileConfig;
@@ -83,10 +104,10 @@ namespace PM.Web.Controllers
         }
         public ActionResult EditRow(TbModelOtherInfo model)
         {
-            if (model == null || string.IsNullOrEmpty(model.SiteCode)) return Content("");
+            if (model == null || model.SiteCode.IsEmpty() || model.ComponentCode.IsEmpty()) return Content("");
             model.Type = 1;
             model.ProjectId = base.CurrentUser.ProjectId;
-            var data = _organizationMap.EditModelOtherInfo(model);
+            var data = _modelPropertyLogIc.EditModelOtherInfo(model);
             if (model.AllWrite)
             {
                 BIMRequest request = new BIMRequest()
@@ -104,6 +125,7 @@ namespace PM.Web.Controllers
                     TbModelOtherInfo item = new TbModelOtherInfo()
                     {
                         ComponentCode = x.ComponentCode,
+                        ComponentParentCode= model.ComponentCode,
                         SiteCode = model.SiteCode,
                         ProjectId = model.ProjectId,
                         PlanTime=model.PlanTime,
@@ -111,25 +133,17 @@ namespace PM.Web.Controllers
                     };
                     iList.Add(item);
                 });
-                _organizationMap.EditModelOtherInfo(iList);
+                _modelPropertyLogIc.EditModelOtherInfo(iList);
             }
             return Content(data.ToJson());
         }
         public ActionResult EditRowSub(TbModelOtherInfo model)
         {
-            if (model == null || string.IsNullOrEmpty(model.SiteCode)) return Content("");
+            if (model == null || model.SiteCode.IsEmpty() || model.ComponentCode.IsEmpty()) return Content("");
             model.Type = 2;
             model.ProjectId = base.CurrentUser.ProjectId;
-            var data = _organizationMap.EditModelOtherInfo(model);
+            var data = _modelPropertyLogIc.EditModelOtherInfo(model);
             return Content(data.ToJson());
-        }
-        /// <summary>
-        ///工点进度概况
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult ProgressOverView()
-        {
-            return View();
         }
         /// <summary>
         /// 获取分页列表数据(项目总清单)
@@ -142,7 +156,6 @@ namespace PM.Web.Controllers
             var data = _modelPropertyLogIc.GetDataListForPage(request);
             return Content(data.ToJson());
         }
-
         /// <summary>
         /// 获取分页列表数据(项目清单明细_分页)
         /// </summary>
@@ -154,6 +167,16 @@ namespace PM.Web.Controllers
             return Content(data.ToJson());
         }
 
+        #endregion
+
+        /// <summary>
+        ///工点进度概况
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ProgressOverView()
+        {
+            return View();
+        }
         /// <summary>
         /// 获取项目结构树
         /// </summary>
@@ -192,6 +215,18 @@ namespace PM.Web.Controllers
             var data = _modelPropertyLogIc.GetModelIdList(request);
             return Content(data.ToJson());
         }
+
+        /// <summary>
+        /// 构件标签信息(项目结构)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetComponentLabInfoList(BIMRequest request)
+        {
+            var data = _modelPropertyLogIc.GetComponentLabInfoList(request);
+            return Content(data.ToJson());
+        }
+
 
         /// <summary>
         /// 导出
@@ -273,6 +308,26 @@ namespace PM.Web.Controllers
         public ActionResult RightReportChar()
         {
             return View();
+        }
+        /// <summary>
+        /// 项目进度
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetProjectProgress(BIMRequest request)
+        {
+            var data = _modelPropertyLogIc.GetProjectProgress(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 构件量统计
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetComponentReport(BIMRequest request)
+        {
+            var data = _modelPropertyLogIc.GetComponentReport(request);
+            return Content(data.ToJson());
         }
         /// <summary>
         /// 订单报警详情

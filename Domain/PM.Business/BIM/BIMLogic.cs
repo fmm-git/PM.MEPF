@@ -438,7 +438,7 @@ namespace PM.Business.BIM
 
         #endregion
 
-        #region 加工订单获取模型清单数据
+        #region 加工订单获取模型清单数据(没有用到)
         public PageModel GetProjectList(ProjectListRequest request)
         {
             string where = " where 1=1 ";
@@ -463,9 +463,9 @@ namespace PM.Business.BIM
             {
                 where += " and Tb.mxgjbm like '%" + request.mxgjbm + "%'";
             }
-            if (!string.IsNullOrWhiteSpace(request.sbclmc))
+            if (!string.IsNullOrWhiteSpace(request.gjmc))
             {
-                where += " and Tb.sbclmc like '%" + request.sbclmc + "%'";
+                where += " and Tb.sbclmc like '%" + request.gjmc + "%'";
             }
             StringBuilder sb = new StringBuilder();
             //获取加工订单明细中已经存在了模型构建id
@@ -518,7 +518,7 @@ namespace PM.Business.BIM
 
         #region 接口
 
-        public PageModel GetComponentDetails(ProjectListRequest request)
+        public DataTable GetComponentDetails(ProjectListRequest request)
         {
             string where = " where 1=1 ";
             if (!string.IsNullOrWhiteSpace(request.id))
@@ -530,7 +530,7 @@ namespace PM.Business.BIM
             SQLiteParameter[] cmdParms ={
                     //new SQLiteParameter("@mxgjbm", DbType.String,request.mxgjbm)
                                         };
-            var data = _sqlite.SelectPaging(sql + where, request.rows, request.page, cmdParms);
+            var data = _sqlite.ExecuteDataTable(sql + where, CommandType.Text,cmdParms);
             return data;
         }
 

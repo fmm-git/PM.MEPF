@@ -296,13 +296,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/ProblemOrder/Details.cshtml">
-      <publishTime>07/07/2020 11:12:51</publishTime>
+      <publishTime>08/26/2020 17:42:13</publishTime>
     </File>
     <File Include="Areas/Production/Views/ProblemOrder/Form.cshtml">
-      <publishTime>07/07/2020 11:12:51</publishTime>
+      <publishTime>08/26/2020 17:42:13</publishTime>
     </File>
     <File Include="Areas/Production/Views/ProblemOrder/Index.cshtml">
-      <publishTime>07/31/2020 18:02:00</publishTime>
+      <publishTime>08/28/2020 11:09:32</publishTime>
     </File>
     <File Include="Areas/Production/Views/ProcessingTechnology/Details.cshtml">
       <publishTime>07/07/2020 11:12:51</publishTime>
@@ -326,34 +326,34 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/ChangeInstallTypeList.cshtml">
-      <publishTime>08/05/2020 16:28:39</publishTime>
+      <publishTime>08/28/2020 11:09:32</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/ChangeSignForTypeList.cshtml">
-      <publishTime>08/10/2020 18:07:10</publishTime>
+      <publishTime>08/28/2020 11:09:32</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/DeliveryConfirmView.cshtml">
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/Details.cshtml">
-      <publishTime>08/20/2020 09:22:45</publishTime>
+      <publishTime>08/26/2020 17:42:13</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/FillInpackingQ.cshtml">
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/Form.cshtml">
-      <publishTime>08/19/2020 16:17:27</publishTime>
+      <publishTime>08/26/2020 17:42:13</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/Index.cshtml">
       <publishTime>07/22/2020 16:31:12</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/OrderPackIndex.cshtml">
-      <publishTime>08/20/2020 09:22:45</publishTime>
+      <publishTime>08/28/2020 11:09:32</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/PrintPackQRCodeInfo.cshtml">
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/ProjectList.cshtml">
-      <publishTime>08/17/2020 16:33:19</publishTime>
+      <publishTime>08/24/2020 10:49:58</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/RightReportChar.cshtml">
       <publishTime>07/31/2020 18:02:00</publishTime>
@@ -365,16 +365,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:51</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/WorkOrderIndex.cshtml">
-      <publishTime>08/20/2020 09:22:45</publishTime>
+      <publishTime>08/28/2020 11:09:32</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/WorkOrderInstallIndex.cshtml">
-      <publishTime>08/12/2020 18:16:27</publishTime>
+      <publishTime>08/26/2020 15:14:26</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/WorkOrderPackIndex.cshtml">
-      <publishTime>08/05/2020 16:28:39</publishTime>
+      <publishTime>08/24/2020 10:49:58</publishTime>
     </File>
     <File Include="Areas/Production/Views/WorkOrder/WorkOrderSignForIndex.cshtml">
-      <publishTime>08/12/2020 18:16:27</publishTime>
+      <publishTime>08/26/2020 15:14:26</publishTime>
     </File>
     <File Include="Areas/RawMaterial/Views/CarInfo/Details.cshtml">
       <publishTime>07/07/2020 11:12:51</publishTime>
@@ -896,34 +896,34 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:13:42</publishTime>
     </File>
     <File Include="bin/PM.Business.dll">
-      <publishTime>08/20/2020 09:23:38</publishTime>
+      <publishTime>08/28/2020 17:38:19</publishTime>
     </File>
     <File Include="bin/PM.Business.pdb">
-      <publishTime>08/20/2020 09:23:38</publishTime>
+      <publishTime>08/28/2020 17:38:19</publishTime>
     </File>
     <File Include="bin/PM.Collector.dll">
       <publishTime>07/07/2020 11:13:43</publishTime>
     </File>
     <File Include="bin/PM.Common.dll">
-      <publishTime>08/17/2020 18:56:21</publishTime>
+      <publishTime>08/28/2020 17:38:15</publishTime>
     </File>
     <File Include="bin/PM.Common.pdb">
-      <publishTime>08/17/2020 18:56:21</publishTime>
+      <publishTime>08/28/2020 17:38:15</publishTime>
     </File>
     <File Include="bin/PM.DAL.dll">
       <publishTime>07/07/2020 11:13:43</publishTime>
     </File>
     <File Include="bin/PM.DataAccess.dll">
-      <publishTime>08/19/2020 12:31:09</publishTime>
+      <publishTime>08/28/2020 17:38:17</publishTime>
     </File>
     <File Include="bin/PM.DataAccess.pdb">
-      <publishTime>08/19/2020 12:31:09</publishTime>
+      <publishTime>08/28/2020 17:38:17</publishTime>
     </File>
     <File Include="bin/PM.DataEntity.dll">
-      <publishTime>08/19/2020 12:31:09</publishTime>
+      <publishTime>08/28/2020 17:38:16</publishTime>
     </File>
     <File Include="bin/PM.DataEntity.pdb">
-      <publishTime>08/19/2020 12:31:09</publishTime>
+      <publishTime>08/28/2020 17:38:16</publishTime>
     </File>
     <File Include="bin/PM.Executor.dll">
       <publishTime>07/07/2020 11:13:43</publishTime>
@@ -932,10 +932,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:13:43</publishTime>
     </File>
     <File Include="bin/PM.Web.dll">
-      <publishTime>08/20/2020 09:23:39</publishTime>
+      <publishTime>08/28/2020 17:38:23</publishTime>
     </File>
     <File Include="bin/PM.Web.pdb">
-      <publishTime>08/20/2020 09:23:39</publishTime>
+      <publishTime>08/28/2020 17:38:23</publishTime>
     </File>
     <File Include="bin/System.Data.SQLite.dll">
       <publishTime>11/01/2019 11:05:29</publishTime>
@@ -974,31 +974,31 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:13:39</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Net.Http.Formatting.resources.dll">
-      <publishTime>07/07/2020 11:13:37</publishTime>
+      <publishTime>05/10/2013 14:59:26</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.Helpers.resources.dll">
-      <publishTime>07/07/2020 11:13:39</publishTime>
+      <publishTime>07/09/2013 14:43:24</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.Http.resources.dll">
-      <publishTime>07/07/2020 11:13:37</publishTime>
+      <publishTime>07/09/2013 14:38:54</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.Http.WebHost.resources.dll">
-      <publishTime>07/07/2020 11:13:38</publishTime>
+      <publishTime>07/09/2013 14:40:34</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.Mvc.resources.dll">
-      <publishTime>07/07/2020 11:13:34</publishTime>
+      <publishTime>07/09/2013 14:33:40</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.Razor.resources.dll">
-      <publishTime>07/07/2020 11:13:34</publishTime>
+      <publishTime>07/09/2013 14:34:22</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.WebPages.Deployment.resources.dll">
-      <publishTime>07/07/2020 11:13:39</publishTime>
+      <publishTime>07/09/2013 14:43:24</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.WebPages.Razor.resources.dll">
-      <publishTime>07/07/2020 11:13:39</publishTime>
+      <publishTime>07/09/2013 14:43:24</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.WebPages.resources.dll">
-      <publishTime>07/07/2020 11:13:39</publishTime>
+      <publishTime>07/09/2013 14:43:24</publishTime>
     </File>
     <File Include="Configs/log4net.config">
       <publishTime>07/07/2020 11:12:58</publishTime>
@@ -1028,7 +1028,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/27/2020 18:29:41</publishTime>
     </File>
     <File Include="Content/css/framework-ui.css">
-      <publishTime>07/07/2020 11:12:58</publishTime>
+      <publishTime>08/20/2020 11:50:10</publishTime>
     </File>
     <File Include="Content/css/input.css">
       <publishTime>07/07/2020 11:12:58</publishTime>
@@ -1104,6 +1104,15 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="Content/img/button_pm_close.png">
       <publishTime>07/07/2020 11:12:58</publishTime>
+    </File>
+    <File Include="Content/img/coming.png">
+      <publishTime>08/26/2020 16:31:19</publishTime>
+    </File>
+    <File Include="Content/img/cominstall.png">
+      <publishTime>11/01/2019 10:53:12</publishTime>
+    </File>
+    <File Include="Content/img/comover.png">
+      <publishTime>11/01/2019 10:53:15</publishTime>
     </File>
     <File Include="Content/img/cy-reward-title-bg.jpg">
       <publishTime>07/07/2020 11:12:58</publishTime>
@@ -1403,7 +1412,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:56</publishTime>
     </File>
     <File Include="Content/js/framework-ui.js">
-      <publishTime>07/30/2020 18:28:26</publishTime>
+      <publishTime>08/24/2020 10:49:59</publishTime>
     </File>
     <File Include="Content/js/Highcharts-8.0.0/css/annotations/popup.css">
       <publishTime>07/07/2020 11:12:52</publishTime>
@@ -2927,7 +2936,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:56</publishTime>
     </File>
     <File Include="Content/js/Icon_Click.js">
-      <publishTime>08/13/2020 11:31:28</publishTime>
+      <publishTime>08/27/2020 16:07:21</publishTime>
     </File>
     <File Include="Content/js/index.js">
       <publishTime>07/07/2020 11:12:56</publishTime>
@@ -2942,7 +2951,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:52</publishTime>
     </File>
     <File Include="Content/js/jqgrid/jqgrid.min.js">
-      <publishTime>08/19/2020 17:47:50</publishTime>
+      <publishTime>08/25/2020 17:21:57</publishTime>
     </File>
     <File Include="Content/js/jqgrid/jquery.contextmenu.r2.js">
       <publishTime>07/07/2020 11:12:52</publishTime>
@@ -3038,7 +3047,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:57</publishTime>
     </File>
     <File Include="Content/js/MaterialNameSelect.js">
-      <publishTime>07/07/2020 11:12:55</publishTime>
+      <publishTime>08/26/2020 12:28:12</publishTime>
     </File>
     <File Include="Content/js/pager/images/page_bg.jpg">
       <publishTime>07/07/2020 11:12:57</publishTime>
@@ -14630,7 +14639,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
     <File Include="Views/Attachment/Upload.cshtml">
-      <publishTime>08/07/2020 11:12:00</publishTime>
+      <publishTime>08/20/2020 11:50:10</publishTime>
     </File>
     <File Include="Views/Attachment/UploadFileList.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
@@ -14639,25 +14648,25 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/16/2020 17:22:29</publishTime>
     </File>
     <File Include="Views/BIM/BIM3DGridList.cshtml">
-      <publishTime>08/20/2020 09:22:30</publishTime>
+      <publishTime>08/28/2020 14:52:22</publishTime>
     </File>
     <File Include="Views/BIM/BIM3DView.cshtml">
-      <publishTime>08/20/2020 09:22:44</publishTime>
+      <publishTime>08/28/2020 17:36:20</publishTime>
     </File>
     <File Include="Views/BIM/BIMGISView.cshtml">
-      <publishTime>08/19/2020 16:17:26</publishTime>
+      <publishTime>08/28/2020 17:14:51</publishTime>
     </File>
     <File Include="Views/BIM/ComponentData.cshtml">
       <publishTime>07/27/2020 16:00:45</publishTime>
     </File>
     <File Include="Views/BIM/GISGridList.cshtml">
-      <publishTime>08/12/2020 17:37:54</publishTime>
+      <publishTime>08/28/2020 16:30:50</publishTime>
     </File>
     <File Include="Views/BIM/ProgressOverView.cshtml">
       <publishTime>07/16/2020 17:26:56</publishTime>
     </File>
     <File Include="Views/BIM/RightReportChar.cshtml">
-      <publishTime>07/30/2020 18:22:34</publishTime>
+      <publishTime>08/27/2020 16:05:58</publishTime>
     </File>
     <File Include="Views/Common/Input.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
@@ -14687,7 +14696,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
     <File Include="Views/Home/Default.cshtml">
-      <publishTime>08/20/2020 09:22:44</publishTime>
+      <publishTime>08/28/2020 11:09:33</publishTime>
     </File>
     <File Include="Views/Home/GuidePage.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
@@ -14734,11 +14743,14 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/Shared/_NEWS.cshtml">
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
+    <File Include="Views/Shared/_Report.cshtml">
+      <publishTime>08/28/2020 15:04:36</publishTime>
+    </File>
     <File Include="Views/Web.config">
       <publishTime>07/07/2020 11:12:50</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/17/2020 18:56:28</publishTime>
+      <publishTime>08/28/2020 17:38:26</publishTime>
     </File>
   </ItemGroup>
 </Project>

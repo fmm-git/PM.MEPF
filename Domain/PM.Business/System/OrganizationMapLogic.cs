@@ -32,10 +32,10 @@ namespace PM.Business.System
                 List<string> SiteList = _workOrderLogic.GetCompanyWorkAreaOrSiteList(request.SiteCode, 5);//站点
                 where.And(p => p.CompanyCode.In(SiteList) || p.ParentCompanyCode == request.SiteCode);
             }
-           var retData = Db.Context.From<TbOrganizationMap>()
-                    .Select(
-                      TbOrganizationMap._.All)
-                  .Where(where).ToList();
+            var retData = Db.Context.From<TbOrganizationMap>()
+                     .Select(
+                       TbOrganizationMap._.All)
+                   .Where(where).ToList();
             return AjaxResult.Success(retData);
         }
 
@@ -94,7 +94,6 @@ namespace PM.Business.System
                 var list = _BIMLogic.GetModelInfoList(model.SiteCode, model.ProjectId, model.Path);
                 //var insertSql = SqlBuilderHelper.BulkInsertSql<ProjectListInsertModel>(list, "TbModel_Property");
                 //var entityList = MapperHelper.Map<TbModel_Property, TbRawMaterialStockRecord>(x);
-                var report = _modelPropertyLogIc.CreatReportModel(model);
                 using (DbTrans trans = Db.Context.BeginTransaction())
                 {
                     //添加模型基础信息
@@ -103,12 +102,17 @@ namespace PM.Business.System
 
                     Repository<TbModel_Property>.Insert(trans, list);
                     //添加模型上传信息
-                    Repository<TbModelOrg>.Insert(trans,model);
+                    Repository<TbModelOrg>.Insert(trans, model);
+                    trans.Commit();
+                }
+                var report = _modelPropertyLogIc.CreatReportModel(model);
+                using (DbTrans trans = Db.Context.BeginTransaction())
+                {
                     //统计信息
                     _modelPropertyLogIc.UpdateModelReportData(trans, report.Item1, report.Item2, report.Item3);
                     trans.Commit();
-                    return AjaxResult.Success();
                 }
+                return AjaxResult.Success();
             }
             catch (Exception ex)
             {
@@ -140,56 +144,31 @@ namespace PM.Business.System
 
         #endregion
 
-        #region 模型项目清单附加信息
+        #region  GIS滞后百分比
 
-        public AjaxResult EditModelOtherInfo(TbModelOtherInfo model)
+        public AjaxResult SetLagPoint(string point, string proId)
         {
-            if (model == null)
+            if (string.IsNullOrEmpty(point) || string.IsNullOrEmpty(proId))
                 return AjaxResult.Warning("参数错误");
             try
             {
-                var data = Repository<TbModelOtherInfo>.First(p => p.ComponentCode == model.ComponentCode && p.Type == model.Type);
-                if (data != null)
+                var pointInfo = Repository<TbSysDictionaryData>.First(p => p.FDictionaryCode == "LagPoint" && p.DictionaryCode == proId);
+                if (pointInfo != null)
                 {
-                    Repository<TbModelOtherInfo>.Update(model);
-                }
-                else
-                {
-                    Repository<TbModelOtherInfo>.Insert(model);
+                    pointInfo.DictionaryText = point;
+                    Repository<TbSysDictionaryData>.Update(pointInfo);
                 }
                 return AjaxResult.Success();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return AjaxResult.Error();
             }
         }
 
-        public AjaxResult EditModelOtherInfo(List<TbModelOtherInfo> model)
+        public TbSysDictionaryData GetLagPoint(string proId)
         {
-            try
-            {
-                var codeList = model.Select(p => p.ComponentCode).ToList();
-                var removeList = new List<string>();
-                var data = Repository<TbModelOtherInfo>.Query(p => p.ComponentCode.In(codeList) && p.Type == 2);
-                if (data.Any())
-                {
-                    data.ForEach(x =>
-                    {
-                        var md = model.First(p => p.ComponentCode == x.ComponentCode);
-                        x.PlanTime = md.PlanTime;
-                        removeList.Add(x.ComponentCode);
-                    });
-                    Repository<TbModelOtherInfo>.Update(data);
-                }
-                var lastList = model.Where(p => !removeList.Contains(p.ComponentCode)).ToList();
-                Repository<TbModelOtherInfo>.Insert(lastList);
-                return AjaxResult.Success();
-            }
-            catch (Exception)
-            {
-                return AjaxResult.Error();
-            }
+            return Repository<TbSysDictionaryData>.First(p => p.FDictionaryCode == "LagPoint" && p.DictionaryCode == proId);
         }
         #endregion
     }

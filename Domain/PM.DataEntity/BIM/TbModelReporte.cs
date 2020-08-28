@@ -25,6 +25,7 @@ namespace PM.DataEntity
 		private string _SiteCode;
 		private string _ProjectId;
 		private string _ComponentCode;
+		private string _ComponentName;
 		private string _ComponentCodeP;
 		private string _FileName;
 		private int _Type;
@@ -84,6 +85,19 @@ namespace PM.DataEntity
 			{
 				this.OnPropertyValueChange("ComponentCode");
 				this._ComponentCode = value;
+			}
+		}
+		/// <summary>
+		/// 模型名称
+		/// </summary>
+		[Field("ComponentName")]
+		public string ComponentName
+		{
+			get { return _ComponentName; }
+			set
+			{
+				this.OnPropertyValueChange("ComponentName");
+				this._ComponentName = value;
 			}
 		}
 		/// <summary>
@@ -219,6 +233,7 @@ namespace PM.DataEntity
 				_.SiteCode,
 				_.ProjectId,
 				_.ComponentCode,
+				_.ComponentName,
 				_.ComponentCodeP,
 				_.FileName,
 				_.Type,
@@ -239,6 +254,7 @@ namespace PM.DataEntity
 				this._SiteCode,
 				this._ProjectId,
 				this._ComponentCode,
+				this._ComponentName,
 				this._ComponentCodeP,
 				this._FileName,
 				this._Type,
@@ -285,7 +301,11 @@ namespace PM.DataEntity
 			/// 模型编号
 			/// </summary>
 			public readonly static Field ComponentCode = new Field("ComponentCode", "TbModelReporte", "模型编号");
-            /// <summary>
+			/// <summary>
+			/// 模型名称
+			/// </summary>
+			public readonly static Field ComponentName = new Field("ComponentName", "TbModelReporte", "模型名称");
+			/// <summary>
 			/// 父及编号
 			/// </summary>
 			public readonly static Field ComponentCodeP = new Field("ComponentCodeP", "TbModelReporte", "父及编号");

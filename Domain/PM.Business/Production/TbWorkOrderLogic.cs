@@ -1,6 +1,8 @@
 ﻿using Dos.Common;
 using Dos.ORM;
 using PM.Common;
+using PM.Common.EnumModel;
+using PM.Common.Extension;
 using PM.Common.Helper;
 using PM.DataAccess.DbContext;
 using PM.DataEntity;
@@ -49,7 +51,7 @@ namespace PM.Business.Production
                     if (modelPropertyList1.Count > 0)
                         Repository<TbModel_Property>.Update(trans, modelPropertyList1);
                     trans.Commit();
-                    return AjaxResult.Success();
+                    return AjaxResult.Success(items.Select(p => p.MxGjId));
                 }
                 catch (Exception ex)
                 {
@@ -113,7 +115,7 @@ namespace PM.Business.Production
                     }
                     trans.Commit();//提交事务
 
-                    return AjaxResult.Success();
+                    return AjaxResult.Success(items.Select(p => p.MxGjId));
                 }
             }
             catch (Exception ex)
@@ -223,20 +225,6 @@ namespace PM.Business.Production
 
             var where = new Where<TbWorkOrder>();
 
-
-            if (!string.IsNullOrWhiteSpace(request.OrderCode))
-            {
-                where.And(p => p.OrderCode.Like(request.OrderCode));
-            }
-
-            #endregion
-
-            #region 数据权限新
-
-            //if (!string.IsNullOrWhiteSpace(request.ProcessFactoryCode))
-            //{
-            //    where.And(p => p.ProcessFactoryCode == request.ProcessFactoryCode);
-            //}
             if (!string.IsNullOrWhiteSpace(request.ProjectId))
             {
                 where.And(p => p.ProjectId == request.ProjectId);
@@ -247,6 +235,35 @@ namespace PM.Business.Production
                 if (SiteList.Count > 0)
                 {
                     where.And(p => p.SiteCode.In(SiteList));
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(request.IsLeft))
+            {
+                where.And(p => p.OrderState == "加工中" && p.ChangeStatus != "全部变更");
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(request.OrderCode))
+                    where.And(p => p.OrderCode.Like(request.OrderCode));
+                if (!string.IsNullOrWhiteSpace(request.Examinestatus))
+                    where.And(p => p.Examinestatus == request.Examinestatus);
+                if (!string.IsNullOrWhiteSpace(request.OrderState))
+                    where.And(p => p.OrderState == request.OrderState);
+                if (!string.IsNullOrWhiteSpace(request.OrderType))
+                    where.And(p => p.OrderType == request.OrderType);
+                if (!string.IsNullOrWhiteSpace(request.UrgentDegree))
+                    where.And(p => p.UrgentDegree == request.UrgentDegree);
+                if (!string.IsNullOrWhiteSpace(request.SignForState))
+                    where.And(p => p.SignForState == request.SignForState);
+                if (!string.IsNullOrWhiteSpace(request.InstallState))
+                    where.And(p => p.InstallState == request.InstallState);
+                if (!string.IsNullOrWhiteSpace(request.ChangeStatus))
+                    where.And(p => p.ChangeStatus == request.ChangeStatus);
+                if (request.HistoryMonth.HasValue)
+                {
+                    string HistoryMonth = Convert.ToDateTime(request.HistoryMonth).ToString("yyyy-MM");
+                    var historyMonth = new WhereClip("((CONVERT(varchar(7), TbWorkOrder.InsertTime, 120)='" + HistoryMonth + "'))");
+                    where.And(historyMonth);
                 }
             }
 
@@ -303,11 +320,11 @@ namespace PM.Business.Production
             {
                 where += " and Tb.mxgjbm like '%" + request.mxgjbm + "%'";
             }
-            if (!string.IsNullOrWhiteSpace(request.sbclmc))
+            if (!string.IsNullOrWhiteSpace(request.gjmc))
             {
-                where += " and Tb.sbclmc like '%" + request.sbclmc + "%'";
+                where += " and Tb.gjmc like '%" + request.gjmc + "%'";
             }
-            string sql = @"select * from (select ID as id,StationName as zzbh,Major as zy,System as dxt,Subsystem as zxt,SystemType as xtlx,MaterialType as sbcllx,Texture as cz,ComponentCode as mxgjbm,'' as gjbm,ComponentName as sbclmc,Size as ggcc,Length as cd,Area as mj from TbModel_Property where SiteCode='" + request.SiteCode + "' and IsOrder=0) Tb ";
+            string sql = @"select * from (select ID as id,StationName as zzbh,Major as zy,System as dxt,Subsystem as zxt,SystemType as xtlx,MaterialType as cllx,Texture as cz,ComponentCode as mxgjbm,'' as gjbm,ComponentName as gjmc,Size as ggcc,Length as cd,Area as mj,Material as clmc from TbModel_Property where SiteCode='" + request.SiteCode + "' and IsOrder=0) Tb ";
             //参数化
             List<Parameter> parameter = new List<Parameter>();
             var model = Repository<TbModel_Property>.FromSqlToPageTable(sql + where, parameter, request.rows, request.page, "id", "asc");
@@ -340,7 +357,7 @@ namespace PM.Business.Production
         public AjaxResult IsModelIdPlaceOrder(List<string> modelIdList)
         {
             string str = pjMxIdList(modelIdList);
-            string sql = "select MxGjId from TbWorkOrderDetail where MxGjId in(" + str + ")";
+            string sql = "select MxGjId from TbWorkOrderDetail where MxGjId in(" + str + ") and RevokeStart!='已撤销'";
             DataTable dt = Db.Context.FromSql(sql).ToDataTable();
             if (dt.Rows.Count > 0)
                 return AjaxResult.Error("选中的模型构建中存在已经下单了构建");
@@ -377,10 +394,10 @@ namespace PM.Business.Production
             string strNew = pjMxIdList(mxIds);
             string sql = "select ID as MxGjId from TbModel_Property where SiteCode='" + SiteCode + "' and IsOrder=1 and ID in(" + strNew + ")";
             List<string> list = Db.Context.FromSql(sql).ToList<string>();
-            if (list.Count>0)
+            if (list.Count > 0)
             {
                 List<string> list1 = mxIds.Except(list).ToList();
-                if (list1.Count > 0) 
+                if (list1.Count > 0)
                 {
                     return AjaxResult.Success(list1);
                 }
@@ -428,7 +445,7 @@ namespace PM.Business.Production
             string str = pjMxIdList(modelIdList);
             string sql = @"select a.MxGjId,a.IsSignFor,b.Examinestatus from TbWorkOrderDetail a
                 left join TbWorkOrder b on a.OrderCode = b.OrderCode
-                where a.MxGjId in(" + str + ")";
+                where a.MxGjId in(" + str + ") and a.RevokeStart='未撤销' ";
             List<orderItemList> list = Db.Context.FromSql(sql).ToList<orderItemList>();
             if (list.Count < modelIdList.Count)
             {
@@ -465,7 +482,7 @@ namespace PM.Business.Production
             string str = pjMxIdList(modelIdList);
             string sql = @"select a.MxGjId,a.IsInstall,b.Examinestatus from TbWorkOrderDetail a
                 left join TbWorkOrder b on a.OrderCode = b.OrderCode
-                where MxGjId in(" + str + ")";
+                where MxGjId in(" + str + ") and a.RevokeStart='未撤销' ";
             DataTable dt = Db.Context.FromSql(sql).ToDataTable();
             List<orderItemList> list = Db.Context.FromSql(sql).ToList<orderItemList>();
             if (list.Count < modelIdList.Count)
@@ -594,7 +611,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
             //组装查询语句
             #region 模糊搜索条件
 
-            string where = " where 1=1 and a.IsPack='否' and a.IsSignFor='否' ";
+            string where = " where 1=1 and a.IsPack='否' and a.IsSignFor='否' and a.RevokeStart='未撤销' ";
             if (!string.IsNullOrWhiteSpace(request.OrderCode))
             {
                 where += " and a.OrderCode='" + request.OrderCode + "'";
@@ -721,7 +738,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
                     }
                     else
                     {
-                        orderModel.JgProgress = "延迟";
+                        orderModel.JgProgress = "滞后";
                     }
                 }
             }
@@ -750,7 +767,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
                     //添加打包信息
                     Repository<TbWorkOrderPack>.Insert(trans, items);
                     trans.Commit();
-                    return AjaxResult.Success();
+                    return AjaxResult.Success(orderDetailList.Select(p => p.MxGjId));
                 }
                 catch (Exception ex)
                 {
@@ -878,7 +895,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
             try
             {
 
-                string sql = @"select a.ID,c.CompanyFullName as SiteName,a.PackCode,a.OrderCode,a.SystemType,a.MaterialType,a.ComponentName,ISNULL(d.ThisPackNoSignForNumber,0) as ThisPackNumber,d.OrderDetialId,a.PackDate,a.Remark from TbWorkOrderPack a
+                string sql = @"select a.ID,c.CompanyFullName as SiteName,a.PackCode,a.OrderCode,a.SystemType,a.MaterialType,a.ComponentName,ISNULL(d.ThisPackNoSignForNumber,0) as ThisPackNumber,d.OrderDetialId,CONVERT(varchar(100),a.PackDate,23) as PackDate,a.Remark from TbWorkOrderPack a
 left join (SELECT COUNT(1) as ThisPackNoSignForNumber,PackCode,OrderDetialId=(STUFF(( SELECT ',' + OrderDetialId FROM TbPackDetail WHERE PackCode = Test.PackCode and IsSignFor='否' FOR XML PATH('')), 1, 1, '') )
 FROM TbPackDetail AS Test where IsSignFor='否' GROUP BY PackCode) d on a.PackCode=d.PackCode
 left join TbWorkOrder b on a.OrderCode=b.OrderCode
@@ -901,7 +918,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
             //组装查询语句
             #region 模糊搜索条件
 
-            string where = " where 1=1 and a.IsPack='否' and a.IsSignFor='否'";
+            string where = " where 1=1 and a.IsPack='否' and a.IsSignFor='否' and a.RevokeStart='未撤销' ";
             if (!string.IsNullOrWhiteSpace(request.OrderCode))
             {
                 where += " and a.OrderCode='" + request.OrderCode + "'";
@@ -912,7 +929,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
             try
             {
 
-                string sql = @"select a.ID,c.CompanyFullName as SiteName,a.OrderCode,a.SystemType,a.MaterialType,a.MxGjBm as ComponentCode,a.ComponentName,a.SpecificationModel,a.Length from TbWorkOrderDetail a
+                string sql = @"select a.ID,c.CompanyFullName as SiteName,a.OrderCode,a.SystemType,a.MaterialType,a.MxGjBm as ComponentCode,a.ComponentName,a.SpecificationModel,a.Length,a.Area from TbWorkOrderDetail a
 left join TbWorkOrder b on a.OrderCode=b.OrderCode
 left join TbCompany c on b.SiteCode=c.CompanyCode ";
                 //参数化
@@ -1013,7 +1030,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
                     }
                     else
                     {
-                        orderModel.JgProgress = "延迟";
+                        orderModel.JgProgress = "滞后";
                     }
                 }
 
@@ -1080,7 +1097,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
                     if (signForDetailList.Count > 0)
                         Repository<TbSignForDetail>.Insert(trans, signForDetailList);
                     trans.Commit();
-                    return AjaxResult.Success();
+                    return AjaxResult.Success(orderDetailList.Select(p => p.MxGjId));
                 }
                 catch (Exception ex)
                 {
@@ -1238,7 +1255,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode
                         }
                         else
                         {
-                            orderModel.JgProgress = "延迟";
+                            orderModel.JgProgress = "滞后";
                         }
                     }
                     orderModelList.Add(orderModel);
@@ -1375,7 +1392,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
             //组装查询语句
             #region 模糊搜索条件
 
-            string where = " where 1=1 and a.IsPack='否' and a.IsInstall='否'";
+            string where = " where 1=1 and a.IsPack='否' and a.IsInstall='否' and a.RevokeStart='未撤销' ";
             if (!string.IsNullOrWhiteSpace(request.OrderCode))
             {
                 where += " and a.OrderCode='" + request.OrderCode + "'";
@@ -1386,7 +1403,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
             try
             {
 
-                string sql = @"select a.ID,c.CompanyFullName as SiteName,a.OrderCode,a.SystemType,a.MaterialType,a.MxGjBm as ComponentCode,a.ComponentName,a.SpecificationModel,a.Length,a.IsSignFor from TbWorkOrderDetail a
+                string sql = @"select a.ID,c.CompanyFullName as SiteName,a.OrderCode,a.SystemType,a.MaterialType,a.MxGjBm as ComponentCode,a.ComponentName,a.SpecificationModel,a.Length,a.Area,a.IsSignFor from TbWorkOrderDetail a
 left join TbWorkOrder b on a.OrderCode=b.OrderCode
 left join TbCompany c on b.SiteCode=c.CompanyCode ";
                 //参数化
@@ -1537,7 +1554,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
                     }
                     else
                     {
-                        orderModel.JgProgress = "延迟";
+                        orderModel.JgProgress = "滞后";
                     }
                 }
 
@@ -1549,7 +1566,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
                 var yqsCount = orderItemList.Where(p => p.IsSignFor == "是").Count();
                 if (yqsCount == orderItemList.Count)
                 {
-                    orderModel.SignForState = "全部签收";
+                    orderModel.SignForState = "已签收";
                 }
                 else
                 {
@@ -1629,7 +1646,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
                     //添加信息及明细信息
                     Repository<TbWorkOrderInstall>.Insert(trans, items);
                     trans.Commit();
-                    return AjaxResult.Success();
+                    return AjaxResult.Success(orderDetailModelList.Select(p => p.MxGjId));
                 }
                 catch (Exception ex)
                 {
@@ -1797,7 +1814,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
                         }
                         else
                         {
-                            orderModel.JgProgress = "延迟";
+                            orderModel.JgProgress = "滞后";
                         }
                     }
                     orderModelList.Add(orderModel);
@@ -1809,7 +1826,7 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
                     var yqsCount = orderItemList1.Where(p => p.IsSignFor == "是").Count();
                     if (yqsCount == orderItemList1.Count)
                     {
-                        orderModel.SignForState = "全部签收";
+                        orderModel.SignForState = "已签收";
                     }
                     else
                     {
@@ -1859,29 +1876,29 @@ left join TbCompany c on b.SiteCode=c.CompanyCode ";
 
         #endregion
 
-        #region 获取站点对应模型的数据库地址信息
+        //#region 获取站点对应模型的数据库地址信息
 
-        public string GetModelDBPath(string SiteCode, string ProjectId)
-        {
-            string path = "";
-            string sql = "select Path from TbModelOrg where ProjectId='" + ProjectId + "' and SiteCode='" + SiteCode + "' and Type=2";
-            DataTable dt = Db.Context.FromSql(sql).ToDataTable();
-            if (dt.Rows.Count > 0)
-            {
-                path = dt.Rows[0]["Path"].ToString();
-            }
-            return path;
-        }
+        //public string GetModelDBPath(string SiteCode, string ProjectId)
+        //{
+        //    string path = "";
+        //    string sql = "select Path from TbModelOrg where ProjectId='" + ProjectId + "' and SiteCode='" + SiteCode + "' and Type=2";
+        //    DataTable dt = Db.Context.FromSql(sql).ToDataTable();
+        //    if (dt.Rows.Count > 0)
+        //    {
+        //        path = dt.Rows[0]["Path"].ToString();
+        //    }
+        //    return path;
+        //}
 
-        #endregion
+        //#endregion
 
-        #region 模型改变构件颜色状态接口
+        #region java模型改变构件颜色状态接口
 
         public DataTable GetSiteCodeDetailsState(string SiteCode, string ProjectId)
         {
-            string sql = @"select b.id,b.MxGjId,case when b.IsInstall='否' then b.ComponentStrat else '安装完成' end Orderstate from TbWorkOrder a
+            string sql = @"select b.id,b.MxGjId,case when b.IsInstall='否' and b.ComponentStrat!='未加工' then b.ComponentStrat when b.ComponentStrat='未加工' then '已下单' else '安装完成' end Orderstate from TbWorkOrder a
 left join TbWorkOrderDetail b on a.OrderCode=b.OrderCode
-where a.Examinestatus='审核完成' and a.ProjectId=@ProjectId and a.SiteCode=@SiteCode";
+where b.RevokeStart='未撤销' and a.ProjectId=@ProjectId and a.SiteCode=@SiteCode";
             DataTable dt = Db.Context.FromSql(sql)
                 .AddInParameter("@ProjectId", DbType.String, ProjectId)
                 .AddInParameter("@SiteCode", DbType.String, SiteCode)
@@ -1929,6 +1946,439 @@ left join TbCompany c on b.SiteCode=c.CompanyCode";
             {
                 throw;
             }
+        }
+
+        public DataTable GetScanQRCodePackInfo(int ID)
+        {
+            string sql = @"select a.*,c.CompanyFullName as SiteName from TbWorkOrderPack a
+                           left join TbWorkOrder b on a.OrderCode=b.OrderCode
+                           left join TbCompany c on b.SiteCode=c.CompanyCode
+                           where a.ID=@ID";
+            DataTable dt = Db.Context.FromSql(sql)
+                .AddInParameter("@ID", DbType.Int32, ID)
+                .ToDataTable();
+            return dt;
+        }
+        public DataTable GetAppCodePackItemList(string PackCode)
+        {
+            string sql = @"select a.ID,a.PackCode,a.IsSignFor,a.IsInstall,a.OrderCode,a.OrderDetialId,b.MaterialType,b.ComponentName,c.MaterialQuality,c.SpecificationModel,c.Length,c.MxGjBm,c.Remark,CONVERT(varchar(100), c.SignForDate, 23) as SignForDate,d.UserName as SignForUser,CONVERT(varchar(100),c.InstallDate, 23) as InstallDate,e.UserName as InstallUser from TbPackDetail a
+left join TbWorkOrderPack b on a.PackCode=b.PackCode
+left join TbWorkOrderDetail c on a.OrderDetialId=c.ID
+left join TbUser d on c.SignForUserCode=d.UserCode
+left join TbUser e on c.InstallUserCode=e.UserCode
+where a.PackCode=@PackCode";
+            DataTable dt = Db.Context.FromSql(sql)
+                .AddInParameter("@PackCode", DbType.String, PackCode)
+                .ToDataTable();
+            return dt;
+        }
+        /// <summary>
+        /// 保存包件明细签收信息
+        /// </summary>
+        /// <returns></returns>
+        public AjaxResult GetAppPackItemSignFor(List<AppSignForOrInstallItem> modelList)
+        {
+            if (modelList.Count <= 0)
+                return AjaxResult.Warning("参数错误");
+            var orderModel = Repository<TbWorkOrder>.First(p => p.OrderCode == modelList[0].OrderCode);
+            var orderItemList = Repository<TbWorkOrderDetail>.Query(p => p.OrderCode == modelList[0].OrderCode);
+            var packItemList = Repository<TbPackDetail>.Query(p => p.OrderCode == modelList[0].OrderCode && p.PackCode == modelList[0].PackCode);
+            List<TbWorkOrderDetail> orderItemModelList = new List<TbWorkOrderDetail>();
+            List<TbPackDetail> packItemModelList = new List<TbPackDetail>();
+            TbWorkOrderSignFor signForModel = new TbWorkOrderSignFor();
+            List<TbSignForDetail> signForItemModelList = new List<TbSignForDetail>();
+            try
+            {
+                List<int> itemIds = modelList.Select(p => p.OrderDetialId).ToList();
+                string signForCode = CreateCode.GetNoNew2("SignForCode", "TbWorkOrderSignFor");
+                for (int i = 0; i < modelList.Count; i++)
+                {
+                    var orderItemModel = orderItemList.Find(p => p.ID == modelList[i].OrderDetialId);
+                    orderItemModel.SignForDate = modelList[i].OperationDate;
+                    orderItemModel.SignForUserCode = modelList[i].OperationUserCode;
+                    orderItemModel.IsSignFor = "是";
+                    //判断订单是否加工完成
+                    if (orderItemModel.ComponentStrat == "加工中")
+                    {
+                        orderItemModel.ComponentStrat = "加工完成";
+                    }
+                    orderItemModelList.Add(orderItemModel);
+                    var packItem = packItemList.Find(p => p.OrderDetialId == Convert.ToString(orderItemModel.ID));
+                    packItem.IsSignFor = "是";
+                    packItemModelList.Add(packItem);
+                    TbSignForDetail signForDetailModel = new TbSignForDetail();
+                    signForDetailModel.OrderCode = orderItemModel.OrderCode;
+                    signForDetailModel.PackCode = orderItemModel.PackCode;
+                    signForDetailModel.SignFoeCode = signForCode;
+                    signForDetailModel.OrderDetialId = orderItemModel.ID;
+                    signForDetailModel.IsInstall = "否";
+                    signForItemModelList.Add(signForDetailModel);
+                }
+                signForModel.OrderCode = modelList[0].OrderCode;
+                signForModel.PackCode = modelList[0].PackCode;
+                signForModel.SignForCode = signForCode;
+                signForModel.SystemType = orderItemModelList[0].SystemType;
+                signForModel.MaterialType = orderItemModelList[0].MaterialType;
+                signForModel.ComponentName = orderItemModelList[0].ComponentName;
+                string orderDetialId = string.Join(",", itemIds.ToArray());
+                signForModel.OrderDetialId = orderDetialId;
+                signForModel.SignForNumber = itemIds.Count;
+                signForModel.SignForDate = orderItemModelList[0].SignForDate;
+                signForModel.Remark = "App端签收生成";
+                signForModel.SignForUserCode = modelList[0].OperationUserCode;
+                //判断订单主表中是否签收完成
+                var orderItemSignForList = orderItemList.Where(p => p.IsSignFor == "是").ToList();
+                if (orderItemList.Count > orderItemSignForList.Count)
+                {
+                    if (orderModel.SignForState == "未签收")
+                    {
+                        orderModel.SignForState = "部分签收";
+                    }
+                }
+                else
+                {
+                    orderModel.SignForState = "已签收";
+                    //判断订单是否加工完成
+                    if (string.IsNullOrWhiteSpace(orderModel.JgProgress))
+                    {
+                        orderModel.OrderState = "加工完成";
+                        orderModel.JgCompleteTiem = DateTime.Now;
+                        string dt1 = Convert.ToDateTime(orderModel.DistributionTime).ToShortDateString();
+                        string dt2 = DateTime.Now.ToShortDateString();
+                        if (DateTime.Parse(dt1) == DateTime.Parse(dt2))
+                        {
+                            orderModel.JgProgress = "正常";
+                        }
+                        else if (DateTime.Parse(dt1) > DateTime.Parse(dt2))
+                        {
+                            orderModel.JgProgress = "提前";
+                        }
+                        else
+                        {
+                            orderModel.JgProgress = "滞后";
+                        }
+                    }
+                }
+                using (DbTrans trans = Db.Context.BeginTransaction())
+                {
+                    try
+                    {
+                        if (orderModel != null)
+                            //修改订单主表中的订单签收状态
+                            Repository<TbWorkOrder>.Update(trans, orderModel, true);
+                        if (orderItemModelList.Count > 0)
+                            //修改订单明细表中是否签收信息
+                            Repository<TbWorkOrderDetail>.Update(trans, orderItemModelList, true);
+                        if (packItemModelList.Count > 0)
+                            //修改订单打包信息中的签收信息
+                            Repository<TbPackDetail>.Update(trans, packItemModelList, true);
+                        //添加签收主表、明细表信息  
+                        Repository<TbWorkOrderSignFor>.Insert(trans, signForModel, true);
+                        if (signForItemModelList.Count > 0)
+                            Repository<TbSignForDetail>.Insert(trans, signForItemModelList, true);
+                        trans.Commit();
+                        return AjaxResult.Success();
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback();
+                        return AjaxResult.Error(ex.ToString());
+                    }
+                    finally
+                    {
+                        trans.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return AjaxResult.Error(ex.ToString());
+            }
+
+        }
+        /// <summary>
+        /// 保存包件明细安装信息
+        /// </summary>
+        /// <returns></returns>
+        public AjaxResult GetAppPackItemInstall(List<AppSignForOrInstallItem> modelList)
+        {
+            if (modelList.Count <= 0)
+                return AjaxResult.Warning("参数错误");
+            var orderModel = Repository<TbWorkOrder>.First(p => p.OrderCode == modelList[0].OrderCode);
+            var orderItemList = Repository<TbWorkOrderDetail>.Query(p => p.OrderCode == modelList[0].OrderCode);
+            var packItemList = Repository<TbPackDetail>.Query(p => p.OrderCode == modelList[0].OrderCode && p.PackCode == modelList[0].PackCode);
+            var signForItemList = Repository<TbSignForDetail>.Query(p => p.OrderCode == modelList[0].OrderCode && p.PackCode == modelList[0].PackCode);
+            List<TbWorkOrderDetail> orderItemModelList = new List<TbWorkOrderDetail>();
+            List<TbPackDetail> packItemModelList = new List<TbPackDetail>();
+            TbWorkOrderSignFor signForAddModel = new TbWorkOrderSignFor();
+            List<TbSignForDetail> signForItemModelUpdateList = new List<TbSignForDetail>();
+            List<TbSignForDetail> signForItemModelAddList = new List<TbSignForDetail>();
+            TbWorkOrderInstall installForModel = new TbWorkOrderInstall();
+            try
+            {
+                List<int> itemIds = modelList.Select(p => p.OrderDetialId).ToList();
+                string orderDetialId = string.Join(",", itemIds.ToArray());
+                string signForCode = CreateCode.GetNoNew2("SignForCode", "TbWorkOrderSignFor");
+                for (int i = 0; i < modelList.Count; i++)
+                {
+                    var orderItemModel = orderItemList.Find(p => p.ID == modelList[i].OrderDetialId);
+                    var packItem = packItemList.Find(p => p.OrderDetialId == Convert.ToString(orderItemModel.ID));
+                    var signForItemModel = signForItemList.Find(p => p.OrderDetialId == orderItemModel.ID);
+                    if (orderItemModel.IsSignFor == "否")
+                    {
+                        //订单明细信息
+                        orderItemModel.SignForDate = modelList[i].OperationDate;
+                        orderItemModel.SignForUserCode = modelList[i].OperationUserCode;
+                        orderItemModel.IsSignFor = "是";
+                        orderItemModel.InstallDate = modelList[i].OperationDate;
+                        orderItemModel.InstallUserCode = modelList[i].OperationUserCode;
+                        orderItemModel.IsInstall = "是";
+                        //判断订单是否加工完成
+                        if (orderItemModel.ComponentStrat == "加工中")
+                        {
+                            orderItemModel.ComponentStrat = "加工完成";
+                        }
+                        orderItemModelList.Add(orderItemModel);
+
+                        //包件明细信息
+                        packItem.IsSignFor = "是";
+                        packItem.IsInstall = "是";
+                        packItemModelList.Add(packItem);
+
+                        //签收明细信息
+                        TbSignForDetail signForDetailModel = new TbSignForDetail();
+                        signForDetailModel.OrderCode = orderItemModel.OrderCode;
+                        signForDetailModel.PackCode = orderItemModel.PackCode;
+                        signForDetailModel.SignFoeCode = signForCode;
+                        signForDetailModel.OrderDetialId = orderItemModel.ID;
+                        signForDetailModel.IsInstall = "是";
+                        signForItemModelAddList.Add(signForDetailModel);
+                    }
+                    else
+                    {
+                        //订单明细信息
+                        orderItemModel.InstallDate = modelList[i].OperationDate;
+                        orderItemModel.InstallUserCode = modelList[i].OperationUserCode;
+                        orderItemModel.IsInstall = "是";
+                        //判断订单是否加工完成
+                        if (orderItemModel.ComponentStrat == "加工中")
+                        {
+                            orderItemModel.ComponentStrat = "加工完成";
+                        }
+                        orderItemModelList.Add(orderItemModel);
+
+                        //包件明细信息
+                        packItem.IsInstall = "是";
+                        packItemModelList.Add(packItem);
+
+                        //签收明细信息
+                        signForItemModel.IsInstall = "是";
+                        signForItemModelUpdateList.Add(signForItemModel);
+                    }
+                }
+                if (signForItemModelAddList.Count > 0)
+                {
+                    signForAddModel.OrderCode = modelList[0].OrderCode;
+                    signForAddModel.PackCode = modelList[0].PackCode;
+                    signForAddModel.SignForCode = signForCode;
+                    signForAddModel.SystemType = orderItemModelList[0].SystemType;
+                    signForAddModel.MaterialType = orderItemModelList[0].MaterialType;
+                    signForAddModel.ComponentName = orderItemModelList[0].ComponentName;
+                    signForAddModel.OrderDetialId = orderDetialId;
+                    signForAddModel.SignForNumber = itemIds.Count;
+                    signForAddModel.SignForDate = orderItemModelList[0].SignForDate;
+                    signForAddModel.Remark = "App端安装生成";
+                    signForAddModel.SignForUserCode = modelList[0].OperationUserCode;
+                }
+                installForModel.OrderCode = modelList[0].OrderCode;
+                installForModel.PackCode = modelList[0].PackCode;
+                installForModel.SystemType = orderItemModelList[0].SystemType;
+                installForModel.MaterialType = orderItemModelList[0].MaterialType;
+                installForModel.ComponentName = orderItemModelList[0].ComponentName;
+                installForModel.OrderDetialId = orderDetialId;
+                installForModel.InstallNumber = itemIds.Count;
+                installForModel.InstallDate = orderItemModelList[0].SignForDate;
+                installForModel.Remark = "App端安装";
+                installForModel.InstallUserCode = modelList[0].OperationUserCode;
+                //判断订单主表中是否签收完成
+                var orderItemSignForList = orderItemList.Where(p => p.IsSignFor == "是").ToList();
+                if (orderItemList.Count > orderItemSignForList.Count)
+                {
+                    if (orderModel.SignForState == "未签收")
+                    {
+                        orderModel.SignForState = "部分签收";
+                    }
+                }
+                else
+                {
+                    orderModel.SignForState = "已签收";
+                    //判断订单是否加工完成
+                    if (string.IsNullOrWhiteSpace(orderModel.JgProgress))
+                    {
+                        orderModel.OrderState = "加工完成";
+                        orderModel.JgCompleteTiem = DateTime.Now;
+                        string dt1 = Convert.ToDateTime(orderModel.DistributionTime).ToShortDateString();
+                        string dt2 = DateTime.Now.ToShortDateString();
+                        if (DateTime.Parse(dt1) == DateTime.Parse(dt2))
+                        {
+                            orderModel.JgProgress = "正常";
+                        }
+                        else if (DateTime.Parse(dt1) > DateTime.Parse(dt2))
+                        {
+                            orderModel.JgProgress = "提前";
+                        }
+                        else
+                        {
+                            orderModel.JgProgress = "滞后";
+                        }
+                    }
+                }
+                //判断订单主表中是否安装完成
+                var orderItemInstallList = orderItemList.Where(p => p.IsInstall == "是").ToList();
+                if (orderItemList.Count > orderItemInstallList.Count)
+                {
+                    if (orderModel.InstallState == "未安装")
+                    {
+                        orderModel.InstallState = "部分安装";
+                    }
+                }
+                else
+                {
+                    orderModel.InstallState = "已安装";
+                    //判断订单是否加工完成
+                    if (string.IsNullOrWhiteSpace(orderModel.JgProgress))
+                    {
+                        orderModel.OrderState = "加工完成";
+                        orderModel.JgCompleteTiem = DateTime.Now;
+                        string dt1 = Convert.ToDateTime(orderModel.DistributionTime).ToShortDateString();
+                        string dt2 = DateTime.Now.ToShortDateString();
+                        if (DateTime.Parse(dt1) == DateTime.Parse(dt2))
+                        {
+                            orderModel.JgProgress = "正常";
+                        }
+                        else if (DateTime.Parse(dt1) > DateTime.Parse(dt2))
+                        {
+                            orderModel.JgProgress = "提前";
+                        }
+                        else
+                        {
+                            orderModel.JgProgress = "滞后";
+                        }
+                    }
+                }
+                using (DbTrans trans = Db.Context.BeginTransaction())
+                {
+                    try
+                    {
+                        if (orderModel != null)
+                            //修改订单主表中的订单签收状态
+                            Repository<TbWorkOrder>.Update(trans, orderModel, true);
+                        if (orderItemModelList.Count > 0)
+                            //修改订单明细表中是否签收信息
+                            Repository<TbWorkOrderDetail>.Update(trans, orderItemModelList, true);
+                        if (packItemModelList.Count > 0)
+                            //修改订单打包信息中的签收信息
+                            Repository<TbPackDetail>.Update(trans, packItemModelList, true);
+                        //添加签收主表、明细表信息  
+                        if (signForItemModelAddList.Count > 0)
+                        {
+                            Repository<TbWorkOrderSignFor>.Insert(trans, signForAddModel, true);
+                            Repository<TbSignForDetail>.Insert(trans, signForItemModelAddList, true);
+                        }
+                        if (signForItemModelUpdateList.Count > 0)
+                            Repository<TbSignForDetail>.Update(trans, signForItemModelUpdateList, true);
+                        Repository<TbWorkOrderInstall>.Insert(trans, installForModel, true);
+                        trans.Commit();
+                        return AjaxResult.Success();
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback();
+                        return AjaxResult.Error(ex.ToString());
+                    }
+                    finally
+                    {
+                        trans.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return AjaxResult.Error(ex.ToString());
+            }
+        }
+        public class AppSignForOrInstallItem
+        {
+            public string OrderCode { get; set; }
+            public string PackCode { get; set; }
+            public int OrderDetialId { get; set; }
+            public DateTime OperationDate { get; set; }
+            public string OperationUserCode { get; set; }
+        }
+        #endregion
+
+        #region
+
+        /// <summary>
+        /// 构件标签信息(组织机构)
+        /// </summary>
+        /// <returns></returns>
+        public List<OrgLabData> GetOrgLabInfoList(WorkOrderRequest request)
+        {
+            #region 查询语句
+            string whereSql = "where 1=1 and a.OrderState='加工中' and a.ChangeStatus!='全部变更'";
+            List<Parameter> parameter = new List<Parameter>();
+            if (!string.IsNullOrWhiteSpace(request.SiteCode))
+            {
+                List<string> SiteList = GetCompanyWorkAreaOrSiteList(request.SiteCode, 5);//站点
+                string siteStr = string.Join("','", SiteList);
+                whereSql += (" and a.SiteCode in('" + siteStr + "')");
+            }
+            #endregion
+
+            string sql = @"select  SiteCode as Code,
+                           COUNT(1) as SumCount,
+                           (select COUNT(*) from TbWorkOrder where SiteCode=a.SiteCode and OrderState='加工中' and ChangeStatus!='全部变更' and UrgentDegree='Urgent') as JjCount,
+                           (select COUNT(*) ZhCount from TbWorkOrder where SiteCode=a.SiteCode and OrderState='加工中' and ChangeStatus!='全部变更' and CONVERT(varchar(100),GETDATE(),23)> CONVERT(varchar(100),DistributionTime,23)) as ZhCount from TbWorkOrder a 
+                           {0}
+                           group by a.SiteCode";
+            sql = string.Format(sql, whereSql);
+            try
+            {
+                var retData = new List<OrgLabData>();
+                var data = Repositorys<OrderModelLabelData>.FromSql(sql, parameter);
+                if (data.Any())
+                {
+                    var orgList = data.Select(p => p.Code).Distinct().ToList();
+                    orgList.ForEach(x =>
+                    {
+                        var oList = data.First(p => p.Code == x);
+                        var labList = new List<OrgLab>();
+                        labList.Add(new OrgLab("订单", oList.SumCount, ColorEnum.蓝色.GetValue()));
+                        labList.Add(new OrgLab("加急", oList.JjCount, ColorEnum.橘黄色.GetValue()));
+                        labList.Add(new OrgLab("滞后", oList.ZhCount, ColorEnum.红色.GetValue()));
+                        var item = new OrgLabData()
+                        {
+                            OrgCode = x,
+                            LabList = labList
+                        };
+                        retData.Add(item);
+                    });
+                }
+                return retData;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public class OrderModelLabelData
+        {
+            public string Code { get; set; }
+            public int SumCount { get; set; }
+            public int JjCount { get; set; }
+            public int ZhCount { get; set; }
         }
 
         #endregion

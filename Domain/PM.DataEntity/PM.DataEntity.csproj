@@ -171,6 +171,7 @@
     <Compile Include="RawMaterial\TbRawMaterialMonthDemandSupplyPlanDetail.cs" />
     <Compile Include="RawMaterial\TbRawMaterialStock.cs" />
     <Compile Include="RawMaterial\TbRawMaterialStockRecord.cs" />
+    <Compile Include="RawMaterial\TbRawMaterialType.cs" />
     <Compile Include="RawMaterial\TbRMProductionMaterial.cs" />
     <Compile Include="RawMaterial\TbRMProductionMaterialDetail.cs" />
     <Compile Include="RawMaterial\TbRMProductionMaterialLockCount.cs" />

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using PM.Common.Helper;
 
 namespace PM.Common.Extension
 {
-   public static class StringEx
+    public static class StringEx
     {
         private static readonly DateTime DefaultTime = DateTime.Parse("1900-01-01");
 
@@ -326,5 +328,57 @@ namespace PM.Common.Extension
         #endregion
 
         #endregion
+
+        public static string GetCode(string code)
+        {
+            string retCode = code;
+            int lastIndex = code.LastIndexOf('-');
+            if (lastIndex > 0)
+            {
+                retCode = code.Substring(0, lastIndex);
+                int last = 0;
+                bool isNumber = int.TryParse(retCode.Last().ToString(), out last);
+                if (isNumber) retCode = code.Substring(0, code.Length - 1);
+            }
+            return retCode;
+        }
+        public static string GetCodeSub(string code)
+        {
+            var codeArry = code.Split('_');
+            if (codeArry.Length > 7)
+            {
+                int lastIndex = code.LastIndexOf('_');
+                code = code.Substring(0, lastIndex);
+            }
+           return StringEx.GetCode(code);
+        }
+    }
+    /// <summary>
+    /// 枚举扩展类
+    /// </summary>
+    public static class EnumEx
+    {
+        /// <summary>
+        /// 获取枚举的描述信息
+        /// </summary>
+        public static string GetValue(this Enum em)
+        {
+            Type type = em.GetType();
+            FieldInfo fd = type.GetField(em.ToString());
+            if (fd == null)
+                return string.Empty;
+            object[] attrs = fd.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            string name = string.Empty;
+            foreach (DescriptionAttribute attr in attrs)
+            {
+                name = attr.Description;
+            }
+            return name;
+        }
+
+        //public static string GetEnum<T>(string value) where T : Enum
+        //{
+        //    return ((T)Enum.Parse(typeof(T), value)).GetValue();
+        //}
     }
 }

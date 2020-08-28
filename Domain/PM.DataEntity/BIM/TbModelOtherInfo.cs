@@ -23,6 +23,7 @@ namespace PM.DataEntity
         #region Model
 		private int _ID;
 		private string _ComponentCode;
+		private string _ComponentParentCode;
 		private DateTime _PlanTime;
 		private DateTime? _ActualTime;
 		private string _Remark;
@@ -55,6 +56,19 @@ namespace PM.DataEntity
 			{
 				this.OnPropertyValueChange("ComponentCode");
 				this._ComponentCode = value;
+			}
+		}
+		/// <summary>
+		/// 父级构建编码
+		/// </summary>
+		[Field("ComponentParentCode")]
+		public string ComponentParentCode
+		{
+			get { return _ComponentParentCode; }
+			set
+			{
+				this.OnPropertyValueChange("ComponentParentCode");
+				this._ComponentParentCode = value;
 			}
 		}
 		/// <summary>
@@ -175,6 +189,7 @@ namespace PM.DataEntity
             return new Field[] {
 				_.ID,
 				_.ComponentCode,
+				_.ComponentParentCode,
 				_.PlanTime,
 				_.ActualTime,
 				_.Remark,
@@ -192,6 +207,7 @@ namespace PM.DataEntity
             return new object[] {
 				this._ID,
 				this._ComponentCode,
+				this._ComponentParentCode,
 				this._PlanTime,
 				this._ActualTime,
 				this._Remark,
@@ -229,7 +245,11 @@ namespace PM.DataEntity
 			/// 构建编码
 			/// </summary>
 			public readonly static Field ComponentCode = new Field("ComponentCode", "TbModelOtherInfo", "构建编码");
-            /// <summary>
+			/// <summary>
+			/// 父级构建编码
+			/// </summary>
+			public readonly static Field ComponentParentCode = new Field("ComponentParentCode", "TbModelOtherInfo", "构建编码");
+			/// <summary>
 			/// 计划完成时间
 			/// </summary>
 			public readonly static Field PlanTime = new Field("PlanTime", "TbModelOtherInfo", "计划完成时间");
@@ -268,8 +288,10 @@ namespace PM.DataEntity
         public int Difference { get; set; }
         public bool AllWrite { get; set; }
         public string ComponentCodeShow { get; set; }
+		public string ComponentCodeP { get; set; }
 		public string Size { get; set; }
         public int TotalCount { get; set; }
+        public DateTime PlanTimeP { get; set; }
         #endregion
     }
 }

@@ -15,6 +15,9 @@ namespace PM.Business
 {
     public class TbAttachmentLogic
     {
+
+        private string HostAddress = Configs.GetValue("HostAddress");
+
         #region 附件旧版
 
         #region 新增数据
@@ -274,5 +277,25 @@ where FileID='" + ids + "'";
             return flag;
         }
         #endregion
+
+        /// <summary>
+        /// 获取附件地址
+        /// </summary>
+        /// <param name="FileId"></param>
+        /// <returns></returns>
+        public DataTable GetEnclosureUrl(string FileId)
+        {
+            string sql = @"select FileStoragePath,FileName from TbAttachment where FileID=@FileID";
+            DataTable dt = Db.Context.FromSql(sql).AddInParameter("@FileId", DbType.String, FileId)
+                .ToDataTable();
+            if (dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    dt.Rows[i]["FileStoragePath"] = "http://" + HostAddress + dt.Rows[i]["FileStoragePath"];
+                }
+            }
+            return dt;
+        }
     }
 }

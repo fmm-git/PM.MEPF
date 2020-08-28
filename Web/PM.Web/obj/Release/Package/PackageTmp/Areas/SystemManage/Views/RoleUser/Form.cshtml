@@ -1,0 +1,233 @@
+﻿@{
+    ViewBag.Title = "用户及权限Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script src="~/Content/js/Comm.js"></script>
+<script src="~/Content/js/jqgrid/jqgrid.min.js"></script>
+<link href="~/Content/js/jqgrid/jqgrid.css" rel="stylesheet" />
+<script src="~/Content/js/jqgrid/grid.locale-cn.js"></script>
+<style>
+    .select2-container {
+        box-sizing: border-box;
+        display: inline-block;
+        margin: 0;
+        position: relative;
+        vertical-align: middle;
+        width: 102% !important;
+    }
+</style>
+<script>
+    var type = $.request("type");
+    var keyValue = $.request("keyValue");
+    var CompanyCode = $.request("CompanyCode");
+    var OrgType = $.request("OrgType");
+    var ProjectId = $.request("ProjectId");
+    if (OrgType == "1") {
+        var CompanyCodeNew = CompanyCode.split('-');
+        CompanyCode = CompanyCodeNew[0];
+    }
+    var idArr = [];
+    $(function () {
+        gridList();
+        bindSelect();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/SystemManage/RoleUser/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+
+    function bindSelect() {
+        //性别
+        $("#UserSex").bindSelect({
+            url: "/SystemManage/User/GetSelect?dataCode=Sex",
+        });
+        $("#UserType").bindSelect({
+            url: "/SystemManage/User/GetSelect?dataCode=UserType",
+        });
+    }
+
+    //提交新增员工
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        GetAllCheckedList();
+        var formData = $("#form1").formSerialize();
+        if (!formData.ID) {
+            formData.ID = 0;
+        }
+        $.submitForm({
+            url: "/SystemManage/RoleUser/SubmitForm",
+            param: { userModel: JSON.stringify(formData), userRoleModel: JSON.stringify(idArr), type: type },
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+
+    function gridList() {
+        var $gridList = $("#treegridDeptOrRoleList");
+        $gridList.dataGrid({
+            treeGrid: true,
+            treeGridModel: "adjacency",
+            ExpandColumn: "Name",
+            multiselect: true,//复选框
+            rownumbers: false,
+            url: "/SystemManage/RoleUser/GetTreeGridDeptOrRoleJson?ProjectId=" + ProjectId + "&OrgType=" + OrgType,
+            height: $(window).height() - 96,
+            colModel: [
+                {
+                    label: '用户角色设置', name: 'Name', width: 200, sortable: false, formatter: function (value, grid, rows, state) {
+                        var row = JSON.stringify(rows);
+                        return "<input type='checkbox' value=" + rows.id + " onclick='RelativeTreeGridCheck(" + row + ",this)'/>" + rows.Name
+                    }
+                },
+                { label: "id", name: "id", key: true, hidden: true },
+                { label: "pid", name: "pid", hidden: true },
+                { label: "OrgType", name: "OrgType", hidden: true },
+                { label: "ProjectId", name: "ProjectId", hidden: true },
+            ],
+            gridComplete: function () {
+                if (type == "edit") {
+                    //设置复选框选中
+                    //1、获取该用户在该组织机构下有哪些角色
+                    $.ajax({
+                        url: "/SystemManage/RoleUser/GetUserRoleNew",
+                        data: { ProjectId: ProjectId, OrgId: CompanyCode, OrgType: OrgType, UserId: keyValue },
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            if (data.length > 0) {
+                                for (var i = 0; i < data.length; i++) {
+                                    $("#treegridDeptOrRoleList #" + data[i].RoleCode).children().children().find("input").prop("checked", true);
+                                    $("#treegridDeptOrRoleList #" + data[i].DeptId).children().children().find("input").prop("checked", true);
+                                }
+                            }
+                        }
+                    });
+                }
+            },
+        });
+    }
+    function GetAllCheckedList() {
+        var UserId = $("#UserId").val();
+        $("#treegridDeptOrRoleList input:checkbox:checked").each(function () {
+            var id = $(this).val();
+            var rowData = $('#treegridDeptOrRoleList').jqGrid('getRowData', id, true);
+            if (rowData.pid != "0") {
+                idArr.push({ ID: 0, RoleCode: rowData.id, UserCode: UserId, ProjectId: rowData.ProjectId, OrgId: CompanyCode, OrgType: OrgType, DeptId: rowData.pid, Flag: 0 });
+            }
+        });
+    }
+
+
+    function RelativeTreeGridCheck(row, That, e) {
+        var rowData = $('#treegridDeptOrRoleList').jqGrid('getRowData', row.id, true);
+        var childrenData = $('#treegridDeptOrRoleList').jqGrid('getNodeChildren', rowData);
+        var parentData = $('#treegridDeptOrRoleList').jqGrid('getNodeParent', rowData);
+        var rowChecked = $("#" + row.id).children().children().find("input").is(":checked");
+        //  不为0，则为子节点，肯定有父节点，把父节点勾上
+        if (childrenData.length != 0) {
+            for (var i = 0; i < childrenData.length; i++) {
+                if (rowChecked == true) {
+                    $("#" + childrenData[i].id).children().children().find("input").prop("checked", true);
+                } else {
+                    $("#" + childrenData[i].id).children().children().find("input").prop("checked", false);
+                    $("#" + childrenData[i].id).children().children().prop("checked", false);
+                }
+            }
+        } else {
+            // 为0 则为子节点， 如果有子勾选，没有则不操作
+            row.level != 0 ? $("#" + parentData.id).children().children().find("input").prop("checked", true) : '';
+            if (rowChecked == false) {
+                //判断是否还有兄弟元素被选中，如果没有就取消父节点选中
+                var count = 0;
+                var xdys = $('#treegridDeptOrRoleList').jqGrid('getNodeChildren', parentData);
+                for (var i = 0; i < xdys.length; i++) {
+                    if (xdys[i].id != row.id) {
+                        var xdyschecked = $("#" + xdys[i].id).children().children().find("input").is(":checked");
+                        if (xdyschecked == true) {
+                            count++;
+                        }
+                    }
+                }
+                if (count == 0) {
+                    $("#" + parentData.id).children().children().find("input").prop("checked", false);
+                }
+            }
+        }
+
+        if (e && e.stopPropagation) {
+            e.stopPropagation();
+        } else if (window.event) {
+            window.event.cancelBubble = true;
+        }
+    }
+</script>
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <div style=" margin-right: 30px;">
+            <input type="hidden" id="ID" name="ID" />
+            <table class="form">
+                <tr>
+                    <th class="formTitle">用户账号<span class="required1">*</span></th>
+                    <td class="formValue">
+                        <input id="UserCode" name="UserCode" value="@ViewBag.UserCode" maxlength="6" type="text" disabled="disabled" class="form-control required" placeholder="用户名" />
+                        <input id="UserId" name="UserId" value="@ViewBag.UserId" type="hidden" />
+                    </td>
+                    <td colspan="2">&nbsp;&nbsp;初始密码为身份证的后8位</td>
+                </tr>
+                <tr>
+                    <th class="formTitle">用户名称<span class="required1">*</span></th>
+                    <td class="formValue">
+                        <input id="UserName" name="UserName" maxlength="200" type="text" class="form-control required" placeholder="员工名称" />
+                        <input id="UserPwd" name="UserPwd" type="text" style="display:none" disabled="disabled" class="form-control" />
+                    </td>
+                    <td rowspan="6" colspan="2" style="padding-left:50px;">
+                        <table id="treegridDeptOrRoleList"></table>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">性别<span class="required1">*</span></th>
+                    <td class="formValue">
+                        <select id="UserSex" name="UserSex" class="form-control required"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">手机号码<span class="required1">*</span></th>
+                    <td class="formValue">
+                        <input id="MobilePhone" maxlength="14" name="MobilePhone" type="text" class="form-control required TelYZ" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">身份证号<span class="required1">*</span></th>
+                    <td class="formValue">
+                        <input id="IDNumber" maxlength="18" name="IDNumber" type="text" class="form-control required" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">人员类型<span class="required1">*</span></th>
+                    <td class="formValue">
+                        <select id="UserType" name="UserType" class="form-control required">
+                            <option value="0">内部人员</option>
+                            <option value="1">外部人员</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">邮箱<span class="required1">*</span></th>
+                    <td class="formValue">
+                        <input id="Email" maxlength="30" name="Email" type="text" class="form-control required" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>

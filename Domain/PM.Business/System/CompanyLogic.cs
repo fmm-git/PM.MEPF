@@ -1,6 +1,7 @@
 ﻿using Dos.Common;
 using Dos.ORM;
 using PM.Common;
+using PM.Common.Helper;
 using PM.DataAccess.DbContext;
 using PM.DataEntity;
 using PM.DataEntity.System.ViewModel;
@@ -82,6 +83,55 @@ where 1=1 " + where + @" order by a.LocalCurrency asc";
             {
                 throw;
             }
+        }
+
+        public List<TbCompany> GetLoginUserAllCompany(bool isNoSite = true)
+        {
+            string CompanyCode = OperatorProvider.Provider.CurrentUser.CompanyId;
+            string OrgType = OperatorProvider.Provider.CurrentUser.OrgType;
+            string ProjectId = OperatorProvider.Provider.CurrentUser.ProjectId;
+            var listAll = new List<TbCompany>();
+            string noSiteWhere = "";
+            if (!isNoSite)
+            {
+                noSiteWhere = " and T.OrgType!=5";
+            }
+            if (OrgType == "1")//当前登录人是加工厂人员（加载所以线的组织机构数据）
+            {
+                string sqlJgc = @"select a.id,a.CompanyCode,a.ParentCompanyCode,a.CompanyFullName,a.Address,a.OrgType,a.FullCode as ProjectId from TbCompany a
+where 1=1 " + noSiteWhere + @" order by a.LocalCurrency asc";
+                DataTable retjgc = Db.Context.FromSql(sqlJgc).ToDataTable();
+                List<TbCompany> jgcList = ModelConvertHelper<TbCompany>.ToList(retjgc);
+                listAll.AddRange(jgcList);
+            }
+            else// 当前登录人是经理部、分部、工区、站点人员（加载所属跟下级）
+            {
+                //获取当前登录人的所有上级除本身
+                string sqlParentCompany = @"WITH T
+                                        AS( 
+                                            SELECT id,CompanyCode,ParentCompanyCode,CompanyFullName,Address,OrgType,LocalCurrency FROM TbCompany WHERE CompanyCode=@CompanyCode 
+                                            UNION ALL 
+                                            SELECT a.id,a.CompanyCode,a.ParentCompanyCode,a.CompanyFullName,a.Address,a.OrgType,a.LocalCurrency
+                                            FROM TbCompany a INNER JOIN T ON a.CompanyCode=T.ParentCompanyCode  
+                                        ) 
+                                        SELECT * FROM T  where T.CompanyCode!=@CompanyCode and T.OrgType!=1 " + noSiteWhere + " order by T.LocalCurrency asc;";
+                DataTable retParent = Db.Context.FromSql(sqlParentCompany)
+                    .AddInParameter("@CompanyCode", DbType.String, CompanyCode).ToDataTable();
+                List<TbCompany> parentList = ModelConvertHelper<TbCompany>.ToList(retParent);
+                listAll.AddRange(parentList);
+                //获取当前登录人的所有下级包括本身
+                string sqlSonCompany = @"WITH T
+                                     AS( 
+                                         SELECT id,CompanyCode,ParentCompanyCode,CompanyFullName,Address,OrgType,LocalCurrency FROM TbCompany WHERE CompanyCode=@CompanyCode 
+                                         UNION ALL 
+                                         SELECT a.id,a.CompanyCode,a.ParentCompanyCode,a.CompanyFullName,a.Address,a.OrgType,a.LocalCurrency  FROM TbCompany a INNER JOIN T ON a.ParentCompanyCode=T.CompanyCode  
+                                     ) 
+                                     SELECT T.* FROM T where T.OrgType!=1" + noSiteWhere + " order by T.LocalCurrency asc;";
+                DataTable retSon = Db.Context.FromSql(sqlSonCompany).AddInParameter("@CompanyCode", DbType.String, CompanyCode).ToDataTable();
+                List<TbCompany> sonList = ModelConvertHelper<TbCompany>.ToList(retSon);
+                listAll.AddRange(sonList);
+            }
+            return listAll;
         }
 
         public List<TbCompany> GetAllCompanyOrBySearchNew()

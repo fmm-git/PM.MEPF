@@ -1,0 +1,255 @@
+﻿@{
+    ViewBag.Title = "用户/员工Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="ui-layout-center">
+    <div class="topPanel">
+        <div class="search">
+            <table>
+                <tr>
+                    <td>
+                        <div class="input-group">
+                            <input id="UserName" type="text" class="form-control" placeholder="用户名称" style="width: 200px;">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-search">
+                            <a class="btn btn-primary" id="btn_search">查询</a>
+                            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span> 刷新</a>
+                            <a class="btn btn-primary" onclick="AddUser();"><span class="fa fa-plus"></span> 新增</a>
+                            <a class="btn btn-primary" onclick="EditUser();"><span class="fa fa fa-pencil-square-o"></span> 修改</a>
+                            <a class="btn btn-primary" onclick="DeleteUser();"><span class="fa fa-trash-o"></span> 删除</a>
+                            <a class="btn btn-primary" onclick="SetUpUserAuthority();">设置用户权限</a>
+                            <a class="btn btn-primary" onclick="SetUpUserRole();">设置用户角色</a>
+                            @*<a class="btn btn-primary" onclick="SynchronizationUser();">同步用户</a>*@
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="gridPanel">
+        <table id="gridList"></table>
+        <div id="gridPager"></div>
+    </div>
+</div>
+
+<script>
+    var projectId;
+    $(function () {
+        $("#NF-Details").parent().hide();//隐藏查看按钮
+        gridList();
+    });
+    function gridList() {
+        var $gridList = $("#gridList");
+        var newurl = "/SystemManage/User/GetGridJson";
+        $gridList.dataGrid({
+            height: $(window).height() - 128,
+            url: newurl,
+            colModel: [
+                { label: "标识ID", name: "ID", hidden: true, },
+                { label: '用户ID', name: 'UserId', hidden: true },
+                { label: '用户账号', name: 'UserCode', sortable: false, width: 100, align: 'left', Key: true },
+                { label: '用户名称', name: 'UserName', sortable: false, width: 100, align: 'left' },
+                {
+                    label: '用户状态', name: 'UserClosed', sortable: false, width: 80, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        var tdhtml = "";
+                        if (cellvalue == "在职") {
+                            tdhtml += "<i class=\"fa fa-toggle-on\" onclick=\"IsUserClosed("+rowObject.ID+",2)\"></i>";
+                        } else {
+                            tdhtml += "<i class=\"fa fa-toggle-off\" onclick=\"IsUserClosed(" + rowObject.ID + ",1)\"></i>";
+                        }
+                        return tdhtml;
+                    }
+                },
+                { label: '性别', name: 'UserSex', sortable: false, width: 80, align: 'left' },
+                {
+                    label: '身份证号', name: 'IDNumber', sortable: false, width: 180, align: 'left', formatter: function (value, options, rowObject) {
+                        var code = rowObject.IDNumber;
+                        if (code) {
+                            if (code.length > 12) {
+                                s = code.substring(0, 12) + "...";
+                                return s;
+                            }
+                        } else {
+                            return "";
+                        }
+
+                    }
+                },
+                { label: '用户角色', name: 'DeptOrOrRle', sortable: false, width: 120, align: 'left' },
+                {
+                    label: '手机号', name: 'MobilePhone', sortable: false, width: 150, align: 'left', formatter: function (value, options, rowObject) {
+                        var code = rowObject.MobilePhone;
+                        if (code) {
+                            if (code.length > 8) {
+                                s = code.substring(0, 8) + "...";
+                                return s;
+                            }
+                        }
+                        else {
+                            return "";
+                        }
+                    }
+                },
+                { label: '邮箱', name: 'Email', sortable: false, width: 120, align: 'left' },
+                { label: '用户来源', name: 'RecruitmentSource', sortable: false, width: 120, align: 'left', formatter: cellUserSource },
+            ],
+            ondblClickRow: function (id) {//双击
+                btn_details();
+            },
+            pager: "#gridPager",
+            sortname: 'UserCode',
+            sortorder: 'desc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+            //获取系统所有的用户
+            $gridList.jqGrid('setGridParam', {
+                postData: $(".search").formSerialize(),
+            }).trigger('reloadGrid');
+        });
+
+        //回车查询
+        document.onkeydown = function (e) {
+            if (!e) e = window.event;
+            if ((e.keyCode || e.which) == 13) {
+                $('#btn_search').trigger("click");
+            }
+        }
+    }
+    //用户来源
+    function cellUserSource(cellValue, options, rowObject) {
+        var tdhtml = "";
+        if (cellValue == 0) {
+            tdhtml += "数据同步";
+        } else {
+            tdhtml += "系统录入";
+        }
+        return tdhtml;
+    }
+    function IsUserClosed(ID,Type) {
+        $.ajax({
+            type: 'POST',
+            url: "/SystemManage/User/UpdateUserClosed?ID="+ID+"&Type="+Type,
+            dataType: "json",
+            success: function (data) {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        });
+    }
+    function AddUser() {
+        $.modalOpen({
+            id: "Form",
+            title: "新增用户信息",
+            url: "/SystemManage/User/Form?type=add",
+            width: "40%",
+            height: "450px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+
+    function EditUser() {
+        var keyValue = $("#gridList").jqGridRowValue().UserId;
+        if (keyValue) {
+            $.modalOpen({
+                id: "Form",
+                title: "修改用户信息",
+                url: "/SystemManage/User/Form?keyValue=" + keyValue + "&type=edit",
+                width: "55%",
+                height: "60%",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                }
+            });
+        } else {
+            $.modalMsg("请选中用户，再执行修改操作", "warning");
+        }
+    }
+
+    function DeleteUser() {
+        var keyValue = $("#gridList").jqGridRowValue().id;
+        if (keyValue != undefined) {
+            $.deleteForm({
+                url: "/SystemManage/User/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        } else {
+            $.modalMsg("请选中用户，再执行删除操作", "warning");
+        }
+    }
+
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().UserId;
+        if (keyValue) {
+            $.modalOpen({
+                id: "Form",
+                title: "查看用户信息",
+                url: "/SystemManage/User/Form?keyValue=" + keyValue + "&type=edit",
+                width: "55%",
+                height: "60%",
+                btn: null,
+            });
+        }
+    }
+
+    //设置权限
+    function SetUpUserAuthority() {
+        var UserId = $("#gridList").jqGridRowValue().UserId;
+        if (UserId) {
+            $.modalOpen({
+                id: "UserAuthority",
+                title: "设置用户权限",
+                url: "/SystemManage/User/UserAuthority?UserId=" + UserId,
+                width: "70%",
+                height: "550px",
+                btn: null,
+            });
+        } else {
+            $.modalMsg("请选择要设置权限的用户信息", "warning");
+        }
+    }
+    //设置用户角色
+    function SetUpUserRole() {
+        var UserId = $("#gridList").jqGridRowValue().UserId;
+        $.modalOpen({
+            id: "UserAuthority",
+            title: "设置用户权限",
+            url: "/SystemManage/User/SzUserRole?UserId=" + UserId,
+            width: "50%",
+            height: "550px",
+            btn: null,
+        });
+    }
+    //同步用户
+    function SynchronizationUser() {
+        var url = "server/byServer/queryUserList.json";
+        $.loading(true, "正在同步数据...");
+        $.ajax({
+            url: "/api/SystemManage/GetUserList",
+            data: { url: url },
+            type: "get",
+            success: function (data) {
+                if (data.state == "success") {
+                    $.loading(false);
+                    $.modalMsg("同步成功", data.state);
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                } else {
+                    $.loading(false);
+                    $.modalMsg("同步失败", "error");
+                }
+            },
+            error: function () {
+                $.loading(false);
+                $.modalMsg("同步失败", "error");
+            }
+        });
+    }
+</script>

@@ -20,29 +20,29 @@ namespace PM.Web.Areas.Production.Controllers
     public class ProblemOrderController : BaseController
     {
 
-        //private readonly ProblemOrderLogic _problemOrder = new ProblemOrderLogic();
+        private readonly ProblemOrderLogic _problemOrder = new ProblemOrderLogic();
 
-        //#region 列表
+        #region 列表
 
         public ActionResult Index()
         {
             return View();
         }
 
-        ///// <summary>
-        ///// 获取分页列表数据
-        ///// </summary>
-        ///// <param name="request"></param>
-        ///// <returns></returns>
-        //public ActionResult GetGridJson(ProblemOrderRequest request)
-        //{
-        //    var data = _problemOrder.GetDataListForPage(request);
-        //    return Content(data.ToJson());
-        //}
+        /// <summary>
+        /// 获取分页列表数据
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetGridJson(ProblemOrderRequest request)
+        {
+            var data = _problemOrder.GetDataListForPage(request);
+            return Content(data.ToJson());
+        }
 
-        //#endregion
+        #endregion
 
-        //#region 编辑
+        #region 编辑
 
         /// <summary>
         /// 新增、修改页面
@@ -58,112 +58,122 @@ namespace PM.Web.Areas.Production.Controllers
             return View();
         }
 
-        ///// <summary>
-        ///// 查看页面
-        ///// </summary>
-        ///// <returns></returns>
-        //[HandlerLogin(Ignore = false)]
-        //public ActionResult Details()
-        //{
-        //    return View();
-        //}
+        /// <summary>
+        /// 查看页面
+        /// </summary>
+        /// <returns></returns>
+        [HandlerLogin(Ignore = false)]
+        public ActionResult Details()
+        {
+            return View();
+        }
 
-        ///// <summary>
-        ///// 编辑/查看页获取数据
-        ///// </summary>
-        ///// <param name="keyValue"></param>
-        ///// <returns></returns>
+        /// <summary>
+        /// 编辑/查看页获取数据
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
 
-        //[HandlerLogin(Ignore = false)]
-        //public ActionResult GetFormJson(int keyValue)
-        //{
-        //    var data = _problemOrder.FindEntity(keyValue);
-        //    return Content(data.ToJson());
-        //}
+        [HandlerLogin(Ignore = false)]
+        public ActionResult GetFormJson(int keyValue)
+        {
+            var data = _problemOrder.FindEntity(keyValue);
+            return Content(data.ToJson());
+        }
 
-        ///// <summary>
-        ///// 新增、修改数据提交
-        ///// </summary>
-        ///// <param name="request"></param>
-        ///// <param name="type"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //public ActionResult SubmitForm(string model, string itemModel, string type)
-        //{
-        //    try
-        //    {
-        //        var inOrderModel = JsonEx.JsonToObj<TbProblemOrder>(model);
-        //        var inOrderItem = JsonEx.JsonToObj<List<TbProblemOrderItem>>(itemModel);
-        //        if (type == "add")
-        //        {
-        //            var data = _problemOrder.Insert(inOrderModel, inOrderItem);
-        //            return Content(data.ToJson());
-        //        }
-        //        else
-        //        {
-        //            var data = _problemOrder.Update(inOrderModel, inOrderItem);
-        //            return Content(data.ToJson());
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
+        /// <summary>
+        /// 新增、修改数据提交
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SubmitForm(string model, string itemModel, string type)
+        {
+            try
+            {
+                var inOrderModel = JsonEx.JsonToObj<TbProblemOrder>(model);
+                var inOrderItem = JsonEx.JsonToObj<List<TbProblemOrderItem>>(itemModel);
+                if (type == "add")
+                {
+                    var data = _problemOrder.Insert(inOrderModel, inOrderItem);
+                    return Content(data.ToJson());
+                }
+                else
+                {
+                    var data = _problemOrder.Update(inOrderModel, inOrderItem);
+                    return Content(data.ToJson());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
-        //#endregion
+        #endregion
 
-        //#region 删除
+        #region 删除
 
-        ///// <summary>
-        ///// 删除
-        ///// </summary>
-        ///// <param name="keyValue"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //public ActionResult DeleteForm(int keyValue)
-        //{
-        //    var data = _problemOrder.Delete(keyValue);
-        //    return Content(data.ToJson());
-        //}
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DeleteForm(int keyValue)
+        {
+            var data = _problemOrder.Delete(keyValue);
+            return Content(data.ToJson());
+        }
 
-        //#endregion
+        #endregion
 
-        //#region 信息验证
+        #region 信息验证
 
-        ///// <summary>
-        ///// 判断信息是否可操作
-        ///// </summary>
-        ///// <param name="keyValue"></param>
-        ///// <returns></returns>
-        //public ActionResult AnyInfo(int keyValue)
-        //{
-        //    var data = _problemOrder.AnyInfo(keyValue);
-        //    return Content(data.ToJson());
-        //}
+        /// <summary>
+        /// 判断信息是否可操作
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        public ActionResult AnyInfo(int keyValue)
+        {
+            var data = _problemOrder.AnyInfo(keyValue);
+            return Content(data.ToJson());
+        }
 
-        //#endregion
+        #endregion
 
-        ///// <summary>
-        ///// 获取数据列表(原订单)
-        ///// </summary>
-        ///// <param name="request"></param>
-        ///// <returns></returns>
-        //public ActionResult GetOrderGridJson(ProblemOrderRequest request)
-        //{
-        //    var data = _problemOrder.GetOrderDataList(request);
-        //    return Content(data.ToJson());
-        //}
-        ///// <summary>
-        ///// 获取数据列表(原订单明细)
-        ///// </summary>
-        ///// <param name="request"></param>
-        ///// <returns></returns>
-        //public ActionResult GetOrderItemGridJson(ProblemOrderRequest request)
-        //{
-        //    var data = _problemOrder.GetOrderItemDataList(request);
-        //    return Content(data.ToJson());
-        //}
+        /// <summary>
+        /// 获取数据列表(原订单)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetOrderGridJson(ProblemOrderRequest request)
+        {
+            var data = _problemOrder.GetOrderDataList(request);
+            return Content(data.ToJson());
+        }
+        /// <summary>
+        /// 获取数据列表(原订单明细)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ActionResult GetOrderItemGridJson(ProblemOrderRequest request)
+        {
+            var data = _problemOrder.GetOrderItemDataList(request);
+            return Content(data.ToJson());
+        }
+
+        #region 统计
+
+        public ActionResult GetProblemReport(ProblemOrderRequest request)
+        {
+            var data = _problemOrder.GetProblemReport(request);
+            return Content(data.ToJson());
+        }
+
+        #endregion
 
         //#region 导出
 

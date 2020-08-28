@@ -193,8 +193,8 @@ namespace PM.DataAccess.DbContext
             sqlStr.Append(" SELECT * FROM temptbl");
             if (request.rows>0)
             {
-                var start = ((request.rows - 1) * request.rows) + 1;
-                var end = ((request.rows - 1) * request.rows) + request.rows;
+                var start = ((request.page - 1) * request.rows) + 1;
+                var end = ((request.page - 1) * request.rows) + request.rows;
                 sqlStr.Append(" where Row between " + start + " and " + end);
             }
             var dataList = Db.Context.FromSql(sqlStr.ToString()).AddParameter(param).ToList<T>();

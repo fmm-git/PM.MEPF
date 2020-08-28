@@ -463,6 +463,7 @@ namespace PM.DataEntity
         #region 扩展字段
 
         public string ParentCompanyName { get; set; }
+        public string CompanyFullNameShow { get { return CompanyFullName; } }
         /// <summary>
         /// 项目id
         /// </summary>

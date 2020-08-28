@@ -43,6 +43,7 @@ namespace PM.DataEntity
 		private string _InstallState;
 		private DateTime? _JgCompleteTiem;
 		private string _JgProgress;
+		private string _ChangeStatus;
 
 		/// <summary>
 		/// ID
@@ -330,6 +331,19 @@ namespace PM.DataEntity
 				this._JgProgress = value;
 			}
 		}
+		/// <summary>
+		/// 变更状态
+		/// </summary>
+		[Field("ChangeStatus")]
+		public string ChangeStatus
+		{
+			get{ return _ChangeStatus; }
+			set
+			{
+				this.OnPropertyValueChange("ChangeStatus");
+				this._ChangeStatus = value;
+			}
+		}
 		#endregion
 
 		#region Method
@@ -377,6 +391,7 @@ namespace PM.DataEntity
 				_.InstallState,
 				_.JgCompleteTiem,
 				_.JgProgress,
+				_.ChangeStatus,
 			};
         }
         /// <summary>
@@ -407,6 +422,7 @@ namespace PM.DataEntity
 				this._InstallState,
 				this._JgCompleteTiem,
 				this._JgProgress,
+				this._ChangeStatus,
 			};
         }
         /// <summary>
@@ -517,6 +533,10 @@ namespace PM.DataEntity
 			/// 加工进度
 			/// </summary>
 			public readonly static Field JgProgress = new Field("JgProgress", "TbWorkOrder", "加工进度");
+            /// <summary>
+			/// 变更状态
+			/// </summary>
+			public readonly static Field ChangeStatus = new Field("ChangeStatus", "TbWorkOrder", "变更状态");
         }
         #endregion
 	}

@@ -52,127 +52,128 @@ namespace PM.Business.RawMaterial
         /// </summary>
         public AjaxResult Input(List<TbRawMaterialStockRecord> model, StringBuilder errorMsg)
         {
-            if (model == null)
-                return AjaxResult.Warning("参数错误");
-            //仓库
-            var storageNames = model.Select(p => p.StorageCode).ToList();
-            var storages = Repository<TbStorage>.Query(p => p.StorageName.In(storageNames)).ToList();
-            //分部
-            var branchNames = model.Select(p => p.BranchCode).Distinct().ToList();
-            var branchs = Db.Context.From<TbCompany>().Select(
-                TbCompany._.CompanyFullName,
-                TbCompany._.CompanyCode)
-                .LeftJoin<TbProjectCompany>((a, c) => a.CompanyCode == c.CompanyCode)
-                .Where(TbProjectCompany._.ProjectId == model[0].ProjectId && TbCompany._.CompanyFullName.In(branchNames))
-                .ToList();
-            //工区
-            var workAreaNames = model.Select(p => p.WorkAreaCode).Distinct().ToList();
-            var workAreas = Repository<TbCompany>.Query(p => p.CompanyFullName.In(workAreaNames)).ToList();
-            //站点
-            var siteNames = model.Select(p => p.SiteCode).Distinct().ToList();
-            var sites = Repository<TbCompany>.Query(p => p.CompanyFullName.In(siteNames)).ToList();
-            //原材料
-            var specifications = model.Select(p => p.SpecificationModel).Distinct().ToList();
-            var rawMaterials = Repository<TbRawMaterialArchives>.Query(p => p.SpecificationModel.In(specifications)).ToList();
-            var userCode = OperatorProvider.Provider.CurrentUser.UserCode;
-            foreach (var item in model)
-            {
-                item.InsertUserCode = userCode;
-                item.InsertTime = DateTime.Now;
-                //判断原材料是否存在
-                var rawMaterial = rawMaterials.FirstOrDefault(p => p.SpecificationModel == item.SpecificationModel);
-                if (rawMaterial == null)
-                {
-                    errorMsg.AppendFormat("第{0}行规格【{1}】信息不存在！", item.IndexNum, item.SpecificationModel);
-                    continue;
-                }
-                item.MaterialName = rawMaterial.MaterialName;
-                item.MaterialCode = rawMaterial.MaterialCode;
-                item.SpecificationModel = rawMaterial.SpecificationModel;
-                item.MeasurementUnit = rawMaterial.MeasurementUnit;
-                item.RebarType = rawMaterial.RebarType;
-                //判断仓库是否存在
-                var storage = storages.FirstOrDefault(p => p.StorageName == item.StorageCode);
-                if (storage == null)
-                {
-                    errorMsg.AppendFormat("第{0}行仓库【{1}】信息不存在！", item.IndexNum, item.StorageCode);
-                    continue;
-                }
-                item.StorageCode = storage.StorageCode;
-                //判断分部是否存在
-                var branch = branchs.FirstOrDefault(p => p.CompanyFullName == item.BranchCode);
-                if (branch == null)
-                {
-                    errorMsg.AppendFormat("第{0}行分部【{1}】信息不存在！", item.IndexNum, item.BranchCode);
-                    continue;
-                }
-                //判断工区是否存在
-                var workArea = workAreas.FirstOrDefault(p => p.CompanyFullName == item.WorkAreaCode && p.ParentCompanyCode == branch.CompanyCode);
-                if (workArea == null)
-                {
-                    errorMsg.AppendFormat("第{0}行工区【{1}】信息不存在！", item.IndexNum, item.WorkAreaCode);
-                    continue;
-                }
-                //判断站点是否存在
-                if (sites.Any())
-                {
-                    var site = sites.Where(p => p.CompanyFullName == item.SiteCode).ToList();
-                    if (site.Any())
-                    {
-                        //判断工区站点是否匹配
-                        var siteret = site.FirstOrDefault(p => p.CompanyFullName == item.SiteCode && p.ParentCompanyCode == workArea.CompanyCode);
-                        if (siteret == null)
-                        {
-                            errorMsg.AppendFormat("第{0}行工区【{1}】信息和站点【{2}】信息不匹配！", item.IndexNum, item.WorkAreaCode, item.SiteCode);
-                            continue;
-                        }
-                        item.SiteCode = siteret.CompanyCode;
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(item.SiteCode))
-                        {
-                            errorMsg.AppendFormat("第{0}行站点【{1}】信息不存在！", item.IndexNum, item.SiteCode);
-                            continue;
-                        }
-                        item.SiteCode = "";
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(item.SiteCode))
-                    {
-                        errorMsg.AppendFormat("第{0}行站点【{1}】信息不存在！", item.IndexNum, item.SiteCode);
-                        continue;
-                    }
-                    item.SiteCode = "";
-                }
-                item.WorkAreaCode = workArea.CompanyCode;
-            }
-            //查询库存记录
-            var ret = GetStockRecord(model);
-            var addList = ret.Item1;
-            var updateList = ret.Item2;
-            if (!addList.Any() && !updateList.Any())
-                return AjaxResult.Error(errorMsg.ToString());
-            try
-            {
-                using (DbTrans trans = Db.Context.BeginTransaction())
-                {
-                    //添加信息
-                    if (addList.Any())
-                        Repository<TbRawMaterialStockRecord>.Insert(trans, addList);
-                    //修改信息
-                    if (updateList.Any())
-                        Repository<TbRawMaterialStockRecord>.Update(trans, updateList);
-                    trans.Commit();//提交事务
-                    return AjaxResult.Success(errorMsg.ToString());
-                }
-            }
-            catch (Exception ex)
-            {
-                return AjaxResult.Error("操作失败");
-            }
+            //if (model == null)
+            //    return AjaxResult.Warning("参数错误");
+            ////仓库
+            //var storageNames = model.Select(p => p.StorageCode).ToList();
+            //var storages = Repository<TbStorage>.Query(p => p.StorageName.In(storageNames)).ToList();
+            ////分部
+            //var branchNames = model.Select(p => p.BranchCode).Distinct().ToList();
+            //var branchs = Db.Context.From<TbCompany>().Select(
+            //    TbCompany._.CompanyFullName,
+            //    TbCompany._.CompanyCode)
+            //    .LeftJoin<TbProjectCompany>((a, c) => a.CompanyCode == c.CompanyCode)
+            //    .Where(TbProjectCompany._.ProjectId == model[0].ProjectId && TbCompany._.CompanyFullName.In(branchNames))
+            //    .ToList();
+            ////工区
+            //var workAreaNames = model.Select(p => p.WorkAreaCode).Distinct().ToList();
+            //var workAreas = Repository<TbCompany>.Query(p => p.CompanyFullName.In(workAreaNames)).ToList();
+            ////站点
+            //var siteNames = model.Select(p => p.SiteCode).Distinct().ToList();
+            //var sites = Repository<TbCompany>.Query(p => p.CompanyFullName.In(siteNames)).ToList();
+            ////原材料
+            //var specifications = model.Select(p => p.SpecificationModel).Distinct().ToList();
+            //var rawMaterials = Repository<TbRawMaterialArchives>.Query(p => p.SpecificationModel.In(specifications)).ToList();
+            //var userCode = OperatorProvider.Provider.CurrentUser.UserCode;
+            //foreach (var item in model)
+            //{
+            //    item.InsertUserCode = userCode;
+            //    item.InsertTime = DateTime.Now;
+            //    //判断原材料是否存在
+            //    var rawMaterial = rawMaterials.FirstOrDefault(p => p.SpecificationModel == item.SpecificationModel);
+            //    if (rawMaterial == null)
+            //    {
+            //        errorMsg.AppendFormat("第{0}行规格【{1}】信息不存在！", item.IndexNum, item.SpecificationModel);
+            //        continue;
+            //    }
+            //    item.MaterialName = rawMaterial.MaterialName;
+            //    item.MaterialCode = rawMaterial.MaterialCode;
+            //    item.SpecificationModel = rawMaterial.SpecificationModel;
+            //    item.MeasurementUnit = rawMaterial.MeasurementUnit;
+            //    item.RebarType = rawMaterial.RebarType;
+            //    //判断仓库是否存在
+            //    var storage = storages.FirstOrDefault(p => p.StorageName == item.StorageCode);
+            //    if (storage == null)
+            //    {
+            //        errorMsg.AppendFormat("第{0}行仓库【{1}】信息不存在！", item.IndexNum, item.StorageCode);
+            //        continue;
+            //    }
+            //    item.StorageCode = storage.StorageCode;
+            //    //判断分部是否存在
+            //    var branch = branchs.FirstOrDefault(p => p.CompanyFullName == item.BranchCode);
+            //    if (branch == null)
+            //    {
+            //        errorMsg.AppendFormat("第{0}行分部【{1}】信息不存在！", item.IndexNum, item.BranchCode);
+            //        continue;
+            //    }
+            //    //判断工区是否存在
+            //    var workArea = workAreas.FirstOrDefault(p => p.CompanyFullName == item.WorkAreaCode && p.ParentCompanyCode == branch.CompanyCode);
+            //    if (workArea == null)
+            //    {
+            //        errorMsg.AppendFormat("第{0}行工区【{1}】信息不存在！", item.IndexNum, item.WorkAreaCode);
+            //        continue;
+            //    }
+            //    //判断站点是否存在
+            //    if (sites.Any())
+            //    {
+            //        var site = sites.Where(p => p.CompanyFullName == item.SiteCode).ToList();
+            //        if (site.Any())
+            //        {
+            //            //判断工区站点是否匹配
+            //            var siteret = site.FirstOrDefault(p => p.CompanyFullName == item.SiteCode && p.ParentCompanyCode == workArea.CompanyCode);
+            //            if (siteret == null)
+            //            {
+            //                errorMsg.AppendFormat("第{0}行工区【{1}】信息和站点【{2}】信息不匹配！", item.IndexNum, item.WorkAreaCode, item.SiteCode);
+            //                continue;
+            //            }
+            //            item.SiteCode = siteret.CompanyCode;
+            //        }
+            //        else
+            //        {
+            //            if (!string.IsNullOrEmpty(item.SiteCode))
+            //            {
+            //                errorMsg.AppendFormat("第{0}行站点【{1}】信息不存在！", item.IndexNum, item.SiteCode);
+            //                continue;
+            //            }
+            //            item.SiteCode = "";
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (!string.IsNullOrEmpty(item.SiteCode))
+            //        {
+            //            errorMsg.AppendFormat("第{0}行站点【{1}】信息不存在！", item.IndexNum, item.SiteCode);
+            //            continue;
+            //        }
+            //        item.SiteCode = "";
+            //    }
+            //    item.WorkAreaCode = workArea.CompanyCode;
+            //}
+            ////查询库存记录
+            //var ret = GetStockRecord(model);
+            //var addList = ret.Item1;
+            //var updateList = ret.Item2;
+            //if (!addList.Any() && !updateList.Any())
+            //    return AjaxResult.Error(errorMsg.ToString());
+            //try
+            //{
+            //    using (DbTrans trans = Db.Context.BeginTransaction())
+            //    {
+            //        //添加信息
+            //        if (addList.Any())
+            //            Repository<TbRawMaterialStockRecord>.Insert(trans, addList);
+            //        //修改信息
+            //        if (updateList.Any())
+            //            Repository<TbRawMaterialStockRecord>.Update(trans, updateList);
+            //        trans.Commit();//提交事务
+            //        return AjaxResult.Success(errorMsg.ToString());
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return AjaxResult.Error("操作失败");
+            //}
+            return null;
         }
 
         #endregion
@@ -239,42 +240,43 @@ namespace PM.Business.RawMaterial
         /// <returns></returns>
         public DataTable FindEntity(int keyValue)
         {
-            var ret = Db.Context.From<TbRawMaterialStockRecord>()
-                   .Select(
-                       TbRawMaterialStockRecord._.ID
-                       , TbRawMaterialStockRecord._.Enclosure
-                       , TbRawMaterialStockRecord._.ProjectId
-                       , TbRawMaterialStockRecord._.MaterialCode
-                       , TbRawMaterialStockRecord._.MaterialName
-                       , TbRawMaterialStockRecord._.Factory
-                       , TbRawMaterialStockRecord._.BatchNumber
-                       , TbRawMaterialStockRecord._.Count
-                       , TbRawMaterialStockRecord._.UseCount.As("UseCountS")
-                       , TbRawMaterialStockRecord._.StorageCode
-                       , TbRawMaterialStockRecord._.WorkAreaCode
-                       , TbRawMaterialStockRecord._.SiteCode
-                       , TbRawMaterialStockRecord._.InsertUserCode
-                       , TbRawMaterialStockRecord._.InsertTime
-                       , TbUser._.UserName
-                       , TbStorage._.StorageName
-                       , TbCompany._.CompanyFullName.As("SiteName")
-                       , TbStorage._.StorageName
-                       , TbStorage._.StorageName
-                       , TbRawMaterialArchives._.SpecificationModel
-                       , TbRawMaterialArchives._.MeasurementUnit
-                       , TbRawMaterialArchives._.RebarType)
-                    .AddSelect(Db.Context.From<TbCompany>().Select(p => p.CompanyFullName)
-                    .Where(TbCompany._.CompanyCode == TbRawMaterialStockRecord._.WorkAreaCode), "WorkAreaName")
-                    .AddSelect(Db.Context.From<TbSysDictionaryData>().Select(p => p.DictionaryText)
-                    .Where(TbSysDictionaryData._.DictionaryCode == TbRawMaterialArchives._.MeasurementUnit), "MeasurementUnitText")
-                    .AddSelect(Db.Context.From<TbSysDictionaryData>().Select(p => p.DictionaryText)
-                    .Where(TbSysDictionaryData._.DictionaryCode == TbRawMaterialArchives._.RebarType), "RebarTypeName")
-                    .LeftJoin<TbUser>((a, c) => a.InsertUserCode == c.UserCode)
-                    .LeftJoin<TbStorage>((a, c) => a.StorageCode == c.StorageCode)
-                    .LeftJoin<TbCompany>((a, c) => a.SiteCode == c.CompanyCode)
-                    .LeftJoin<TbRawMaterialArchives>((a, c) => a.MaterialCode == c.MaterialCode)
-                    .Where(p => p.ID == keyValue).ToDataTable();
-            return ret;
+            //var ret = Db.Context.From<TbRawMaterialStockRecord>()
+            //       .Select(
+            //           TbRawMaterialStockRecord._.ID
+            //           , TbRawMaterialStockRecord._.Enclosure
+            //           , TbRawMaterialStockRecord._.ProjectId
+            //           , TbRawMaterialStockRecord._.MaterialCode
+            //           , TbRawMaterialStockRecord._.MaterialName
+            //           , TbRawMaterialStockRecord._.Factory
+            //           , TbRawMaterialStockRecord._.BatchNumber
+            //           , TbRawMaterialStockRecord._.Count
+            //           , TbRawMaterialStockRecord._.UseCount.As("UseCountS")
+            //           , TbRawMaterialStockRecord._.StorageCode
+            //           , TbRawMaterialStockRecord._.WorkAreaCode
+            //           , TbRawMaterialStockRecord._.SiteCode
+            //           , TbRawMaterialStockRecord._.InsertUserCode
+            //           , TbRawMaterialStockRecord._.InsertTime
+            //           , TbUser._.UserName
+            //           , TbStorage._.StorageName
+            //           , TbCompany._.CompanyFullName.As("SiteName")
+            //           , TbStorage._.StorageName
+            //           , TbStorage._.StorageName
+            //           , TbRawMaterialArchives._.SpecificationModel
+            //           , TbRawMaterialArchives._.MeasurementUnit
+            //           , TbRawMaterialArchives._.RebarType)
+            //        .AddSelect(Db.Context.From<TbCompany>().Select(p => p.CompanyFullName)
+            //        .Where(TbCompany._.CompanyCode == TbRawMaterialStockRecord._.WorkAreaCode), "WorkAreaName")
+            //        .AddSelect(Db.Context.From<TbSysDictionaryData>().Select(p => p.DictionaryText)
+            //        .Where(TbSysDictionaryData._.DictionaryCode == TbRawMaterialArchives._.MeasurementUnit), "MeasurementUnitText")
+            //        .AddSelect(Db.Context.From<TbSysDictionaryData>().Select(p => p.DictionaryText)
+            //        .Where(TbSysDictionaryData._.DictionaryCode == TbRawMaterialArchives._.RebarType), "RebarTypeName")
+            //        .LeftJoin<TbUser>((a, c) => a.InsertUserCode == c.UserCode)
+            //        .LeftJoin<TbStorage>((a, c) => a.StorageCode == c.StorageCode)
+            //        .LeftJoin<TbCompany>((a, c) => a.SiteCode == c.CompanyCode)
+            //        .LeftJoin<TbRawMaterialArchives>((a, c) => a.MaterialCode == c.MaterialCode)
+            //        .Where(p => p.ID == keyValue).ToDataTable();
+            //return ret;
+            return null;
         }
 
         /// <summary>
@@ -819,43 +821,44 @@ namespace PM.Business.RawMaterial
         /// </summary>
         public PageModel GetMaterialDataList(RawMaterialStockRequest request)
         {
-            #region 模糊搜索条件
+            //#region 模糊搜索条件
 
-            var where = new Where<TbRawMaterialArchives>();
-            if (!string.IsNullOrWhiteSpace(request.keyword))
-            {
-                where.And(p => p.MaterialName.Like(request.keyword) || p.SpecificationModel.Like(request.keyword));
-            }
-            if (request.IsYL)
-            {
-                string a = typeof(OperationEnum.MaterialType).GetEnumName(OperationEnum.MaterialType.圆钢);
-                string b = typeof(OperationEnum.MaterialType).GetEnumName(OperationEnum.MaterialType.螺纹钢);
-                where.And(p => p.MaterialName == a || p.MaterialName == b);
-            }
-            #endregion
+            //var where = new Where<TbRawMaterialArchives>();
+            //if (!string.IsNullOrWhiteSpace(request.keyword))
+            //{
+            //    where.And(p => p.MaterialName.Like(request.keyword) || p.SpecificationModel.Like(request.keyword));
+            //}
+            //if (request.IsYL)
+            //{
+            //    string a = typeof(OperationEnum.MaterialType).GetEnumName(OperationEnum.MaterialType.圆钢);
+            //    string b = typeof(OperationEnum.MaterialType).GetEnumName(OperationEnum.MaterialType.螺纹钢);
+            //    where.And(p => p.MaterialName == a || p.MaterialName == b);
+            //}
+            //#endregion
 
-            try
-            {
-                var data = Db.Context.From<TbRawMaterialArchives>().Select(
-                    TbRawMaterialArchives._.MaterialCode,
-                    TbRawMaterialArchives._.MaterialName,
-                    TbRawMaterialArchives._.SpecificationModel,
-                    TbRawMaterialArchives._.MeasurementUnit,
-                    TbRawMaterialArchives._.RebarType,
-                    TbSysDictionaryData._.DictionaryText.As("MeasurementUnitText"),
-                    TbRawMaterialArchives._.MeasurementUnitZl)
-                    .AddSelect(Db.Context.From<TbSysDictionaryData>()
-                    .Select(p => p.DictionaryText)
-                    .Where(TbSysDictionaryData._.DictionaryCode == TbRawMaterialArchives._.RebarType), "RebarTypeName")
-                    .LeftJoin<TbSysDictionaryData>((a, c) => a.MeasurementUnit == c.DictionaryCode)
-                    .Where(where).OrderBy(TbRawMaterialArchives._.MaterialCode)
-                    .ToPageList(request.rows, request.page);
-                return data;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            //try
+            //{
+            //    var data = Db.Context.From<TbRawMaterialArchives>().Select(
+            //        TbRawMaterialArchives._.MaterialCode,
+            //        TbRawMaterialArchives._.MaterialName,
+            //        TbRawMaterialArchives._.SpecificationModel,
+            //        TbRawMaterialArchives._.MeasurementUnit,
+            //        TbRawMaterialArchives._.RebarType,
+            //        TbSysDictionaryData._.DictionaryText.As("MeasurementUnitText"),
+            //        TbRawMaterialArchives._.MeasurementUnitZl)
+            //        .AddSelect(Db.Context.From<TbSysDictionaryData>()
+            //        .Select(p => p.DictionaryText)
+            //        .Where(TbSysDictionaryData._.DictionaryCode == TbRawMaterialArchives._.RebarType), "RebarTypeName")
+            //        .LeftJoin<TbSysDictionaryData>((a, c) => a.MeasurementUnit == c.DictionaryCode)
+            //        .Where(where).OrderBy(TbRawMaterialArchives._.MaterialCode)
+            //        .ToPageList(request.rows, request.page);
+            //    return data;
+            //}
+            //catch (Exception)
+            //{
+            //    throw;
+            //}
+            return null;
         }
 
         /// <summary>
